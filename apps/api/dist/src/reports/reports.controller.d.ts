@@ -1,4 +1,4 @@
-import { Response } from 'express';
+import type { Response } from 'express';
 import { ReportsService } from './reports.service';
 import type { CurrentUserPayload } from '../common/decorators/current-user.decorator';
 export declare class ReportsController {
