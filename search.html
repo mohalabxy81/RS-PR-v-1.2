@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Advanced Search — REIS Realty</title>
+  <meta name="description" content="Search for luxury real estate properties using advanced filters. Find the perfect home, villa, or apartment." />
+  <meta http-equiv="X-Frame-Options" content="SAMEORIGIN" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; object-src 'none';" />
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <header id="navbar" class="transparent" role="banner">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo" aria-label="REIS Realty home">
+        <div class="nav-logo__mark">R</div>
+        <div class="nav-logo__text">
+          <span class="nav-logo__name">REIS Realty</span>
+          <span class="nav-logo__tagline">Luxury Properties</span>
+        </div>
+      </a>
+      <nav class="nav-menu" id="nav-menu" role="navigation" aria-label="Main navigation">
+        <a href="index.html"      class="nav-link">Home</a>
+        <a href="properties.html" class="nav-link">Properties</a>
+        <a href="agents.html"     class="nav-link">Agents</a>
+        <a href="gallery.html"    class="nav-link">Gallery</a>
+        <a href="blog.html"       class="nav-link">Blog</a>
+        <a href="about.html"      class="nav-link">About</a>
+        <a href="contact.html"    class="nav-link">Contact</a>
+      </nav>
+      <div class="nav-actions">
+        <a href="search.html" class="btn btn-outline active">🔍 Search</a>
+        <a href="join.html"   class="btn btn-primary">Join Now</a>
+      </div>
+      <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section class="search-hero">
+      <div class="container">
+        <div class="text-center">
+          <h1 class="text-white" style="margin-bottom:0.5rem;">Find Your Next Property</h1>
+          <p style="color:rgba(255,255,255,0.7);">Use our advanced search to find exactly what you're looking for.</p>
+        </div>
+
+        <div class="search-form-card reveal">
+          <form id="search-form" role="search">
+            
+            <div class="search-form-grid">
+              <div class="form-group" style="margin:0;">
+                <label for="search-keyword-input" class="form-label">Keyword</label>
+                <input type="text" id="search-keyword-input" class="form-input" placeholder="e.g. Pool, Garage..." autocomplete="off" />
+              </div>
+              <div class="form-group" style="margin:0;">
+                <label for="search-location-input" class="form-label">Location</label>
+                <input type="text" id="search-location-input" class="form-input" placeholder="City, neighborhood..." autocomplete="off" />
+              </div>
+              <div class="form-group" style="margin:0;">
+                <label for="search-type-input" class="form-label">Property Type</label>
+                <select id="search-type-input" class="form-select">
+                  <option value="">All Types</option>
+                  <option value="Villa">Villa</option>
+                  <option value="Apartment">Apartment</option>
+                  <option value="House">House</option>
+                  <option value="Townhouse">Townhouse</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-primary" style="height:44px;align-self:flex-end;">Search</button>
+            </div>
+
+            <button type="button" id="advanced-toggle" class="search-advanced-toggle">▼ Advanced Filters</button>
+
+            <div class="search-advanced-grid" id="advanced-grid">
+              <div class="form-group" style="margin:0;">
+                <label for="search-min-price" class="form-label">Min Price</label>
+                <select id="search-min-price" class="form-select">
+                  <option value="">No Min</option>
+                  <option value="500000">$500,000</option>
+                  <option value="1000000">$1,000,000</option>
+                  <option value="2000000">$2,000,000</option>
+                </select>
+              </div>
+              <div class="form-group" style="margin:0;">
+                <label for="search-max-price" class="form-label">Max Price</label>
+                <select id="search-max-price" class="form-select">
+                  <option value="">No Max</option>
+                  <option value="1000000">$1,000,000</option>
+                  <option value="3000000">$3,000,000</option>
+                  <option value="5000000">$5,000,000</option>
+                  <option value="10000000">$10,000,000</option>
+                </select>
+              </div>
+              <div class="form-group" style="margin:0;">
+                <label for="search-beds-input" class="form-label">Min Bedrooms</label>
+                <select id="search-beds-input" class="form-select">
+                  <option value="">Any</option>
+                  <option value="2">2+</option>
+                  <option value="3">3+</option>
+                  <option value="4">4+</option>
+                  <option value="5">5+</option>
+                </select>
+              </div>
+              <div class="form-group" style="margin:0;">
+                <label for="search-baths-input" class="form-label">Min Bathrooms</label>
+                <select id="search-baths-input" class="form-select">
+                  <option value="">Any</option>
+                  <option value="2">2+</option>
+                  <option value="3">3+</option>
+                  <option value="4">4+</option>
+                </select>
+              </div>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--cream" aria-label="Search results">
+      <div class="container">
+        <div class="section-header flex-between" style="margin-bottom:2rem;">
+          <h2 class="section-title" style="margin:0;font-size:1.5rem;">Results</h2>
+          <div id="search-results-count" class="text-muted"><strong>0</strong> Results Found</div>
+        </div>
+
+        <div class="grid-3" id="search-results-grid" aria-live="polite"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="nav-logo">
+            <div class="nav-logo__mark">R</div>
+            <div class="nav-logo__text">
+              <span class="nav-logo__name">REIS Realty</span>
+            </div>
+          </div>
+          <p>Your trusted partner in premium real estate since 2010.</p>
+        </div>
+        <div class="footer-col"><h5>Navigate</h5>
+          <nav class="footer-links">
+            <a href="index.html">Home</a><a href="properties.html">Properties</a>
+            <a href="gallery.html">Gallery</a><a href="contact.html">Contact</a>
+          </nav>
+        </div>
+        <div class="footer-col"><h5>Explore</h5>
+          <nav class="footer-links">
+            <a href="agents.html">Agents</a><a href="blog.html">Blog</a>
+            <a href="about.html">About</a><a href="join.html">Join Now</a>
+          </nav>
+        </div>
+        <div class="footer-col"><h5>Contact</h5>
+          <div class="footer-contact-item"><div class="footer-contact-icon">📞</div><div>+1 (310) 555-0100</div></div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 REIS Realty. All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
+
+  <button id="back-to-top" aria-label="Scroll back to top">▲</button>
+  <div class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="js/main.js"></script>
+  <script src="js/properties.js"></script>
+</body>
+</html>

@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>REIS Realty — Find Your Dream Property</title>
+  <meta name="description" content="REIS Realty connects buyers, sellers, and renters with premium properties. Browse luxury homes, apartments, villas, and more with our expert agents." />
+  <!-- Security headers -->
+  <meta http-equiv="X-Frame-Options" content="SAMEORIGIN" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://tile.openstreetmap.org; frame-src https://www.openstreetmap.org; object-src 'none';" />
+  <!-- SEO -->
+  <link rel="canonical" href="index.html" />
+  <meta property="og:title" content="REIS Realty — Find Your Dream Property" />
+  <meta property="og:description" content="Premium real estate listings with expert agents." />
+  <meta property="og:type" content="website" />
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "RealEstateAgent",
+    "name": "REIS Realty",
+    "description": "Premium real estate listings",
+    "url": "index.html"
+  }
+  </script>
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- ===================== NAVBAR ===================== -->
+  <header id="navbar" class="transparent" role="banner">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo" aria-label="REIS Realty home">
+        <div class="nav-logo__mark" aria-hidden="true">R</div>
+        <div class="nav-logo__text">
+          <span class="nav-logo__name">REIS Realty</span>
+          <span class="nav-logo__tagline">Luxury Properties</span>
+        </div>
+      </a>
+
+      <nav class="nav-menu" id="nav-menu" role="navigation" aria-label="Main navigation">
+        <a href="index.html"      class="nav-link">Home</a>
+        <a href="properties.html" class="nav-link">Properties</a>
+        <a href="agents.html"     class="nav-link">Agents</a>
+        <a href="gallery.html"    class="nav-link">Gallery</a>
+        <a href="blog.html"       class="nav-link">Blog</a>
+        <a href="about.html"      class="nav-link">About</a>
+        <a href="contact.html"    class="nav-link">Contact</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="search.html" class="btn btn-outline">🔍 Search</a>
+        <a href="join.html"   class="btn btn-primary">Join Now</a>
+      </div>
+
+      <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===================== HERO ===================== -->
+  <main id="main-content">
+  <section class="hero" aria-label="Hero">
+    <div class="hero__bg">
+      <img src="assets/images/hero-bg.png" alt="Luxury modern residential tower at golden sunset" />
+    </div>
+    <div class="hero__overlay" aria-hidden="true"></div>
+
+    <div class="container">
+      <div class="hero__content">
+        <div class="hero__eyebrow">✦ Premium Real Estate Since 2010</div>
+        <h1 class="hero__title">
+          Find Your Perfect<br><em>Dream Property</em>
+        </h1>
+        <p class="hero__desc">
+          Explore thousands of luxury homes, modern apartments, and exclusive villas curated by our expert agents. Your next chapter starts here.
+        </p>
+        <div class="hero__actions">
+          <a href="properties.html" class="btn btn-primary btn-lg">Browse Properties</a>
+          <a href="about.html" class="btn btn-outline--light btn-lg">Learn More</a>
+        </div>
+
+        <!-- Hero Search Bar -->
+        <div class="hero__search-wrap">
+          <form class="hero-search" id="hero-search-form" role="search" aria-label="Property search">
+            <div class="hero-search__field">
+              <label for="search-location">Location</label>
+              <input type="text" id="search-location" name="location" class="form-input" placeholder="City, neighborhood..." autocomplete="off" maxlength="100" />
+            </div>
+            <div class="hero-search__divider" aria-hidden="true"></div>
+            <div class="hero-search__field">
+              <label for="search-type">Property Type</label>
+              <select id="search-type" name="type" class="form-select">
+                <option value="">All Types</option>
+                <option value="Villa">Villa</option>
+                <option value="Apartment">Apartment</option>
+                <option value="House">House</option>
+                <option value="Townhouse">Townhouse</option>
+              </select>
+            </div>
+            <div class="hero-search__divider" aria-hidden="true"></div>
+            <div class="hero-search__field">
+              <label for="search-price">Max Price</label>
+              <select id="search-price" name="maxPrice" class="form-select">
+                <option value="">Any Price</option>
+                <option value="1000000">$1M</option>
+                <option value="2000000">$2M</option>
+                <option value="5000000">$5M</option>
+                <option value="10000000">$10M+</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary" id="hero-search-btn">Search</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero__scroll" aria-hidden="true">
+      <div class="hero__scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </section>
+
+  <!-- ===================== STATS BANNER ===================== -->
+  <section class="stats-banner section--sm" aria-label="Key statistics">
+    <div class="container">
+      <div class="stats-banner__grid">
+        <div class="stats-banner__item reveal">
+          <div class="stats-banner__num" data-counter data-target="1240">0</div>
+          <div class="stats-banner__label">Properties Listed</div>
+        </div>
+        <div class="stats-banner__item reveal reveal-delay-1">
+          <div class="stats-banner__num" data-counter data-target="3800">0</div>
+          <div class="stats-banner__label">Happy Clients</div>
+        </div>
+        <div class="stats-banner__item reveal reveal-delay-2">
+          <div class="stats-banner__num" data-counter data-target="48">0</div>
+          <div class="stats-banner__label">Expert Agents</div>
+        </div>
+        <div class="stats-banner__item reveal reveal-delay-3">
+          <div class="stats-banner__num" data-counter data-target="15">0</div>
+          <div class="stats-banner__label">Years of Excellence</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FEATURED PROPERTIES ===================== -->
+  <section class="section section--cream" id="featured-properties" aria-label="Featured properties">
+    <div class="container">
+      <div class="section-header flex-between" style="flex-wrap:wrap;gap:1rem;">
+        <div>
+          <div class="section-label">Featured</div>
+          <h2 class="section-title">Premium Properties</h2>
+          <p class="section-desc">Handpicked luxury listings from our top agents, ready for you to explore.</p>
+        </div>
+        <div class="flex gap-2" style="align-items:flex-end;">
+          <div class="view-toggle" role="group" aria-label="View mode">
+            <button class="view-toggle__btn active" id="grid-view-btn" aria-label="Grid view" title="Grid view">⊞</button>
+            <button class="view-toggle__btn" id="list-view-btn" aria-label="List view" title="List view">☰</button>
+          </div>
+          <a href="properties.html" class="btn btn-outline">View All</a>
+        </div>
+      </div>
+      <!-- Cards rendered by JS -->
+      <div class="grid-3" id="featured-properties-grid" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!-- ===================== WHY CHOOSE US ===================== -->
+  <section class="section" aria-label="Why choose REIS Realty">
+    <div class="container">
+      <div class="section-header section-header--center">
+        <div class="section-label">Why Us</div>
+        <h2 class="section-title">The REIS Advantage</h2>
+        <p class="section-desc">We combine local expertise, cutting-edge technology, and genuine care to deliver an unmatched property experience.</p>
+      </div>
+      <div class="grid-4">
+        <div class="feature-card reveal">
+          <div class="feature-card__icon" aria-hidden="true">🏆</div>
+          <h4>Award-Winning Agents</h4>
+          <p>Our team of 48 certified agents brings decades of combined experience to every transaction.</p>
+        </div>
+        <div class="feature-card reveal reveal-delay-1">
+          <div class="feature-card__icon" aria-hidden="true">🔍</div>
+          <h4>Advanced Search Tools</h4>
+          <p>Filter by price, location, size, and amenities with our intuitive search platform.</p>
+        </div>
+        <div class="feature-card reveal reveal-delay-2">
+          <div class="feature-card__icon" aria-hidden="true">🔒</div>
+          <h4>Verified Listings</h4>
+          <p>Every listing is thoroughly vetted and verified for accuracy and legal compliance.</p>
+        </div>
+        <div class="feature-card reveal reveal-delay-3">
+          <div class="feature-card__icon" aria-hidden="true">📊</div>
+          <h4>Market Intelligence</h4>
+          <p>Real-time market data and analytics help you make smarter investment decisions.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== AGENTS PREVIEW ===================== -->
+  <section class="section section--cream" aria-label="Our agents">
+    <div class="container">
+      <div class="section-header section-header--center">
+        <div class="section-label">Our Team</div>
+        <h2 class="section-title">Meet Our Expert Agents</h2>
+        <p class="section-desc">Dedicated professionals ready to guide you through every step of your real estate journey.</p>
+      </div>
+      <div class="grid-4" id="agents-preview-grid"></div>
+      <div class="text-center" style="margin-top:3rem;">
+        <a href="agents.html" class="btn btn-primary btn-lg">Meet All Agents</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== TESTIMONIALS ===================== -->
+  <section class="section section--navy" aria-label="Client testimonials">
+    <div class="container">
+      <div class="section-header section-header--center">
+        <div class="section-label" style="color:var(--clr-gold)">Testimonials</div>
+        <h2 class="section-title section-title--light">What Our Clients Say</h2>
+      </div>
+      <div class="grid-3">
+        <div class="testimonial-card reveal">
+          <div class="testimonial-card__stars" aria-label="5 out of 5 stars">★★★★★</div>
+          <p class="testimonial-card__text">"REIS Realty made finding our dream home effortless. Victoria was incredibly knowledgeable and patient throughout the entire process."</p>
+          <div class="testimonial-card__author">
+            <img src="assets/images/agent1.png" alt="Sarah M." class="testimonial-card__avatar" />
+            <div>
+              <div class="testimonial-card__name">Sarah Mitchell</div>
+              <div class="testimonial-card__role">Homeowner, Beverly Hills</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card reveal reveal-delay-1">
+          <div class="testimonial-card__stars" aria-label="5 out of 5 stars">★★★★★</div>
+          <p class="testimonial-card__text">"Marcus helped us sell our Manhattan penthouse at 12% above asking price. His market knowledge is second to none. Highly recommend!"</p>
+          <div class="testimonial-card__author">
+            <img src="assets/images/agent2.png" alt="James R." class="testimonial-card__avatar" />
+            <div>
+              <div class="testimonial-card__name">James Rodriguez</div>
+              <div class="testimonial-card__role">Property Investor, New York</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card reveal reveal-delay-2">
+          <div class="testimonial-card__stars" aria-label="5 out of 5 stars">★★★★★</div>
+          <p class="testimonial-card__text">"The whole team at REIS made our relocation completely stress-free. Professional, responsive, and truly dedicated to finding the right fit."</p>
+          <div class="testimonial-card__author">
+            <img src="assets/images/agent1.png" alt="Lisa K." class="testimonial-card__avatar" />
+            <div>
+              <div class="testimonial-card__name">Lisa Kameron</div>
+              <div class="testimonial-card__role">Family Home Buyer, Miami</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== BLOG PREVIEW ===================== -->
+  <section class="section" aria-label="Latest blog posts">
+    <div class="container">
+      <div class="section-header flex-between" style="flex-wrap:wrap;gap:1rem;align-items:flex-end;">
+        <div>
+          <div class="section-label">Insights</div>
+          <h2 class="section-title">Latest from Our Blog</h2>
+        </div>
+        <a href="blog.html" class="btn btn-outline">All Articles</a>
+      </div>
+      <div class="grid-3" id="blog-preview-grid"></div>
+    </div>
+  </section>
+
+  <!-- ===================== CTA BANNER ===================== -->
+  <section class="cta-banner" aria-label="Call to action">
+    <div class="container cta-banner__content">
+      <div class="section-label" style="justify-content:center;margin-bottom:1rem;">Start Today</div>
+      <h2>Ready to Find Your Dream Home?</h2>
+      <p>Join thousands of happy homeowners who found their perfect property through REIS Realty.</p>
+      <div class="flex-center gap-4" style="flex-wrap:wrap;">
+        <a href="search.html"     class="btn btn-dark btn-lg">Advanced Search</a>
+        <a href="join.html"       class="btn btn-outline btn-lg">Join as Agent</a>
+        <a href="contact.html"    class="btn btn-dark btn-lg">Contact Us</a>
+      </div>
+    </div>
+  </section>
+  </main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <!-- Brand -->
+        <div class="footer-brand">
+          <div class="nav-logo">
+            <div class="nav-logo__mark">R</div>
+            <div class="nav-logo__text">
+              <span class="nav-logo__name">REIS Realty</span>
+              <span class="nav-logo__tagline">Luxury Properties</span>
+            </div>
+          </div>
+          <p>REIS Realty is your trusted partner in finding, buying, and selling premium properties. Serving clients across the nation since 2010.</p>
+          <div class="footer-social">
+            <a href="#" aria-label="Facebook">f</a>
+            <a href="#" aria-label="Instagram">in</a>
+            <a href="#" aria-label="Twitter">𝕏</a>
+            <a href="#" aria-label="LinkedIn">Li</a>
+          </div>
+        </div>
+        <!-- Links -->
+        <div class="footer-col">
+          <h5>Quick Links</h5>
+          <nav class="footer-links" aria-label="Footer navigation">
+            <a href="index.html">Home</a>
+            <a href="about.html">About Us</a>
+            <a href="agents.html">Our Agents</a>
+            <a href="properties.html">Properties</a>
+            <a href="gallery.html">Gallery</a>
+          </nav>
+        </div>
+        <div class="footer-col">
+          <h5>Explore</h5>
+          <nav class="footer-links" aria-label="Explore navigation">
+            <a href="search.html">Search Properties</a>
+            <a href="blog.html">Blog</a>
+            <a href="contact.html">Contact</a>
+            <a href="join.html">Join Now</a>
+          </nav>
+        </div>
+        <!-- Contact -->
+        <div class="footer-col">
+          <h5>Contact</h5>
+          <div class="footer-contact-item">
+            <div class="footer-contact-icon" aria-hidden="true">📍</div>
+            <div>123 Luxury Lane, Beverly Hills, CA 90210</div>
+          </div>
+          <div class="footer-contact-item">
+            <div class="footer-contact-icon" aria-hidden="true">📞</div>
+            <div>+1 (310) 555-0100</div>
+          </div>
+          <div class="footer-contact-item">
+            <div class="footer-contact-icon" aria-hidden="true">✉</div>
+            <div id="footer-email">info&#64;reis&#45;realty.com</div>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 REIS Realty. All rights reserved.</span>
+        <div class="flex gap-4">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Back to Top -->
+  <button id="back-to-top" aria-label="Scroll back to top" title="Back to top">▲</button>
+
+  <!-- Toast container -->
+  <div class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="js/main.js"></script>
+  <script src="js/properties.js"></script>
+  <script>
+    'use strict';
+    // Render featured properties (first 3 featured)
+    (function() {
+      const data = window.REIS_DATA;
+      if (!data) return;
+
+      const grid = document.getElementById('featured-properties-grid');
+      if (grid) {
+        const featured = data.properties.filter(p => p.featured).slice(0, 3);
+        featured.forEach((prop, i) => {
+          const card = renderPropertyCard(prop);
+          card.classList.add('reveal-delay-' + i);
+          grid.appendChild(card);
+        });
+      }
+
+      // Agents preview
+      const agentGrid = document.getElementById('agents-preview-grid');
+      if (agentGrid) {
+        data.agents.forEach((agent, i) => {
+          const card = buildAgentCard(agent);
+          card.classList.add('reveal', 'reveal-delay-' + (i % 4));
+          agentGrid.appendChild(card);
+        });
+      }
+
+      // Blog preview
+      const blogGrid = document.getElementById('blog-preview-grid');
+      if (blogGrid) {
+        data.blogPosts.forEach((post, i) => {
+          const card = buildBlogCard(post);
+          card.classList.add('reveal', 'reveal-delay-' + (i % 3));
+          blogGrid.appendChild(card);
+        });
+      }
+
+      // View toggle
+      const gridBtn = document.getElementById('grid-view-btn');
+      const listBtn = document.getElementById('list-view-btn');
+      const fpGrid  = document.getElementById('featured-properties-grid');
+      if (gridBtn && listBtn && fpGrid) {
+        gridBtn.addEventListener('click', () => {
+          fpGrid.className = 'grid-3';
+          gridBtn.classList.add('active');
+          listBtn.classList.remove('active');
+        });
+        listBtn.addEventListener('click', () => {
+          fpGrid.className = 'properties-list';
+          listBtn.classList.add('active');
+          gridBtn.classList.remove('active');
+        });
+      }
+
+      // Hero search redirect
+      const heroForm = document.getElementById('hero-search-form');
+      if (heroForm) {
+        heroForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const loc  = document.getElementById('search-location').value;
+          const type = document.getElementById('search-type').value;
+          // Navigate to search page with params — values sanitized by encodeURIComponent
+          const params = new URLSearchParams();
+          if (loc)  params.set('location', loc);
+          if (type) params.set('type', type);
+          window.location.href = 'search.html' + (params.toString() ? '?' + params.toString() : '');
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

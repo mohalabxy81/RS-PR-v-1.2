@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Properties — REIS Realty</title>
+  <meta name="description" content="Browse our full catalog of luxury homes, apartments, villas, and townhouses. Filter by price, location, size, and more." />
+  <meta http-equiv="X-Frame-Options" content="SAMEORIGIN" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; object-src 'none';" />
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <header id="navbar" class="solid" role="banner">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo" aria-label="REIS Realty home">
+        <div class="nav-logo__mark">R</div>
+        <div class="nav-logo__text">
+          <span class="nav-logo__name">REIS Realty</span>
+          <span class="nav-logo__tagline">Luxury Properties</span>
+        </div>
+      </a>
+      <nav class="nav-menu" id="nav-menu" role="navigation" aria-label="Main navigation">
+        <a href="index.html"      class="nav-link">Home</a>
+        <a href="properties.html" class="nav-link">Properties</a>
+        <a href="agents.html"     class="nav-link">Agents</a>
+        <a href="gallery.html"    class="nav-link">Gallery</a>
+        <a href="blog.html"       class="nav-link">Blog</a>
+        <a href="about.html"      class="nav-link">About</a>
+        <a href="contact.html"    class="nav-link">Contact</a>
+      </nav>
+      <div class="nav-actions">
+        <a href="search.html" class="btn btn-outline">🔍 Search</a>
+        <a href="join.html"   class="btn btn-primary">Join Now</a>
+      </div>
+      <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <!-- Page Hero -->
+    <section class="page-hero">
+      <div class="container page-hero__content">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="index.html">Home</a>
+          <span aria-hidden="true">›</span>
+          <span>Properties</span>
+        </nav>
+        <h1>All Properties</h1>
+        <p style="color:rgba(255,255,255,0.65);margin-top:0.5rem;">Discover your perfect home from our curated collection of premium listings.</p>
+      </div>
+    </section>
+
+    <!-- Properties Section -->
+    <section class="section section--cream" aria-label="Property listings">
+      <div class="container">
+        <div class="properties-layout">
+
+          <!-- Filter Sidebar -->
+          <aside aria-label="Property filters">
+            <div class="filter-sidebar">
+              <div class="filter-sidebar__title">Filter Properties</div>
+
+              <div class="filter-group">
+                <div class="filter-group__label">Property Type</div>
+                <div class="filter-chips">
+                  <button class="filter-chip" data-filter="type" data-value="Villa">Villa</button>
+                  <button class="filter-chip" data-filter="type" data-value="Apartment">Apartment</button>
+                  <button class="filter-chip" data-filter="type" data-value="House">House</button>
+                  <button class="filter-chip" data-filter="type" data-value="Townhouse">Townhouse</button>
+                </div>
+              </div>
+
+              <div class="filter-group">
+                <div class="filter-group__label">Status</div>
+                <div class="filter-chips">
+                  <button class="filter-chip" data-filter="status" data-value="For Sale">For Sale</button>
+                  <button class="filter-chip" data-filter="status" data-value="For Rent">For Rent</button>
+                </div>
+              </div>
+
+              <div class="filter-group">
+                <div class="filter-group__label">Location</div>
+                <div class="filter-chips">
+                  <button class="filter-chip" data-filter="location" data-value="Beverly Hills">Beverly Hills</button>
+                  <button class="filter-chip" data-filter="location" data-value="Manhattan">Manhattan</button>
+                  <button class="filter-chip" data-filter="location" data-value="Miami">Miami</button>
+                  <button class="filter-chip" data-filter="location" data-value="Malibu">Malibu</button>
+                </div>
+              </div>
+
+              <div class="filter-group">
+                <div class="filter-group__label">Max Price: <span id="price-max-display">$10M+</span></div>
+                <input type="range" id="price-range" class="form-range" min="500000" max="10000000" value="10000000" step="100000" aria-label="Max price filter" />
+                <div class="filter-price-values">
+                  <span>$500K</span>
+                  <span>$10M+</span>
+                </div>
+              </div>
+
+              <div class="filter-group">
+                <div class="filter-group__label">Bedrooms</div>
+                <div class="filter-chips">
+                  <button class="filter-chip" data-filter="beds" data-value="2">2+</button>
+                  <button class="filter-chip" data-filter="beds" data-value="3">3+</button>
+                  <button class="filter-chip" data-filter="beds" data-value="4">4+</button>
+                  <button class="filter-chip" data-filter="beds" data-value="5">5+</button>
+                </div>
+              </div>
+
+              <div class="filter-group">
+                <div class="filter-group__label">Bathrooms</div>
+                <div class="filter-chips">
+                  <button class="filter-chip" data-filter="baths" data-value="2">2+</button>
+                  <button class="filter-chip" data-filter="baths" data-value="3">3+</button>
+                  <button class="filter-chip" data-filter="baths" data-value="4">4+</button>
+                </div>
+              </div>
+
+              <button id="reset-filters" class="btn btn-outline" style="width:100%;margin-top:0.5rem;">Reset Filters</button>
+            </div>
+          </aside>
+
+          <!-- Results -->
+          <div>
+            <div class="properties-toolbar">
+              <div id="properties-count" class="properties-count"><strong>6</strong> properties found</div>
+              <div class="flex gap-4" style="align-items:center;">
+                <select id="sort-select" class="form-select" style="width:auto;padding:0.5rem 1rem;" aria-label="Sort properties">
+                  <option value="newest">Newest First</option>
+                  <option value="price-asc">Price: Low to High</option>
+                  <option value="price-desc">Price: High to Low</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="properties-grid" id="properties-grid" aria-live="polite"></div>
+            <nav class="pagination" id="properties-pagination" aria-label="Property listing pages"></nav>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="nav-logo">
+            <div class="nav-logo__mark">R</div>
+            <div class="nav-logo__text">
+              <span class="nav-logo__name">REIS Realty</span>
+              <span class="nav-logo__tagline">Luxury Properties</span>
+            </div>
+          </div>
+          <p>Your trusted partner in premium real estate since 2010.</p>
+        </div>
+        <div class="footer-col"><h5>Navigate</h5>
+          <nav class="footer-links">
+            <a href="index.html">Home</a><a href="properties.html">Properties</a>
+            <a href="agents.html">Agents</a><a href="contact.html">Contact</a>
+          </nav>
+        </div>
+        <div class="footer-col"><h5>Property Types</h5>
+          <nav class="footer-links">
+            <a href="properties.html">Villas</a><a href="properties.html">Apartments</a>
+            <a href="properties.html">Houses</a><a href="properties.html">Townhouses</a>
+          </nav>
+        </div>
+        <div class="footer-col"><h5>Contact</h5>
+          <div class="footer-contact-item"><div class="footer-contact-icon">📞</div><div>+1 (310) 555-0100</div></div>
+          <div class="footer-contact-item"><div class="footer-contact-icon">✉</div><div>info&#64;reis&#45;realty.com</div></div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 REIS Realty. All rights reserved.</span>
+        <div class="flex gap-4"><a href="#">Privacy</a><a href="#">Terms</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <button id="back-to-top" aria-label="Scroll back to top">▲</button>
+  <div class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="js/main.js"></script>
+  <script src="js/properties.js"></script>
+</body>
+</html>

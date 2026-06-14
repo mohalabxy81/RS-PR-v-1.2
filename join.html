@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Join Us — REIS Realty</title>
+  <meta name="description" content="Join REIS Realty. Register as a buyer, seller, or apply to become one of our expert real estate agents." />
+  <meta http-equiv="X-Frame-Options" content="SAMEORIGIN" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; object-src 'none';" />
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <header id="navbar" class="transparent" role="banner">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo" aria-label="REIS Realty home">
+        <div class="nav-logo__mark">R</div>
+        <div class="nav-logo__text">
+          <span class="nav-logo__name">REIS Realty</span>
+          <span class="nav-logo__tagline">Luxury Properties</span>
+        </div>
+      </a>
+      <nav class="nav-menu" id="nav-menu" role="navigation" aria-label="Main navigation">
+        <a href="index.html"      class="nav-link">Home</a>
+        <a href="properties.html" class="nav-link">Properties</a>
+        <a href="agents.html"     class="nav-link">Agents</a>
+        <a href="gallery.html"    class="nav-link">Gallery</a>
+        <a href="blog.html"       class="nav-link">Blog</a>
+        <a href="about.html"      class="nav-link">About</a>
+        <a href="contact.html"    class="nav-link">Contact</a>
+      </nav>
+      <div class="nav-actions">
+        <a href="search.html" class="btn btn-outline">🔍 Search</a>
+        <a href="join.html"   class="btn btn-primary active">Join Now</a>
+      </div>
+      <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section class="join-hero">
+      <div class="container join-layout">
+        
+        <!-- Info Column -->
+        <div class="join-info reveal-left">
+          <div class="section-label" style="color:var(--clr-gold-light);margin-bottom:1rem;">Become a Member</div>
+          <h1>Unlock Premium Real Estate Services</h1>
+          <p>Whether you're looking to find your dream home, invest in luxury properties, or grow your career as a real estate agent — REIS Realty provides the platform and support you need.</p>
+
+          <div class="join-benefits">
+            <div class="join-benefit">
+              <div class="join-benefit-icon" aria-hidden="true">🔑</div>
+              <div>Save your favorite properties and searches</div>
+            </div>
+            <div class="join-benefit">
+              <div class="join-benefit-icon" aria-hidden="true">📊</div>
+              <div>Access exclusive market insights and pricing history</div>
+            </div>
+            <div class="join-benefit">
+              <div class="join-benefit-icon" aria-hidden="true">🤝</div>
+              <div>Connect directly with our top-tier agents</div>
+            </div>
+            <div class="join-benefit">
+              <div class="join-benefit-icon" aria-hidden="true">💼</div>
+              <div>Agents: Access our massive buyer network and marketing tools</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Column -->
+        <div class="join-card reveal-right">
+          
+          <div class="tabs-wrapper">
+            <div class="tabs" role="tablist" aria-label="Registration type">
+              <button class="tab-btn active" data-tab="tab-client" role="tab" aria-selected="true" style="flex:1;">Register as Client</button>
+              <button class="tab-btn" data-tab="tab-agent" role="tab" aria-selected="false" style="flex:1;">Apply as Agent</button>
+            </div>
+
+            <!-- Client Form -->
+            <div id="tab-client" class="tab-panel active" role="tabpanel">
+              <h3 style="margin-bottom:1.5rem;color:var(--clr-text-dark);">Create Your Account</h3>
+              <form id="join-form" novalidate>
+                <!-- TODO(security): Backend integration needs CSRF token field here -->
+                
+                <div class="form-group">
+                  <label for="join-name" class="form-label">Full Name</label>
+                  <input type="text" id="join-name" name="name" class="form-input" autocomplete="name" required />
+                </div>
+                <div class="form-group">
+                  <label for="join-email" class="form-label">Email Address</label>
+                  <input type="email" id="join-email" name="email" class="form-input" autocomplete="email" required />
+                </div>
+                <div class="form-group">
+                  <label for="join-password" class="form-label">Password</label>
+                  <input type="password" id="join-password" name="password" class="form-input" autocomplete="new-password" required />
+                  <div class="password-strength" aria-label="Password strength indicator">
+                    <div class="strength-bar" aria-hidden="true"></div>
+                    <div class="strength-bar" aria-hidden="true"></div>
+                    <div class="strength-bar" aria-hidden="true"></div>
+                    <div class="strength-bar" aria-hidden="true"></div>
+                  </div>
+                  <div style="font-size:0.75rem;color:var(--clr-text-muted);margin-top:0.5rem;">Minimum 8 characters. Mix letters, numbers, and symbols.</div>
+                </div>
+                <div class="form-group" style="margin-top:2rem;">
+                  <label class="form-check">
+                    <input type="checkbox" id="join-terms" required />
+                    <span>I agree to the <a href="#" style="color:var(--clr-gold);font-weight:600;">Terms of Service</a> and <a href="#" style="color:var(--clr-gold);font-weight:600;">Privacy Policy</a>.</span>
+                  </label>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-lg" style="width:100%;margin-top:1rem;">Create Account</button>
+              </form>
+              <div class="text-center text-muted" style="margin-top:1.5rem;font-size:0.875rem;">
+                Already have an account? <a href="#" style="color:var(--clr-gold);font-weight:600;">Log In</a>
+              </div>
+            </div>
+
+            <!-- Agent Form (Visual Demo Only) -->
+            <div id="tab-agent" class="tab-panel" role="tabpanel">
+              <h3 style="margin-bottom:1.5rem;color:var(--clr-text-dark);">Agent Application</h3>
+              <form onsubmit="event.preventDefault(); window.showToast('Agent applications are currently reviewed manually. Please contact us.', 'error');">
+                <div class="form-group">
+                  <label class="form-label">Full Name</label>
+                  <input type="text" class="form-input" required />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Email Address</label>
+                  <input type="email" class="form-input" required />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Real Estate License Number</label>
+                  <input type="text" class="form-input" required />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Years of Experience</label>
+                  <select class="form-select" required>
+                    <option value="">Select an option</option>
+                    <option value="1">Less than 1 year</option>
+                    <option value="1-3">1-3 years</option>
+                    <option value="3-5">3-5 years</option>
+                    <option value="5+">5+ years</option>
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-dark btn-lg" style="width:100%;margin-top:1.5rem;">Submit Application</button>
+              </form>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="nav-logo">
+            <div class="nav-logo__mark">R</div>
+            <div class="nav-logo__text">
+              <span class="nav-logo__name">REIS Realty</span>
+            </div>
+          </div>
+          <p>Your trusted partner in premium real estate since 2010.</p>
+        </div>
+        <div class="footer-col"><h5>Navigate</h5>
+          <nav class="footer-links">
+            <a href="index.html">Home</a><a href="properties.html">Properties</a>
+            <a href="gallery.html">Gallery</a><a href="contact.html">Contact</a>
+          </nav>
+        </div>
+        <div class="footer-col"><h5>Explore</h5>
+          <nav class="footer-links">
+            <a href="agents.html">Agents</a><a href="blog.html">Blog</a>
+            <a href="about.html">About</a><a href="search.html">Search</a>
+          </nav>
+        </div>
+        <div class="footer-col"><h5>Contact</h5>
+          <div class="footer-contact-item"><div class="footer-contact-icon">📞</div><div>+1 (310) 555-0100</div></div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 REIS Realty. All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
+
+  <button id="back-to-top" aria-label="Scroll back to top">▲</button>
+  <div class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="js/main.js"></script>
+  <script src="js/properties.js"></script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery — REIS Realty</title>
+  <meta name="description" content="Browse our stunning property photo gallery. Explore interior and exterior shots of luxury villas, apartments, and estates." />
+  <meta http-equiv="X-Frame-Options" content="SAMEORIGIN" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; object-src 'none';" />
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <header id="navbar" class="solid" role="banner">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo" aria-label="REIS Realty home">
+        <div class="nav-logo__mark">R</div>
+        <div class="nav-logo__text">
+          <span class="nav-logo__name">REIS Realty</span>
+          <span class="nav-logo__tagline">Luxury Properties</span>
+        </div>
+      </a>
+      <nav class="nav-menu" id="nav-menu" role="navigation" aria-label="Main navigation">
+        <a href="index.html"      class="nav-link">Home</a>
+        <a href="properties.html" class="nav-link">Properties</a>
+        <a href="agents.html"     class="nav-link">Agents</a>
+        <a href="gallery.html"    class="nav-link">Gallery</a>
+        <a href="blog.html"       class="nav-link">Blog</a>
+        <a href="about.html"      class="nav-link">About</a>
+        <a href="contact.html"    class="nav-link">Contact</a>
+      </nav>
+      <div class="nav-actions">
+        <a href="search.html" class="btn btn-outline">🔍 Search</a>
+        <a href="join.html"   class="btn btn-primary">Join Now</a>
+      </div>
+      <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section class="page-hero">
+      <div class="container page-hero__content">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="index.html">Home</a><span>›</span><span>Gallery</span>
+        </nav>
+        <h1>Property Gallery</h1>
+        <p style="color:rgba(255,255,255,0.65);margin-top:0.5rem;">A visual showcase of our most stunning properties.</p>
+      </div>
+    </section>
+
+    <section class="section" aria-label="Property photo gallery">
+      <div class="container">
+        <!-- Category Filter -->
+        <div class="flex-center gap-2" style="flex-wrap:wrap;margin-bottom:3rem;" role="group" aria-label="Filter gallery by category">
+          <button class="tag active" data-gallery-filter="all">All Properties</button>
+          <button class="tag" data-gallery-filter="villa">Villas</button>
+          <button class="tag" data-gallery-filter="apartment">Apartments</button>
+          <button class="tag" data-gallery-filter="exterior">Exteriors</button>
+        </div>
+
+        <!-- Masonry Gallery -->
+        <div class="gallery-grid" id="gallery-grid" role="list" aria-label="Property photos">
+          <div class="gallery-item" data-category="villa" role="listitem" tabindex="0" aria-label="Open photo: The Grandview Villa">
+            <img src="assets/images/gallery1.png" alt="The Grandview Villa exterior with pool and tropical landscaping" loading="lazy" />
+            <div class="gallery-item__overlay" aria-hidden="true">
+              <div class="gallery-item__zoom">🔍</div>
+            </div>
+          </div>
+          <div class="gallery-item" data-category="apartment" role="listitem" tabindex="0" aria-label="Open photo: Skyline Penthouse">
+            <img src="assets/images/gallery2.png" alt="Skyline Penthouse tower with city views at golden hour" loading="lazy" />
+            <div class="gallery-item__overlay" aria-hidden="true">
+              <div class="gallery-item__zoom">🔍</div>
+            </div>
+          </div>
+          <div class="gallery-item" data-category="exterior" role="listitem" tabindex="0" aria-label="Open photo: Coastal Retreat">
+            <img src="assets/images/gallery3.png" alt="Coastal Retreat home beachfront exterior at sunset" loading="lazy" />
+            <div class="gallery-item__overlay" aria-hidden="true">
+              <div class="gallery-item__zoom">🔍</div>
+            </div>
+          </div>
+          <div class="gallery-item" data-category="villa" role="listitem" tabindex="0" aria-label="Open photo: Garden Estate">
+            <img src="assets/images/gallery4.png" alt="Garden Estate manor luxury residential property" loading="lazy" />
+            <div class="gallery-item__overlay" aria-hidden="true">
+              <div class="gallery-item__zoom">🔍</div>
+            </div>
+          </div>
+          <div class="gallery-item" data-category="exterior" role="listitem" tabindex="0" aria-label="Open photo: Park View">
+            <img src="assets/images/gallery5.png" alt="Park View modern residential exterior with landscaping" loading="lazy" />
+            <div class="gallery-item__overlay" aria-hidden="true">
+              <div class="gallery-item__zoom">🔍</div>
+            </div>
+          </div>
+          <div class="gallery-item" data-category="apartment" role="listitem" tabindex="0" aria-label="Open photo: Downtown Loft">
+            <img src="assets/images/gallery6.png" alt="Downtown luxury loft building modern architecture" loading="lazy" />
+            <div class="gallery-item__overlay" aria-hidden="true">
+              <div class="gallery-item__zoom">🔍</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-banner" aria-label="View all properties">
+      <div class="container cta-banner__content">
+        <h2>Find Your Perfect Property</h2>
+        <p>Browse our full catalog of verified luxury listings and find the one that's right for you.</p>
+        <a href="properties.html" class="btn btn-dark btn-lg">View All Properties</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="Image lightbox">
+    <button id="lightbox-close" class="lightbox__close" aria-label="Close image viewer">✕</button>
+    <button id="lightbox-prev"  class="lightbox__nav lightbox__prev" aria-label="Previous image">‹</button>
+    <img id="lightbox-img" class="lightbox__img" src="" alt="" />
+    <div id="lightbox-caption" class="lightbox__caption"></div>
+    <button id="lightbox-next"  class="lightbox__nav lightbox__next" aria-label="Next image">›</button>
+  </div>
+
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="nav-logo">
+            <div class="nav-logo__mark">R</div>
+            <div class="nav-logo__text">
+              <span class="nav-logo__name">REIS Realty</span>
+              <span class="nav-logo__tagline">Luxury Properties</span>
+            </div>
+          </div>
+          <p>Your trusted partner in premium real estate since 2010.</p>
+        </div>
+        <div class="footer-col"><h5>Navigate</h5>
+          <nav class="footer-links">
+            <a href="index.html">Home</a><a href="properties.html">Properties</a>
+            <a href="gallery.html">Gallery</a><a href="contact.html">Contact</a>
+          </nav>
+        </div>
+        <div class="footer-col"><h5>Explore</h5>
+          <nav class="footer-links">
+            <a href="agents.html">Agents</a><a href="blog.html">Blog</a>
+            <a href="about.html">About</a><a href="join.html">Join Now</a>
+          </nav>
+        </div>
+        <div class="footer-col"><h5>Contact</h5>
+          <div class="footer-contact-item"><div class="footer-contact-icon">📞</div><div>+1 (310) 555-0100</div></div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 REIS Realty. All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
+
+  <button id="back-to-top" aria-label="Scroll back to top">▲</button>
+  <div class="toast-container" aria-live="polite" aria-atomic="true"></div>
+  <script src="js/main.js"></script>
+  <script src="js/properties.js"></script>
+</body>
+</html>

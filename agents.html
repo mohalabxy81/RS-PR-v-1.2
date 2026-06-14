@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Agents — REIS Realty</title>
+  <meta name="description" content="Meet the REIS Realty team of expert agents specializing in luxury homes, apartments, and investment properties across the nation." />
+  <meta http-equiv="X-Frame-Options" content="SAMEORIGIN" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; object-src 'none';" />
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <header id="navbar" class="solid" role="banner">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo" aria-label="REIS Realty home">
+        <div class="nav-logo__mark">R</div>
+        <div class="nav-logo__text">
+          <span class="nav-logo__name">REIS Realty</span>
+          <span class="nav-logo__tagline">Luxury Properties</span>
+        </div>
+      </a>
+      <nav class="nav-menu" id="nav-menu" role="navigation" aria-label="Main navigation">
+        <a href="index.html"      class="nav-link">Home</a>
+        <a href="properties.html" class="nav-link">Properties</a>
+        <a href="agents.html"     class="nav-link">Agents</a>
+        <a href="gallery.html"    class="nav-link">Gallery</a>
+        <a href="blog.html"       class="nav-link">Blog</a>
+        <a href="about.html"      class="nav-link">About</a>
+        <a href="contact.html"    class="nav-link">Contact</a>
+      </nav>
+      <div class="nav-actions">
+        <a href="search.html" class="btn btn-outline">🔍 Search</a>
+        <a href="join.html"   class="btn btn-primary">Join Now</a>
+      </div>
+      <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section class="page-hero">
+      <div class="container page-hero__content">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="index.html">Home</a><span>›</span><span>Our Agents</span>
+        </nav>
+        <h1>Our Expert Agents</h1>
+        <p style="color:rgba(255,255,255,0.65);margin-top:0.5rem;">Meet the professionals who will guide you to your perfect property.</p>
+      </div>
+    </section>
+
+    <section class="section section--cream" aria-label="Agent listings">
+      <div class="container">
+        <!-- Filter Tabs -->
+        <div class="section-header section-header--center" style="margin-bottom:2rem;">
+          <div class="section-label">Our Team</div>
+          <h2 class="section-title">48 Expert Agents Nationwide</h2>
+          <div class="flex-center gap-2" style="flex-wrap:wrap;margin-top:1.5rem;" role="group" aria-label="Filter agents by specialty">
+            <button class="tag active" data-agent-filter="all">All Agents</button>
+            <button class="tag" data-agent-filter="Villa">Villa Specialists</button>
+            <button class="tag" data-agent-filter="Apartment">Apartment Experts</button>
+            <button class="tag" data-agent-filter="House">House & Estate</button>
+          </div>
+        </div>
+
+        <div class="grid-4" id="agents-grid" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <!-- Join as Agent CTA -->
+    <section class="section section--navy" aria-label="Join as agent">
+      <div class="container text-center">
+        <div class="section-label" style="justify-content:center;color:var(--clr-gold)">Join the Team</div>
+        <h2 class="section-title section-title--light" style="margin-bottom:1rem;">Are You a Real Estate Professional?</h2>
+        <p class="section-desc section-desc--light" style="margin:0 auto 2.5rem;">Join REIS Realty and access our platform, marketing tools, and a network of thousands of active buyers and sellers.</p>
+        <a href="join.html" class="btn btn-primary btn-lg">Apply as an Agent</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="nav-logo">
+            <div class="nav-logo__mark">R</div>
+            <div class="nav-logo__text">
+              <span class="nav-logo__name">REIS Realty</span>
+              <span class="nav-logo__tagline">Luxury Properties</span>
+            </div>
+          </div>
+          <p>Your trusted partner in premium real estate since 2010.</p>
+        </div>
+        <div class="footer-col"><h5>Navigate</h5>
+          <nav class="footer-links">
+            <a href="index.html">Home</a><a href="about.html">About</a>
+            <a href="agents.html">Agents</a><a href="contact.html">Contact</a>
+          </nav>
+        </div>
+        <div class="footer-col"><h5>Explore</h5>
+          <nav class="footer-links">
+            <a href="properties.html">Properties</a><a href="gallery.html">Gallery</a>
+            <a href="blog.html">Blog</a><a href="join.html">Join Now</a>
+          </nav>
+        </div>
+        <div class="footer-col"><h5>Contact</h5>
+          <div class="footer-contact-item"><div class="footer-contact-icon">📞</div><div>+1 (310) 555-0100</div></div>
+          <div class="footer-contact-item"><div class="footer-contact-icon">✉</div><div>info&#64;reis&#45;realty.com</div></div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 REIS Realty. All rights reserved.</span>
+        <div class="flex gap-4"><a href="#">Privacy</a><a href="#">Terms</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <button id="back-to-top" aria-label="Scroll back to top">▲</button>
+  <div class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="js/main.js"></script>
+  <script src="js/properties.js"></script>
+  <script>
+    'use strict';
+    (function() {
+      const data = window.REIS_DATA;
+      if (!data) return;
+
+      const grid = document.getElementById('agents-grid');
+      if (!grid) return;
+
+      function renderAgents(filter) {
+        grid.replaceChildren();
+        const filtered = filter === 'all'
+          ? data.agents
+          : data.agents.filter(a => a.specialties.includes(filter));
+
+        filtered.forEach((agent, i) => {
+          const card = buildAgentCard(agent);
+          card.classList.add('reveal', 'reveal-delay-' + (i % 4));
+          grid.appendChild(card);
+        });
+        document.querySelectorAll('.reveal:not(.revealed)').forEach(el => el.classList.add('revealed'));
+      }
+
+      // Filter buttons
+      document.querySelectorAll('[data-agent-filter]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('[data-agent-filter]').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          renderAgents(btn.getAttribute('data-agent-filter'));
+        });
+      });
+
+      renderAgents('all');
+    })();
+  </script>
+</body>
+</html>

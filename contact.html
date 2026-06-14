@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Us — REIS Realty</title>
+  <meta name="description" content="Get in touch with REIS Realty. Contact our expert agents to buy, sell, or rent luxury properties." />
+  <meta http-equiv="X-Frame-Options" content="SAMEORIGIN" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <!-- CSP allows OpenStreetMap tiles and frames -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://tile.openstreetmap.org; frame-src https://www.openstreetmap.org; object-src 'none';" />
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <header id="navbar" class="solid" role="banner">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo" aria-label="REIS Realty home">
+        <div class="nav-logo__mark">R</div>
+        <div class="nav-logo__text">
+          <span class="nav-logo__name">REIS Realty</span>
+          <span class="nav-logo__tagline">Luxury Properties</span>
+        </div>
+      </a>
+      <nav class="nav-menu" id="nav-menu" role="navigation" aria-label="Main navigation">
+        <a href="index.html"      class="nav-link">Home</a>
+        <a href="properties.html" class="nav-link">Properties</a>
+        <a href="agents.html"     class="nav-link">Agents</a>
+        <a href="gallery.html"    class="nav-link">Gallery</a>
+        <a href="blog.html"       class="nav-link">Blog</a>
+        <a href="about.html"      class="nav-link">About</a>
+        <a href="contact.html"    class="nav-link">Contact</a>
+      </nav>
+      <div class="nav-actions">
+        <a href="search.html" class="btn btn-outline">🔍 Search</a>
+        <a href="join.html"   class="btn btn-primary">Join Now</a>
+      </div>
+      <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section class="page-hero">
+      <div class="container page-hero__content">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="index.html">Home</a><span>›</span><span>Contact</span>
+        </nav>
+        <h1>Get in Touch</h1>
+        <p style="color:rgba(255,255,255,0.65);margin-top:0.5rem;">We're here to help you with all your real estate needs.</p>
+      </div>
+    </section>
+
+    <section class="section section--cream" aria-label="Contact information and form">
+      <div class="container">
+        <div class="contact-layout">
+          
+          <!-- Contact Info -->
+          <div class="contact-info-card reveal-left">
+            <div class="section-label" style="color:var(--clr-gold-light);margin-bottom:0.5rem;">Contact Info</div>
+            <h3>Our Office</h3>
+            <p>Reach out to us directly or drop by our office. Our agents are ready to assist you.</p>
+
+            <div class="contact-item">
+              <div class="contact-item__icon" aria-hidden="true">📍</div>
+              <div>
+                <div class="contact-item__label">Address</div>
+                <div class="contact-item__value">123 Luxury Lane<br>Beverly Hills, CA 90210</div>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-item__icon" aria-hidden="true">📞</div>
+              <div>
+                <div class="contact-item__label">Phone</div>
+                <div class="contact-item__value">+1 (310) 555-0100</div>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-item__icon" aria-hidden="true">✉</div>
+              <div>
+                <div class="contact-item__label">Email</div>
+                <div class="contact-item__value">info&#64;reis&#45;realty.com</div>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-item__icon" aria-hidden="true">🕒</div>
+              <div>
+                <div class="contact-item__label">Working Hours</div>
+                <div class="contact-item__value">Mon - Fri: 9:00 AM - 6:00 PM<br>Sat: 10:00 AM - 4:00 PM</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contact Form -->
+          <div class="contact-form-card reveal-right">
+            <h3>Send a Message</h3>
+            <p>Fill out the form below and we'll get back to you within 24 hours.</p>
+
+            <form id="contact-form" novalidate>
+              <!-- TODO(security): Backend integration needs CSRF token field here -->
+              
+              <div class="grid-2" style="gap:var(--sp-5);">
+                <div class="form-group">
+                  <label for="contact-name" class="form-label">Full Name *</label>
+                  <input type="text" id="contact-name" name="name" class="form-input" autocomplete="name" required aria-describedby="contact-name-error" />
+                  <div id="contact-name-error" class="form-error" role="alert"></div>
+                </div>
+                <div class="form-group">
+                  <label for="contact-email" class="form-label">Email Address *</label>
+                  <input type="email" id="contact-email" name="email" class="form-input" autocomplete="email" required aria-describedby="contact-email-error" />
+                  <div id="contact-email-error" class="form-error" role="alert"></div>
+                </div>
+              </div>
+
+              <div class="grid-2" style="gap:var(--sp-5);">
+                <div class="form-group">
+                  <label for="contact-phone" class="form-label">Phone Number</label>
+                  <input type="tel" id="contact-phone" name="phone" class="form-input" autocomplete="tel" aria-describedby="contact-phone-error" />
+                  <div id="contact-phone-error" class="form-error" role="alert"></div>
+                </div>
+                <div class="form-group">
+                  <label for="contact-subject" class="form-label">Subject *</label>
+                  <select id="contact-subject" name="subject" class="form-select" required aria-describedby="contact-subject-error">
+                    <option value="">Select an option</option>
+                    <option value="buy">I want to buy a property</option>
+                    <option value="sell">I want to sell a property</option>
+                    <option value="rent">I want to rent a property</option>
+                    <option value="agent">Agent inquiry</option>
+                    <option value="other">Other</option>
+                  </select>
+                  <div id="contact-subject-error" class="form-error" role="alert"></div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="contact-message" class="form-label">Your Message *</label>
+                <textarea id="contact-message" name="message" class="form-textarea" required aria-describedby="contact-message-error"></textarea>
+                <div id="contact-message-error" class="form-error" role="alert"></div>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-lg" style="width:100%;">Send Message</button>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Map Section (OpenStreetMap - no API key needed) -->
+    <section class="section" aria-label="Location map">
+      <div class="container">
+        <div class="map-container reveal">
+          <iframe 
+            src="https://www.openstreetmap.org/export/embed.html?bbox=-118.4239%2C34.0620%2C-118.3840%2C34.0900&amp;layer=mapnik&amp;marker=34.0736%2C-118.4004" 
+            title="REIS Realty Office Location"
+            allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="nav-logo">
+            <div class="nav-logo__mark">R</div>
+            <div class="nav-logo__text">
+              <span class="nav-logo__name">REIS Realty</span>
+              <span class="nav-logo__tagline">Luxury Properties</span>
+            </div>
+          </div>
+          <p>Your trusted partner in premium real estate since 2010.</p>
+        </div>
+        <div class="footer-col"><h5>Navigate</h5>
+          <nav class="footer-links">
+            <a href="index.html">Home</a><a href="properties.html">Properties</a>
+            <a href="gallery.html">Gallery</a><a href="about.html">About</a>
+          </nav>
+        </div>
+        <div class="footer-col"><h5>Explore</h5>
+          <nav class="footer-links">
+            <a href="agents.html">Agents</a><a href="blog.html">Blog</a>
+            <a href="search.html">Search</a><a href="join.html">Join Now</a>
+          </nav>
+        </div>
+        <div class="footer-col"><h5>Contact</h5>
+          <div class="footer-contact-item"><div class="footer-contact-icon">📞</div><div>+1 (310) 555-0100</div></div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 REIS Realty. All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
+
+  <button id="back-to-top" aria-label="Scroll back to top">▲</button>
+  <div class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="js/main.js"></script>
+  <script src="js/properties.js"></script>
+</body>
+</html>
