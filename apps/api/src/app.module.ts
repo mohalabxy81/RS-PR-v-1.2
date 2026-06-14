@@ -49,6 +49,8 @@ import { RecommendationAnalyticsModule } from './recommendation/recommendation-a
 import { RecommendationFeedbackModule } from './recommendation/recommendation-feedback/recommendation-feedback.module';
 import { RecommendationMonitoringModule } from './recommendation/recommendation-monitoring/recommendation-monitoring.module';
 import { RecommendationExperimentsModule } from './recommendation/recommendation-experiments/recommendation-experiments.module';
+import { BrandingModule } from './branding/branding.module';
+import { EnterpriseModule } from './enterprise/enterprise.module';
 
 @Module({
   imports: [
@@ -100,6 +102,8 @@ import { RecommendationExperimentsModule } from './recommendation/recommendation
     RecommendationFeedbackModule,
     RecommendationMonitoringModule,
     RecommendationExperimentsModule,
+    BrandingModule,
+    EnterpriseModule,
   ],
   controllers: [AppController],
   providers: [AppService],

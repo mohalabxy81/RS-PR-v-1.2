@@ -197,6 +197,14 @@ model Tenant {
   recommendationModels      RecommendationModel[]
   recommendationExperiments RecommendationExperiment[]
   recommendationMetrics     RecommendationMetric[]
+
+  // White Label & Branding Phase 5
+  tenantBrands           TenantBrand[]
+  tenantCustomizations   TenantCustomization[]
+  tenantPreferences      TenantPreference[]
+  tenantIntegrations     TenantIntegration[]
+  tenantConfigurations   TenantConfiguration[]
+  enterpriseOrganization EnterpriseOrganization?
 }
 
 model Branch {
@@ -1688,4 +1696,626 @@ model RecommendationAuditLog {
   createdAt DateTime @default(now())
 
   @@index([tenantId])
+}
+
+// ─────────────────────────────────────────────
+// WHITE LABEL & BRANDING: PHASE 5
+// ─────────────────────────────────────────────
+
+model TenantBrand {
+  id               String   @id @default(uuid())
+  tenantId         String   @unique
+  tenant           Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  companyName      String
+  displayName      String?
+  shortName        String?
+  description      String?
+  tagline          String?
+  missionStatement String?
+  businessDetails  Json?
+  contactEmail     String?
+  contactPhone     String?
+  supportEmail     String?
+  salesEmail       String?
+  socialLinks      Json?
+  legalInfo        Json?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  assets        BrandAsset[]
+  logos         BrandLogo[]
+  themes        BrandTheme[]
+  colors        BrandColor[]
+  typography    BrandTypography[]
+  domains       BrandDomain[]
+  emails        BrandEmail[]
+  templates     BrandTemplate[]
+  pages         BrandPage[]
+  settings      BrandSetting[]
+  features      BrandFeature[]
+  localizations BrandLocalization[]
+  auditLogs     BrandAuditLog[]
+}
+
+model BrandAsset {
+  id        String      @id @default(uuid())
+  brandId   String
+  brand     TenantBrand @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  name      String
+  url       String
+  s3Key     String?
+  assetType String // IMAGE, VIDEO, PDF, ICON, FONT
+  mimeType  String?
+  fileSize  Int?
+  version   Int         @default(1)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  @@index([brandId])
+}
+
+model BrandLogo {
+  id        String      @id @default(uuid())
+  brandId   String
+  brand     TenantBrand @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  type      String // PRIMARY, SECONDARY, LIGHT, DARK, FAVICON, APP_ICON, EMAIL, DOCUMENT, WATERMARK
+  url       String
+  s3Key     String?
+  version   Int         @default(1)
+  isActive  Boolean     @default(true)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  @@index([brandId])
+}
+
+model BrandTheme {
+  id        String      @id @default(uuid())
+  brandId   String
+  brand     TenantBrand @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  name      String
+  isDefault Boolean     @default(false)
+  darkMode  Boolean     @default(false)
+  version   Int         @default(1)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  @@index([brandId])
+}
+
+model BrandColor {
+  id        String      @id @default(uuid())
+  brandId   String
+  brand     TenantBrand @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  name      String // PRIMARY, SECONDARY, ACCENT, BACKGROUND
+  value     String // HEX or RGB
+  themeMode String // LIGHT, DARK
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  @@index([brandId])
+}
+
+model BrandTypography {
+  id         String      @id @default(uuid())
+  brandId    String
+  brand      TenantBrand @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  element    String // HEADING_1, BODY, BUTTON
+  fontFamily String
+  fontWeight String?
+  fontSize   String?
+  lineHeight String?
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  @@index([brandId])
+}
+
+model BrandDomain {
+  id        String      @id @default(uuid())
+  brandId   String
+  brand     TenantBrand @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  domain    String      @unique
+  isPrimary Boolean     @default(false)
+  status    String // PENDING, VERIFIED, FAILED
+  sslStatus String // PROVISIONING, ACTIVE, EXPIRED
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  dnsRecords BrandDnsRecord[]
+
+  @@index([brandId])
+}
+
+model BrandDnsRecord {
+  id         String      @id @default(uuid())
+  domainId   String
+  domain     BrandDomain @relation(fields: [domainId], references: [id], onDelete: Cascade)
+  type       String // TXT, CNAME, A
+  name       String
+  value      String
+  isVerified Boolean     @default(false)
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  @@index([domainId])
+}
+
+model BrandEmail {
+  id          String      @id @default(uuid())
+  brandId     String
+  brand       TenantBrand @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  emailType   String // SUPPORT, SALES, NO_REPLY
+  senderName  String
+  senderEmail String
+  replyTo     String?
+  isVerified  Boolean     @default(false)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([brandId])
+}
+
+model BrandTemplate {
+  id        String      @id @default(uuid())
+  brandId   String
+  brand     TenantBrand @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  name      String
+  type      String // EMAIL, DOCUMENT, INVOICE
+  subject   String?
+  bodyHtml  String
+  variables Json?
+  version   Int         @default(1)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  @@index([brandId])
+}
+
+model BrandPage {
+  id          String      @id @default(uuid())
+  brandId     String
+  brand       TenantBrand @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  slug        String
+  title       String
+  contentHtml String
+  isPublished Boolean     @default(false)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@unique([brandId, slug])
+  @@index([brandId])
+}
+
+model BrandSetting {
+  id        String      @id @default(uuid())
+  brandId   String
+  brand     TenantBrand @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  key       String
+  value     Json
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  @@unique([brandId, key])
+  @@index([brandId])
+}
+
+model BrandFeature {
+  id         String      @id @default(uuid())
+  brandId    String
+  brand      TenantBrand @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  featureKey String
+  isEnabled  Boolean     @default(false)
+  settings   Json?
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  @@unique([brandId, featureKey])
+  @@index([brandId])
+}
+
+model BrandLocalization {
+  id        String      @id @default(uuid())
+  brandId   String
+  brand     TenantBrand @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  language  String // en, ar, fr
+  isDefault Boolean     @default(false)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  translations BrandTranslation[]
+
+  @@index([brandId])
+}
+
+model BrandTranslation {
+  id             String            @id @default(uuid())
+  localizationId String
+  localization   BrandLocalization @relation(fields: [localizationId], references: [id], onDelete: Cascade)
+  key            String
+  value          String
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  @@unique([localizationId, key])
+  @@index([localizationId])
+}
+
+model BrandAuditLog {
+  id        String      @id @default(uuid())
+  brandId   String
+  brand     TenantBrand @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  userId    String?
+  action    String
+  entity    String
+  entityId  String?
+  details   Json?
+  createdAt DateTime    @default(now())
+
+  @@index([brandId])
+}
+
+model TenantCustomization {
+  id        String   @id @default(uuid())
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  module    String // CRM, PORTAL, AI
+  config    Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([tenantId, module])
+  @@index([tenantId])
+}
+
+model TenantPreference {
+  id        String   @id @default(uuid())
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  key       String
+  value     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([tenantId, key])
+  @@index([tenantId])
+}
+
+model TenantIntegration {
+  id          String   @id @default(uuid())
+  tenantId    String
+  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  provider    String // STRIPE, SENDGRID, AWS
+  credentials Json
+  isActive    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([tenantId, provider])
+  @@index([tenantId])
+}
+
+model TenantConfiguration {
+  id        String   @id @default(uuid())
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  key       String
+  value     Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([tenantId, key])
+  @@index([tenantId])
+}
+
+// ─────────────────────────────────────────────
+// ENTERPRISE EDITION: PHASE 6
+// ─────────────────────────────────────────────
+
+model EnterpriseOrganization {
+  id        String                   @id @default(uuid())
+  tenantId  String                   @unique
+  tenant    Tenant                   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  name      String
+  type      String // HOLDING, SUBSIDIARY, FRANCHISE, REGIONAL
+  parentId  String?
+  parent    EnterpriseOrganization?  @relation("OrgHierarchy", fields: [parentId], references: [id], onDelete: SetNull)
+  children  EnterpriseOrganization[] @relation("OrgHierarchy")
+  createdAt DateTime                 @default(now())
+  updatedAt DateTime                 @updatedAt
+
+  hierarchies    EnterpriseHierarchy[]
+  regions        EnterpriseRegion[]
+  departments    EnterpriseDepartment[]
+  businessUnits  EnterpriseBusinessUnit[]
+  policies       EnterprisePolicy[]
+  workflows      EnterpriseWorkflow[]
+  integrations   EnterpriseIntegration[]
+  securityEvents EnterpriseSecurityEvent[]
+  ssoProviders   EnterpriseSsoProvider[]
+  administrators EnterpriseAdministrator[]
+  incidents      EnterpriseIncident[]
+}
+
+model EnterpriseHierarchy {
+  id             String                 @id @default(uuid())
+  organizationId String
+  organization   EnterpriseOrganization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name           String
+  description    String?
+  level          Int                    @default(0)
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime               @updatedAt
+
+  @@index([organizationId])
+}
+
+model EnterpriseRegion {
+  id             String                 @id @default(uuid())
+  organizationId String
+  organization   EnterpriseOrganization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name           String
+  code           String
+  timezone       String?
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime               @updatedAt
+
+  @@index([organizationId])
+}
+
+model EnterpriseDepartment {
+  id             String                 @id @default(uuid())
+  organizationId String
+  organization   EnterpriseOrganization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name           String
+  costCenter     String?
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime               @updatedAt
+
+  @@index([organizationId])
+}
+
+model EnterpriseBusinessUnit {
+  id             String                 @id @default(uuid())
+  organizationId String
+  organization   EnterpriseOrganization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name           String
+  code           String?
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime               @updatedAt
+
+  @@index([organizationId])
+}
+
+model EnterprisePolicy {
+  id             String                 @id @default(uuid())
+  organizationId String
+  organization   EnterpriseOrganization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name           String
+  type           String // ACCESS, DATA, RETENTION, SECURITY
+  rules          Json
+  isActive       Boolean                @default(true)
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime               @updatedAt
+
+  governanceRules EnterpriseGovernanceRule[]
+
+  @@index([organizationId])
+}
+
+model EnterpriseGovernanceRule {
+  id        String           @id @default(uuid())
+  policyId  String
+  policy    EnterprisePolicy @relation(fields: [policyId], references: [id], onDelete: Cascade)
+  name      String
+  condition Json
+  action    String
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  @@index([policyId])
+}
+
+model EnterpriseWorkflow {
+  id             String                 @id @default(uuid())
+  organizationId String
+  organization   EnterpriseOrganization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name           String
+  entityType     String // DEAL, PROPERTY, USER
+  triggerType    String // MANUAL, AUTO
+  steps          Json // Array of step definitions
+  isActive       Boolean                @default(true)
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime               @updatedAt
+
+  approvals EnterpriseApproval[]
+
+  @@index([organizationId])
+}
+
+model EnterpriseApproval {
+  id          String             @id @default(uuid())
+  workflowId  String
+  workflow    EnterpriseWorkflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  entityId    String
+  status      String // PENDING, APPROVED, REJECTED, ESCALATED
+  currentStep Int                @default(0)
+  history     Json?
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+
+  @@index([workflowId])
+}
+
+model EnterpriseIntegration {
+  id             String                 @id @default(uuid())
+  organizationId String
+  organization   EnterpriseOrganization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name           String
+  type           String // INBOUND, OUTBOUND, SYNC
+  config         Json
+  status         String // ACTIVE, ERROR, INACTIVE
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime               @updatedAt
+
+  connectors EnterpriseConnector[]
+
+  @@index([organizationId])
+}
+
+model EnterpriseConnector {
+  id            String                @id @default(uuid())
+  integrationId String
+  integration   EnterpriseIntegration @relation(fields: [integrationId], references: [id], onDelete: Cascade)
+  provider      String // SAP, WORKDAY, SALESFORCE
+  credentials   Json
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
+
+  @@index([integrationId])
+}
+
+model EnterpriseSecurityEvent {
+  id             String                 @id @default(uuid())
+  organizationId String
+  organization   EnterpriseOrganization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  eventType      String // LOGIN_FAILED, UNAUTHORIZED_ACCESS
+  severity       String // LOW, MEDIUM, HIGH, CRITICAL
+  details        Json
+  sourceIp       String?
+  createdAt      DateTime               @default(now())
+
+  @@index([organizationId])
+}
+
+model EnterpriseRiskEvent {
+  id             String   @id @default(uuid())
+  organizationId String
+  score          Float
+  description    String
+  entityType     String
+  entityId       String
+  createdAt      DateTime @default(now())
+
+  @@index([organizationId])
+}
+
+model EnterpriseComplianceRecord {
+  id             String   @id @default(uuid())
+  organizationId String
+  type           String // CONSENT, AUDIT, PRIVACY
+  subjectId      String
+  evidence       Json
+  createdAt      DateTime @default(now())
+
+  @@index([organizationId])
+}
+
+model EnterpriseRetentionPolicy {
+  id             String   @id @default(uuid())
+  organizationId String
+  entityType     String
+  retentionDays  Int
+  action         String // ARCHIVE, DELETE
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([organizationId])
+}
+
+model EnterpriseSsoProvider {
+  id             String                 @id @default(uuid())
+  organizationId String
+  organization   EnterpriseOrganization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  type           String // SAML, OIDC, OAUTH
+  metadataUrl    String?
+  clientId       String?
+  clientSecret   String?
+  domains        String[]
+  isActive       Boolean                @default(true)
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime               @updatedAt
+
+  @@index([organizationId])
+}
+
+model EnterpriseAccessReview {
+  id             String   @id @default(uuid())
+  organizationId String
+  campaignName   String
+  reviewerId     String
+  status         String // DRAFT, ACTIVE, COMPLETED
+  deadline       DateTime
+  results        Json?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([organizationId])
+}
+
+model EnterpriseAuditExport {
+  id             String   @id @default(uuid())
+  organizationId String
+  format         String // CSV, JSON, PDF
+  status         String // PENDING, PROCESSING, COMPLETED, FAILED
+  url            String?
+  query          Json?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([organizationId])
+}
+
+model EnterpriseDataExport {
+  id             String   @id @default(uuid())
+  organizationId String
+  entityType     String
+  format         String
+  status         String
+  url            String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([organizationId])
+}
+
+model EnterpriseAdministrator {
+  id             String                 @id @default(uuid())
+  organizationId String
+  organization   EnterpriseOrganization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  userId         String
+  role           String // SUPER_ADMIN, COMPLIANCE_ADMIN, SECURITY_ADMIN
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime               @updatedAt
+
+  @@index([organizationId])
+}
+
+model EnterpriseReport {
+  id             String   @id @default(uuid())
+  organizationId String
+  name           String
+  type           String // EXECUTIVE, OPERATIONAL, COMPLIANCE
+  config         Json
+  schedule       String? // Cron expression
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([organizationId])
+}
+
+model EnterpriseIncident {
+  id             String                 @id @default(uuid())
+  organizationId String
+  organization   EnterpriseOrganization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  title          String
+  description    String
+  severity       String // SEV1, SEV2, SEV3
+  status         String // OPEN, INVESTIGATING, RESOLVED
+  resolvedAt     DateTime?
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime               @updatedAt
+
+  @@index([organizationId])
 }
