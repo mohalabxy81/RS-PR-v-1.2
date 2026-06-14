@@ -1,0 +1,330 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─────────────────────────────────────────────────────────
+   DESIGN TOKENS — Dark Mode First (Real Estate SaaS)
+───────────────────────────────────────────────────────── */
+@layer base {
+  :root {
+    /* Brand */
+    --brand: 222 89% 55%;
+    --brand-foreground: 0 0% 100%;
+
+    /* Background layers */
+    --background: 220 16% 8%;
+    --background-secondary: 220 14% 10%;
+    --background-tertiary: 220 12% 13%;
+
+    /* Surface / Card */
+    --surface: 220 14% 11%;
+    --surface-hover: 220 12% 14%;
+    --surface-border: 220 10% 18%;
+
+    /* Foreground / Text */
+    --foreground: 220 15% 94%;
+    --foreground-muted: 220 10% 58%;
+    --foreground-subtle: 220 8% 38%;
+
+    /* Sidebar */
+    --sidebar-bg: 220 18% 7%;
+    --sidebar-border: 220 12% 14%;
+    --sidebar-active: 222 89% 55%;
+
+    /* Status colors */
+    --success: 158 64% 40%;
+    --warning: 37 91% 55%;
+    --danger: 0 72% 55%;
+    --info: 199 89% 50%;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+
+    /* Radius */
+    --radius: 0.625rem;
+    --radius-sm: 0.375rem;
+    --radius-lg: 0.875rem;
+    --radius-xl: 1.25rem;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────
+   BASE RESET & GLOBAL STYLES
+───────────────────────────────────────────────────────── */
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-[hsl(var(--background))] text-[hsl(var(--foreground))];
+    min-height: 100vh;
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(220 10% 22%);
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(220 10% 30%);
+  }
+
+  /* Selection */
+  ::selection {
+    background: hsl(var(--brand) / 0.3);
+    color: hsl(var(--foreground));
+  }
+}
+
+/* ─────────────────────────────────────────────────────────
+   COMPONENT LAYER
+───────────────────────────────────────────────────────── */
+@layer components {
+
+  /* ── Cards ── */
+  .card {
+    @apply rounded-xl bg-[hsl(var(--surface))] border border-[hsl(var(--surface-border))];
+    box-shadow: var(--shadow-sm);
+  }
+
+  .card-hover {
+    @apply card transition-all duration-200;
+    @apply hover:bg-[hsl(var(--surface-hover))] hover:border-[hsl(var(--brand)/0.3)];
+    box-shadow: var(--shadow-sm);
+  }
+
+  .card-hover:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+  }
+
+  /* ── Glassmorphism ── */
+  .glass {
+    background: hsl(220 14% 11% / 0.8);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid hsl(220 10% 18% / 0.6);
+  }
+
+  /* ── Stat Cards ── */
+  .stat-card {
+    @apply card p-5 flex flex-col gap-3 relative overflow-hidden;
+  }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, hsl(var(--brand)), hsl(var(--brand) / 0.2));
+  }
+
+  /* ── Navigation Items ── */
+  .nav-item {
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium;
+    @apply text-[hsl(var(--foreground-muted))] transition-all duration-150;
+    @apply hover:text-[hsl(var(--foreground))] hover:bg-[hsl(var(--surface))];
+  }
+
+  .nav-item.active {
+    @apply text-[hsl(var(--foreground))] bg-[hsl(var(--brand)/0.12)];
+    @apply border border-[hsl(var(--brand)/0.2)];
+    color: hsl(var(--brand));
+  }
+
+  .nav-item.active svg {
+    color: hsl(var(--brand));
+  }
+
+  /* ── Buttons ── */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold;
+    @apply transition-all duration-150 cursor-pointer select-none;
+    @apply disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply btn bg-[hsl(var(--brand))] text-white;
+    @apply hover:bg-[hsl(var(--brand)/0.85)] active:scale-[0.98];
+    box-shadow: 0 0 20px hsl(var(--brand) / 0.3);
+  }
+
+  .btn-secondary {
+    @apply btn bg-[hsl(var(--surface))] text-[hsl(var(--foreground-muted))] border border-[hsl(var(--surface-border))];
+    @apply hover:bg-[hsl(var(--surface-hover))] hover:text-[hsl(var(--foreground))];
+  }
+
+  .btn-ghost {
+    @apply btn text-[hsl(var(--foreground-muted))];
+    @apply hover:bg-[hsl(var(--surface))] hover:text-[hsl(var(--foreground))];
+  }
+
+  .btn-danger {
+    @apply btn bg-red-500/15 text-red-400 border border-red-500/20;
+    @apply hover:bg-red-500/25;
+  }
+
+  /* ── Inputs ── */
+  .input {
+    @apply w-full rounded-lg px-3.5 py-2.5 text-sm;
+    @apply bg-[hsl(var(--background-tertiary))] border border-[hsl(var(--surface-border))];
+    @apply text-[hsl(var(--foreground))] placeholder:text-[hsl(var(--foreground-subtle))];
+    @apply outline-none transition-all duration-150;
+    @apply focus:border-[hsl(var(--brand))] focus:ring-2 focus:ring-[hsl(var(--brand)/0.15)];
+  }
+
+  /* ── Labels ── */
+  .label {
+    @apply block text-xs font-medium text-[hsl(var(--foreground-muted))] mb-1.5;
+  }
+
+  /* ── Badges ── */
+  .badge {
+    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium;
+  }
+
+  /* ── Tables ── */
+  .table-wrapper {
+    @apply w-full overflow-x-auto;
+  }
+
+  .table {
+    @apply w-full text-sm;
+  }
+
+  .table thead th {
+    @apply px-4 py-3 text-left text-xs font-medium text-[hsl(var(--foreground-muted))] uppercase tracking-wider;
+    @apply border-b border-[hsl(var(--surface-border))];
+  }
+
+  .table tbody tr {
+    @apply border-b border-[hsl(var(--surface-border))/0.5] transition-colors duration-100;
+    @apply hover:bg-[hsl(var(--surface-hover))];
+  }
+
+  .table tbody td {
+    @apply px-4 py-3.5 text-[hsl(var(--foreground))];
+  }
+
+  /* ── Page header ── */
+  .page-header {
+    @apply flex items-center justify-between mb-6;
+  }
+
+  .page-title {
+    @apply text-2xl font-bold text-[hsl(var(--foreground))];
+  }
+
+  .page-subtitle {
+    @apply text-sm text-[hsl(var(--foreground-muted))] mt-0.5;
+  }
+
+  /* ── Section titles ── */
+  .section-title {
+    @apply text-xs font-semibold uppercase tracking-wider text-[hsl(var(--foreground-subtle))] mb-2 px-3;
+  }
+
+  /* ── Divider ── */
+  .divider {
+    @apply border-t border-[hsl(var(--surface-border))];
+  }
+
+  /* ── Loading skeleton ── */
+  .skeleton {
+    @apply bg-[hsl(var(--surface-border))] rounded animate-pulse;
+  }
+
+  /* ── Empty state ── */
+  .empty-state {
+    @apply flex flex-col items-center justify-center py-16 text-center;
+  }
+
+  /* ── Pipeline / Kanban ── */
+  .kanban-col {
+    @apply flex flex-col gap-3 min-w-[280px] w-72;
+  }
+
+  .kanban-card {
+    @apply card p-4 cursor-pointer;
+    @apply hover:border-[hsl(var(--brand)/0.3)] transition-all duration-150;
+  }
+
+  /* ── Form group ── */
+  .form-group {
+    @apply flex flex-col gap-1.5;
+  }
+
+  /* ── Gradient text ── */
+  .gradient-text {
+    background: linear-gradient(135deg, hsl(var(--brand)), hsl(199 89% 60%));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ── Glow ── */
+  .glow-brand {
+    box-shadow: 0 0 40px hsl(var(--brand) / 0.2);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────
+   ANIMATIONS
+───────────────────────────────────────────────────────── */
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.2s ease-out;
+  }
+
+  .animate-slide-in {
+    animation: slideIn 0.2s ease-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.25s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(-8px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Sidebar transition */
+  .sidebar-transition {
+    transition: width 0.2s ease, transform 0.2s ease;
+  }
+}

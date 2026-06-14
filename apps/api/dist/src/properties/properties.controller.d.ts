@@ -1,0 +1,174 @@
+import { PropertiesService } from './properties.service';
+import type { CurrentUserPayload } from '../common/decorators/current-user.decorator';
+export declare class PropertiesController {
+    private readonly propertiesService;
+    constructor(propertiesService: PropertiesService);
+    create(user: CurrentUserPayload, data: any): Promise<{
+        id: string;
+        status: import("@prisma/client").$Enums.PropertyStatus;
+        createdAt: Date;
+        updatedAt: Date;
+        tenantId: string;
+        description: string | null;
+        branchId: string | null;
+        address: string;
+        title: string;
+        propertyType: import("@prisma/client").$Enums.PropertyType;
+        listingType: import("@prisma/client").$Enums.ListingType;
+        price: number;
+        currency: string;
+        area: number | null;
+        bedrooms: number | null;
+        bathrooms: number | null;
+        parkingSpaces: number | null;
+        city: string;
+        district: string | null;
+        latitude: number | null;
+        longitude: number | null;
+        agentId: string | null;
+    }>;
+    findAll(user: CurrentUserPayload, query: any): Promise<{
+        data: ({
+            agent: {
+                id: string;
+                firstName: string;
+                lastName: string;
+            } | null;
+            images: {
+                url: string;
+                id: string;
+                createdAt: Date;
+                isPrimary: boolean;
+                propertyId: string;
+                s3Key: string | null;
+                order: number;
+            }[];
+        } & {
+            id: string;
+            status: import("@prisma/client").$Enums.PropertyStatus;
+            createdAt: Date;
+            updatedAt: Date;
+            tenantId: string;
+            description: string | null;
+            branchId: string | null;
+            address: string;
+            title: string;
+            propertyType: import("@prisma/client").$Enums.PropertyType;
+            listingType: import("@prisma/client").$Enums.ListingType;
+            price: number;
+            currency: string;
+            area: number | null;
+            bedrooms: number | null;
+            bathrooms: number | null;
+            parkingSpaces: number | null;
+            city: string;
+            district: string | null;
+            latitude: number | null;
+            longitude: number | null;
+            agentId: string | null;
+        })[];
+        meta: {
+            total: number;
+            page: number;
+            limit: number;
+        };
+    }>;
+    findOne(user: CurrentUserPayload, id: string): Promise<{
+        agent: {
+            id: string;
+            firstName: string;
+            lastName: string;
+        } | null;
+        images: {
+            url: string;
+            id: string;
+            createdAt: Date;
+            isPrimary: boolean;
+            propertyId: string;
+            s3Key: string | null;
+            order: number;
+        }[];
+        documents: {
+            url: string;
+            id: string;
+            name: string;
+            createdAt: Date;
+            propertyId: string;
+            s3Key: string | null;
+            mimeType: string | null;
+            fileSize: number | null;
+            docType: string;
+        }[];
+    } & {
+        id: string;
+        status: import("@prisma/client").$Enums.PropertyStatus;
+        createdAt: Date;
+        updatedAt: Date;
+        tenantId: string;
+        description: string | null;
+        branchId: string | null;
+        address: string;
+        title: string;
+        propertyType: import("@prisma/client").$Enums.PropertyType;
+        listingType: import("@prisma/client").$Enums.ListingType;
+        price: number;
+        currency: string;
+        area: number | null;
+        bedrooms: number | null;
+        bathrooms: number | null;
+        parkingSpaces: number | null;
+        city: string;
+        district: string | null;
+        latitude: number | null;
+        longitude: number | null;
+        agentId: string | null;
+    }>;
+    update(user: CurrentUserPayload, id: string, data: any): Promise<{
+        id: string;
+        status: import("@prisma/client").$Enums.PropertyStatus;
+        createdAt: Date;
+        updatedAt: Date;
+        tenantId: string;
+        description: string | null;
+        branchId: string | null;
+        address: string;
+        title: string;
+        propertyType: import("@prisma/client").$Enums.PropertyType;
+        listingType: import("@prisma/client").$Enums.ListingType;
+        price: number;
+        currency: string;
+        area: number | null;
+        bedrooms: number | null;
+        bathrooms: number | null;
+        parkingSpaces: number | null;
+        city: string;
+        district: string | null;
+        latitude: number | null;
+        longitude: number | null;
+        agentId: string | null;
+    }>;
+    assign(user: CurrentUserPayload, id: string, agentId: string): Promise<{
+        id: string;
+        status: import("@prisma/client").$Enums.PropertyStatus;
+        createdAt: Date;
+        updatedAt: Date;
+        tenantId: string;
+        description: string | null;
+        branchId: string | null;
+        address: string;
+        title: string;
+        propertyType: import("@prisma/client").$Enums.PropertyType;
+        listingType: import("@prisma/client").$Enums.ListingType;
+        price: number;
+        currency: string;
+        area: number | null;
+        bedrooms: number | null;
+        bathrooms: number | null;
+        parkingSpaces: number | null;
+        city: string;
+        district: string | null;
+        latitude: number | null;
+        longitude: number | null;
+        agentId: string | null;
+    }>;
+}
