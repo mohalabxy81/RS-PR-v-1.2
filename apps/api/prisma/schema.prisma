@@ -183,14 +183,20 @@ model Tenant {
   aiAuditLogs        AiAuditLog[]
 
   // Communication Phase 3
-  providerAccounts  ProviderAccount[]
-  contacts          Contact[]
-  conversations     Conversation[]
-  messages          Message[]
-  templates         MessageTemplate[]
-  campaigns         Campaign[]
-  automations       AutomationRule[]
-  communicationLogs CommunicationAuditLog[]
+  providerAccounts          ProviderAccount[]
+  contacts                  Contact[]
+  conversations             Conversation[]
+  messages                  Message[]
+  templates                 MessageTemplate[]
+  campaigns                 Campaign[]
+  automations               AutomationRule[]
+  communicationLogs         CommunicationAuditLog[]
+  recommendationProfiles    RecommendationProfile[]
+  recommendationSignals     RecommendationSignal[]
+  recommendationResults     RecommendationResult[]
+  recommendationModels      RecommendationModel[]
+  recommendationExperiments RecommendationExperiment[]
+  recommendationMetrics     RecommendationMetric[]
 }
 
 model Branch {
@@ -233,14 +239,14 @@ model User {
   updatedAt       DateTime   @updatedAt
 
   refreshTokens         RefreshToken[]
-  leadsAssigned         Lead[]            @relation("LeadAssignee")
-  leadsCreated          Lead[]            @relation("LeadCreator")
-  customersAssigned     Customer[]        @relation("CustomerAssignee")
-  dealsAssigned         Deal[]            @relation("DealAssignee")
-  propertiesManaged     Property[]        @relation("PropertyAgent")
-  appointmentsOrganized Appointment[]     @relation("AppointmentOrganizer")
-  tasksAssigned         Task[]            @relation("TaskAssignee")
-  tasksCreated          Task[]            @relation("TaskCreator")
+  leadsAssigned         Lead[]                 @relation("LeadAssignee")
+  leadsCreated          Lead[]                 @relation("LeadCreator")
+  customersAssigned     Customer[]             @relation("CustomerAssignee")
+  dealsAssigned         Deal[]                 @relation("DealAssignee")
+  propertiesManaged     Property[]             @relation("PropertyAgent")
+  appointmentsOrganized Appointment[]          @relation("AppointmentOrganizer")
+  tasksAssigned         Task[]                 @relation("TaskAssignee")
+  tasksCreated          Task[]                 @relation("TaskCreator")
   taskComments          TaskComment[]
   activities            Activity[]
   auditLogs             AuditLog[]
@@ -248,15 +254,16 @@ model User {
   leadNotes             LeadNote[]
   dealNotes             DealNote[]
   customerNotes         CustomerNote[]
-  aiPromptVersions      AiPromptVersion[] @relation("PromptCreator")
+  aiPromptVersions      AiPromptVersion[]      @relation("PromptCreator")
   aiConversations       AiConversation[]
   aiSessions            AiSession[]
   aiRequests            AiRequest[]
   aiUsages              AiUsage[]
   aiFeedbacks           AiFeedback[]
   aiAuditLogs           AiAuditLog[]
-  conversationsAssigned Conversation[]    @relation("ConversationAssignee")
-  messagesSent          Message[]         @relation("MessageSender")
+  conversationsAssigned Conversation[]         @relation("ConversationAssignee")
+  messagesSent          Message[]              @relation("MessageSender")
+  recommendationSignals RecommendationSignal[]
 
   @@index([tenantId])
   @@index([tenantId, email])
@@ -355,10 +362,12 @@ model Property {
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 
-  images       PropertyImage[]
-  documents    PropertyDocument[]
-  deals        Deal[]
-  appointments Appointment[]
+  images                 PropertyImage[]
+  documents              PropertyDocument[]
+  deals                  Deal[]
+  appointments           Appointment[]
+  recommendationProfiles RecommendationProfile[]
+  propertyVectors        PropertyVector[]
 
   @@index([tenantId])
   @@index([tenantId, status])
@@ -479,11 +488,13 @@ model Customer {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  deals         Deal[]
-  customerNotes CustomerNote[]
-  customerDocs  CustomerDocument[]
-  appointments  Appointment[]
-  contactLinks  Contact[]
+  deals                  Deal[]
+  customerNotes          CustomerNote[]
+  customerDocs           CustomerDocument[]
+  appointments           Appointment[]
+  contactLinks           Contact[]
+  recommendationProfiles RecommendationProfile[]
+  customerVectors        CustomerVector[]
 
   @@index([tenantId])
 }
@@ -1419,6 +1430,261 @@ model CommunicationAuditLog {
   entityId  String
   userId    String?
   metadata  Json?
+  createdAt DateTime @default(now())
+
+  @@index([tenantId])
+}
+
+// ─────────────────────────────────────────────
+// RECOMMENDATION: PHASE 4 - AI PROPERTY MATCHING
+// ─────────────────────────────────────────────
+
+enum RecommendationProfileType {
+  CUSTOMER
+  PROPERTY
+}
+
+enum RecommendationSignalType {
+  VIEW
+  SAVE
+  SHARE
+  CLICK
+  APPOINTMENT_REQUEST
+  WHATSAPP_INTERACTION
+  DEAL_PROGRESSION
+  SEARCH
+}
+
+enum RecommendationFeedbackStatus {
+  ACCEPTED
+  REJECTED
+  VIEWED
+  SAVED
+  IGNORED
+  CLOSED_DEAL
+}
+
+enum IntentStatus {
+  HOT
+  WARM
+  COLD
+  EXPLORING
+  READY_TO_BUY
+}
+
+// -- PROFILES & VECTORS --
+
+model RecommendationProfile {
+  id              String                    @id @default(uuid())
+  tenantId        String
+  tenant          Tenant                    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  profileType     RecommendationProfileType
+  customerId      String?
+  customer        Customer?                 @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  propertyId      String?
+  property        Property?                 @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  features        Json? // Extracted attributes
+  intentStatus    IntentStatus?
+  engagementScore Float                     @default(0)
+  createdAt       DateTime                  @default(now())
+  updatedAt       DateTime                  @updatedAt
+
+  featureVectors FeatureVector[]
+
+  @@index([tenantId])
+  @@index([customerId])
+  @@index([propertyId])
+}
+
+model PropertyVector {
+  id         String                      @id @default(uuid())
+  tenantId   String
+  propertyId String
+  property   Property                    @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  embedding  Unsupported("vector(1536)")
+  metadata   Json?
+  createdAt  DateTime                    @default(now())
+  updatedAt  DateTime                    @updatedAt
+
+  @@index([propertyId])
+}
+
+model CustomerVector {
+  id         String                      @id @default(uuid())
+  tenantId   String
+  customerId String
+  customer   Customer                    @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  embedding  Unsupported("vector(1536)")
+  metadata   Json?
+  createdAt  DateTime                    @default(now())
+  updatedAt  DateTime                    @updatedAt
+
+  @@index([customerId])
+}
+
+model SearchVector {
+  id        String                      @id @default(uuid())
+  tenantId  String
+  userId    String?
+  query     String
+  embedding Unsupported("vector(1536)")
+  filters   Json?
+  createdAt DateTime                    @default(now())
+
+  @@index([tenantId])
+}
+
+model FeatureVector {
+  id                      String                      @id @default(uuid())
+  tenantId                String
+  recommendationProfileId String
+  profile                 RecommendationProfile       @relation(fields: [recommendationProfileId], references: [id], onDelete: Cascade)
+  featureType             String // 'BEHAVIOR', 'PREFERENCE', 'MARKET_FIT'
+  embedding               Unsupported("vector(1536)")
+  createdAt               DateTime                    @default(now())
+
+  @@index([recommendationProfileId])
+}
+
+// -- SIGNALS & EVENTS --
+
+model RecommendationSignal {
+  id         String                   @id @default(uuid())
+  tenantId   String
+  tenant     Tenant                   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  userId     String?
+  user       User?                    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  customerId String?
+  type       RecommendationSignalType
+  entityType String // 'Property', 'Message', etc
+  entityId   String
+  weight     Float                    @default(1.0)
+  metadata   Json?
+  createdAt  DateTime                 @default(now())
+
+  @@index([tenantId])
+  @@index([customerId])
+}
+
+model RecommendationEvent {
+  id        String   @id @default(uuid())
+  tenantId  String
+  eventType String // 'INTENT_CHANGE', 'SCORE_UPDATE'
+  targetId  String
+  payload   Json
+  createdAt DateTime @default(now())
+
+  @@index([tenantId])
+}
+
+model RecommendationFeedback {
+  id                     String                       @id @default(uuid())
+  tenantId               String
+  recommendationResultId String
+  result                 RecommendationResult         @relation(fields: [recommendationResultId], references: [id], onDelete: Cascade)
+  status                 RecommendationFeedbackStatus
+  comments               String?
+  createdAt              DateTime                     @default(now())
+
+  @@index([recommendationResultId])
+}
+
+// -- RESULTS & SCORING --
+
+model RecommendationResult {
+  id              String   @id @default(uuid())
+  tenantId        String
+  tenant          Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  targetType      String // 'CUSTOMER', 'PROPERTY'
+  targetId        String
+  recommendedType String // 'PROPERTY', 'CUSTOMER'
+  recommendedId   String
+  compositeScore  Float
+  confidenceScore Float?
+  rank            Int
+  createdAt       DateTime @default(now())
+
+  feedbacks    RecommendationFeedback[]
+  explanations RecommendationExplanation[]
+  scores       RecommendationScore[]
+
+  @@index([tenantId])
+  @@index([targetType, targetId])
+}
+
+model RecommendationScore {
+  id                     String               @id @default(uuid())
+  recommendationResultId String
+  result                 RecommendationResult @relation(fields: [recommendationResultId], references: [id], onDelete: Cascade)
+  componentName          String // 'LOCATION_MATCH', 'BUDGET_MATCH'
+  score                  Float
+  weight                 Float                @default(1.0)
+
+  @@index([recommendationResultId])
+}
+
+model RecommendationExplanation {
+  id                     String               @id @default(uuid())
+  recommendationResultId String
+  result                 RecommendationResult @relation(fields: [recommendationResultId], references: [id], onDelete: Cascade)
+  explanationText        String
+  language               String               @default("en_US")
+  createdAt              DateTime             @default(now())
+
+  @@index([recommendationResultId])
+}
+
+// -- MODELS & EXPERIMENTS --
+
+model RecommendationModel {
+  id        String   @id @default(uuid())
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  name      String
+  version   String
+  modelType String // 'RULE_BASED', 'VECTOR', 'HYBRID'
+  weights   Json?
+  isActive  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([tenantId])
+}
+
+model RecommendationExperiment {
+  id           String    @id @default(uuid())
+  tenantId     String
+  tenant       Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  name         String
+  variantA_Id  String // Refers to RecommendationModel
+  variantB_Id  String
+  trafficSplit Float     @default(0.5)
+  status       String // 'RUNNING', 'STOPPED', 'COMPLETED'
+  startDate    DateTime  @default(now())
+  endDate      DateTime?
+  metrics      Json?
+
+  @@index([tenantId])
+}
+
+model RecommendationMetric {
+  id         String   @id @default(uuid())
+  tenantId   String
+  tenant     Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  date       DateTime @db.Date
+  metricName String // 'CTR', 'ACCEPTANCE_RATE'
+  value      Float
+  modelId    String?
+
+  @@unique([tenantId, date, metricName, modelId])
+  @@index([tenantId])
+}
+
+model RecommendationAuditLog {
+  id        String   @id @default(uuid())
+  tenantId  String
+  action    String
+  details   Json?
   createdAt DateTime @default(now())
 
   @@index([tenantId])

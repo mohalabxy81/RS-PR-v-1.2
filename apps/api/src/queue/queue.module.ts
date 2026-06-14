@@ -22,6 +22,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       { name: 'webhooks' },
       { name: 'campaigns' },
       { name: 'automations' },
+      // Phase 4: Recommendation Queues
+      { name: 'embedding-generation' },
+      { name: 'feature-extraction' },
+      { name: 'ranking-jobs' },
+      { name: 'recommendation-generation' },
+      { name: 'intent-prediction' },
+      { name: 'feedback-processing' },
     ),
   ],
   exports: [BullModule],

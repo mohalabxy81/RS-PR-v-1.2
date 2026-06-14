@@ -23,6 +23,7 @@ import Link from 'next/link';
 import { Plus } from 'lucide-react';
 import { LeadScoreCard } from '@/components/ai/LeadScoreCard';
 import { EmailGenerator } from '@/components/ai/EmailGenerator';
+import { PropertyRecommendationsPanel } from '@/components/recommendations/PropertyRecommendationsPanel';
 
 export default function LeadDetailPage({ params }: { params: { id: string } }) {
   const queryClient = useQueryClient();
@@ -179,6 +180,8 @@ export default function LeadDetailPage({ params }: { params: { id: string } }) {
         {/* Right Column: Timeline & Related Info */}
         <div className="space-y-6">
           <EmailGenerator entityType="Lead" entityId={params.id} />
+          
+          <PropertyRecommendationsPanel leadId={params.id} />
 
           <div className="card p-5">
             <h3 className="section-title !px-0 mb-4">Activity Timeline</h3>

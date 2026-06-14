@@ -39,6 +39,16 @@ import { CommunicationTemplatesModule } from './communication/communication-temp
 import { CommunicationCampaignsModule } from './communication/communication-campaigns/communication-campaigns.module';
 import { CommunicationAutomationModule } from './communication/communication-automation/communication-automation.module';
 import { CommunicationAiModule } from './communication/communication-ai/communication-ai.module';
+import { RecommendationCoreModule } from './recommendation/recommendation-core/recommendation-core.module';
+import { RecommendationEngineModule } from './recommendation/recommendation-engine/recommendation-engine.module';
+import { RecommendationRankingModule } from './recommendation/recommendation-ranking/recommendation-ranking.module';
+import { RecommendationSearchModule } from './recommendation/recommendation-search/recommendation-search.module';
+import { RecommendationSignalsModule } from './recommendation/recommendation-signals/recommendation-signals.module';
+import { RecommendationAiModule } from './recommendation/recommendation-ai/recommendation-ai.module';
+import { RecommendationAnalyticsModule } from './recommendation/recommendation-analytics/recommendation-analytics.module';
+import { RecommendationFeedbackModule } from './recommendation/recommendation-feedback/recommendation-feedback.module';
+import { RecommendationMonitoringModule } from './recommendation/recommendation-monitoring/recommendation-monitoring.module';
+import { RecommendationExperimentsModule } from './recommendation/recommendation-experiments/recommendation-experiments.module';
 
 @Module({
   imports: [
@@ -80,6 +90,16 @@ import { CommunicationAiModule } from './communication/communication-ai/communic
     CommunicationCampaignsModule,
     CommunicationAutomationModule,
     CommunicationAiModule,
+    RecommendationCoreModule,
+    RecommendationEngineModule,
+    RecommendationRankingModule,
+    RecommendationSearchModule,
+    RecommendationSignalsModule,
+    RecommendationAiModule,
+    RecommendationAnalyticsModule,
+    RecommendationFeedbackModule,
+    RecommendationMonitoringModule,
+    RecommendationExperimentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
