@@ -3,6 +3,7 @@ export declare class NotificationsService {
     private readonly prisma;
     constructor(prisma: PrismaService);
     findAll(tenantId: string, userId: string, query: any): Promise<{
+        message: string;
         id: string;
         createdAt: Date;
         link: string | null;
@@ -10,11 +11,11 @@ export declare class NotificationsService {
         tenantId: string;
         title: string;
         type: import("@prisma/client").$Enums.NotificationType;
-        message: string;
         isRead: boolean;
         readAt: Date | null;
     }[]>;
     markAsRead(tenantId: string, userId: string, id: string): Promise<{
+        message: string;
         id: string;
         createdAt: Date;
         link: string | null;
@@ -22,7 +23,6 @@ export declare class NotificationsService {
         tenantId: string;
         title: string;
         type: import("@prisma/client").$Enums.NotificationType;
-        message: string;
         isRead: boolean;
         readAt: Date | null;
     }>;
@@ -35,6 +35,7 @@ export declare class NotificationsService {
         message: string;
         link?: string;
     }): Promise<{
+        message: string;
         id: string;
         createdAt: Date;
         link: string | null;
@@ -42,7 +43,6 @@ export declare class NotificationsService {
         tenantId: string;
         title: string;
         type: import("@prisma/client").$Enums.NotificationType;
-        message: string;
         isRead: boolean;
         readAt: Date | null;
     }>;

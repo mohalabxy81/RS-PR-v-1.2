@@ -1,8 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 /* ─────────────────────────────────────────────────────────
    DESIGN TOKENS — Dark Mode First (Real Estate SaaS)
@@ -110,7 +108,7 @@
   }
 
   .card-hover {
-    @apply card transition-all duration-200;
+    @apply rounded-xl bg-[hsl(var(--surface))] border border-[hsl(var(--surface-border))] transition-all duration-200;
     @apply hover:bg-[hsl(var(--surface-hover))] hover:border-[hsl(var(--brand)/0.3)];
     box-shadow: var(--shadow-sm);
   }
@@ -130,7 +128,7 @@
 
   /* ── Stat Cards ── */
   .stat-card {
-    @apply card p-5 flex flex-col gap-3 relative overflow-hidden;
+    @apply rounded-xl bg-[hsl(var(--surface))] border border-[hsl(var(--surface-border))] p-5 flex flex-col gap-3 relative overflow-hidden;
   }
 
   .stat-card::before {
@@ -168,23 +166,23 @@
   }
 
   .btn-primary {
-    @apply btn bg-[hsl(var(--brand))] text-white;
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all duration-150 cursor-pointer select-none disabled:opacity-50 disabled:cursor-not-allowed bg-[hsl(var(--brand))] text-white;
     @apply hover:bg-[hsl(var(--brand)/0.85)] active:scale-[0.98];
     box-shadow: 0 0 20px hsl(var(--brand) / 0.3);
   }
 
   .btn-secondary {
-    @apply btn bg-[hsl(var(--surface))] text-[hsl(var(--foreground-muted))] border border-[hsl(var(--surface-border))];
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all duration-150 cursor-pointer select-none disabled:opacity-50 disabled:cursor-not-allowed bg-[hsl(var(--surface))] text-[hsl(var(--foreground-muted))] border border-[hsl(var(--surface-border))];
     @apply hover:bg-[hsl(var(--surface-hover))] hover:text-[hsl(var(--foreground))];
   }
 
   .btn-ghost {
-    @apply btn text-[hsl(var(--foreground-muted))];
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all duration-150 cursor-pointer select-none disabled:opacity-50 disabled:cursor-not-allowed text-[hsl(var(--foreground-muted))];
     @apply hover:bg-[hsl(var(--surface))] hover:text-[hsl(var(--foreground))];
   }
 
   .btn-danger {
-    @apply btn bg-red-500/15 text-red-400 border border-red-500/20;
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all duration-150 cursor-pointer select-none disabled:opacity-50 disabled:cursor-not-allowed bg-red-500/15 text-red-400 border border-red-500/20;
     @apply hover:bg-red-500/25;
   }
 
@@ -269,7 +267,7 @@
   }
 
   .kanban-card {
-    @apply card p-4 cursor-pointer;
+    @apply rounded-xl bg-[hsl(var(--surface))] border border-[hsl(var(--surface-border))] p-4 cursor-pointer;
     @apply hover:border-[hsl(var(--brand)/0.3)] transition-all duration-150;
   }
 

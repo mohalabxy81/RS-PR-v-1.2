@@ -40,6 +40,14 @@ const ai_analytics_module_1 = require("./ai/ai-analytics/ai-analytics.module");
 const ai_feedback_module_1 = require("./ai/ai-feedback/ai-feedback.module");
 const ai_admin_module_1 = require("./ai/ai-admin/ai-admin.module");
 const ai_queue_module_1 = require("./ai/ai-queue/ai-queue.module");
+const communication_core_module_1 = require("./communication/communication-core/communication-core.module");
+const communication_providers_module_1 = require("./communication/communication-providers/communication-providers.module");
+const communication_webhooks_module_1 = require("./communication/communication-webhooks/communication-webhooks.module");
+const communication_conversations_module_1 = require("./communication/communication-conversations/communication-conversations.module");
+const communication_templates_module_1 = require("./communication/communication-templates/communication-templates.module");
+const communication_campaigns_module_1 = require("./communication/communication-campaigns/communication-campaigns.module");
+const communication_automation_module_1 = require("./communication/communication-automation/communication-automation.module");
+const communication_ai_module_1 = require("./communication/communication-ai/communication-ai.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -76,6 +84,14 @@ exports.AppModule = AppModule = __decorate([
             ai_feedback_module_1.AiFeedbackModule,
             ai_admin_module_1.AiAdminModule,
             ai_queue_module_1.AiQueueModule,
+            communication_core_module_1.CommunicationCoreModule,
+            communication_providers_module_1.CommunicationProvidersModule,
+            communication_webhooks_module_1.CommunicationWebhooksModule,
+            communication_conversations_module_1.CommunicationConversationsModule,
+            communication_templates_module_1.CommunicationTemplatesModule,
+            communication_campaigns_module_1.CommunicationCampaignsModule,
+            communication_automation_module_1.CommunicationAutomationModule,
+            communication_ai_module_1.CommunicationAiModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

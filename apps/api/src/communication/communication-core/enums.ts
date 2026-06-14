@@ -1,0 +1,37 @@
+export enum ProviderType {
+  WHATSAPP = 'WHATSAPP',
+  SMS = 'SMS',
+  EMAIL = 'EMAIL',
+  MESSENGER = 'MESSENGER',
+  INSTAGRAM = 'INSTAGRAM',
+  TELEGRAM = 'TELEGRAM',
+  WEBCHAT = 'WEBCHAT',
+  VOICE = 'VOICE',
+}
+
+export enum MessageDirection {
+  INBOUND = 'INBOUND',
+  OUTBOUND = 'OUTBOUND',
+}
+
+export enum MessageStatusType {
+  QUEUED = 'QUEUED',
+  SENT = 'SENT',
+  DELIVERED = 'DELIVERED',
+  READ = 'READ',
+  FAILED = 'FAILED',
+  REJECTED = 'REJECTED',
+  EXPIRED = 'EXPIRED',
+}
+
+export enum MessageType {
+  TEXT = 'TEXT',
+  IMAGE = 'IMAGE',
+  DOCUMENT = 'DOCUMENT',
+  VIDEO = 'VIDEO',
+  AUDIO = 'AUDIO',
+  LOCATION = 'LOCATION',
+  CONTACTS = 'CONTACTS',
+  TEMPLATE = 'TEMPLATE',
+  INTERACTIVE = 'INTERACTIVE',
+}

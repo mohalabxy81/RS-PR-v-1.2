@@ -35,7 +35,7 @@ export default function NewLeadPage() {
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>({
-    resolver: zodResolver(createLeadSchema),
+    resolver: zodResolver(createLeadSchema) as any,
     defaultValues: {
       source: 'WEBSITE',
       status: 'NEW',

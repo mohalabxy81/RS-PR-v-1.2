@@ -31,6 +31,14 @@ import { AiAnalyticsModule } from './ai/ai-analytics/ai-analytics.module';
 import { AiFeedbackModule } from './ai/ai-feedback/ai-feedback.module';
 import { AiAdminModule } from './ai/ai-admin/ai-admin.module';
 import { AiQueueModule } from './ai/ai-queue/ai-queue.module';
+import { CommunicationCoreModule } from './communication/communication-core/communication-core.module';
+import { CommunicationProvidersModule } from './communication/communication-providers/communication-providers.module';
+import { CommunicationWebhooksModule } from './communication/communication-webhooks/communication-webhooks.module';
+import { CommunicationConversationsModule } from './communication/communication-conversations/communication-conversations.module';
+import { CommunicationTemplatesModule } from './communication/communication-templates/communication-templates.module';
+import { CommunicationCampaignsModule } from './communication/communication-campaigns/communication-campaigns.module';
+import { CommunicationAutomationModule } from './communication/communication-automation/communication-automation.module';
+import { CommunicationAiModule } from './communication/communication-ai/communication-ai.module';
 
 @Module({
   imports: [
@@ -64,6 +72,14 @@ import { AiQueueModule } from './ai/ai-queue/ai-queue.module';
     AiFeedbackModule,
     AiAdminModule,
     AiQueueModule,
+    CommunicationCoreModule,
+    CommunicationProvidersModule,
+    CommunicationWebhooksModule,
+    CommunicationConversationsModule,
+    CommunicationTemplatesModule,
+    CommunicationCampaignsModule,
+    CommunicationAutomationModule,
+    CommunicationAiModule,
   ],
   controllers: [AppController],
   providers: [AppService],

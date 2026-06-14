@@ -13,7 +13,7 @@ import {
   Clock,
   ArrowUpRight
 } from 'lucide-react';
-import { formatCurrency, formatRelativeTime } from '@/lib/utils';
+import { cn, formatCurrency, formatRelativeTime } from '@/lib/utils';
 import Link from 'next/link';
 
 export default function DashboardPage() {
