@@ -12,6 +12,7 @@ export declare class TasksController {
         description: string | null;
         title: string;
         entityId: string | null;
+        entityType: string | null;
         assigneeId: string | null;
         createdById: string | null;
         priority: import("@prisma/client").$Enums.TaskPriority;
@@ -19,7 +20,6 @@ export declare class TasksController {
         completedAt: Date | null;
         isRecurring: boolean;
         recurrenceRule: string | null;
-        entityType: string | null;
     }>;
     findAll(user: CurrentUserPayload, query: any): Promise<({
         _count: {
@@ -45,6 +45,7 @@ export declare class TasksController {
         description: string | null;
         title: string;
         entityId: string | null;
+        entityType: string | null;
         assigneeId: string | null;
         createdById: string | null;
         priority: import("@prisma/client").$Enums.TaskPriority;
@@ -52,7 +53,6 @@ export declare class TasksController {
         completedAt: Date | null;
         isRecurring: boolean;
         recurrenceRule: string | null;
-        entityType: string | null;
     })[]>;
     findOne(user: CurrentUserPayload, id: string): Promise<{
         taskComments: ({
@@ -98,6 +98,7 @@ export declare class TasksController {
         description: string | null;
         title: string;
         entityId: string | null;
+        entityType: string | null;
         assigneeId: string | null;
         createdById: string | null;
         priority: import("@prisma/client").$Enums.TaskPriority;
@@ -105,7 +106,6 @@ export declare class TasksController {
         completedAt: Date | null;
         isRecurring: boolean;
         recurrenceRule: string | null;
-        entityType: string | null;
     }>;
     update(user: CurrentUserPayload, id: string, data: any): Promise<{
         id: string;
@@ -116,6 +116,7 @@ export declare class TasksController {
         description: string | null;
         title: string;
         entityId: string | null;
+        entityType: string | null;
         assigneeId: string | null;
         createdById: string | null;
         priority: import("@prisma/client").$Enums.TaskPriority;
@@ -123,7 +124,6 @@ export declare class TasksController {
         completedAt: Date | null;
         isRecurring: boolean;
         recurrenceRule: string | null;
-        entityType: string | null;
     }>;
     addComment(user: CurrentUserPayload, id: string, content: string): Promise<{
         id: string;
@@ -142,6 +142,7 @@ export declare class TasksController {
         description: string | null;
         title: string;
         entityId: string | null;
+        entityType: string | null;
         assigneeId: string | null;
         createdById: string | null;
         priority: import("@prisma/client").$Enums.TaskPriority;
@@ -149,6 +150,5 @@ export declare class TasksController {
         completedAt: Date | null;
         isRecurring: boolean;
         recurrenceRule: string | null;
-        entityType: string | null;
     }>;
 }

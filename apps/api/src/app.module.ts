@@ -30,6 +30,7 @@ import { AiFeaturesModule } from './ai/ai-features/ai-features.module';
 import { AiAnalyticsModule } from './ai/ai-analytics/ai-analytics.module';
 import { AiFeedbackModule } from './ai/ai-feedback/ai-feedback.module';
 import { AiAdminModule } from './ai/ai-admin/ai-admin.module';
+import { AiQueueModule } from './ai/ai-queue/ai-queue.module';
 
 @Module({
   imports: [
@@ -62,6 +63,7 @@ import { AiAdminModule } from './ai/ai-admin/ai-admin.module';
     AiAnalyticsModule,
     AiFeedbackModule,
     AiAdminModule,
+    AiQueueModule,
   ],
   controllers: [AppController],
   providers: [AppService],

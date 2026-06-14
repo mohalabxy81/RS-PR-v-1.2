@@ -17,8 +17,17 @@ let ActivitiesService = class ActivitiesService {
     constructor(prisma) {
         this.prisma = prisma;
     }
+    async track(params) {
+        try {
+            await this.prisma.activity.create({ data: params });
+        }
+        catch (err) {
+            console.warn('[ActivitiesService] Failed to track activity:', err);
+        }
+    }
     async findAll(tenantId, query) {
-        const { entityType, entityId, userId, limit = 50 } = query;
+        const { entityType, entityId, userId, limit = 50, page = 1 } = query;
+        const skip = (Number(page) - 1) * Number(limit);
         const where = { tenantId };
         if (entityType)
             where.entityType = entityType;
@@ -26,17 +35,22 @@ let ActivitiesService = class ActivitiesService {
             where.entityId = entityId;
         if (userId)
             where.userId = userId;
-        return this.prisma.activity.findMany({
-            where,
-            include: {
-                user: { select: { id: true, firstName: true, lastName: true } },
-            },
-            orderBy: { createdAt: 'desc' },
-            take: Number(limit),
-        });
-    }
-    async logActivity(data) {
-        return this.prisma.activity.create({ data });
+        const [data, total] = await Promise.all([
+            this.prisma.activity.findMany({
+                where,
+                include: {
+                    user: { select: { id: true, firstName: true, lastName: true } },
+                },
+                orderBy: { createdAt: 'desc' },
+                skip,
+                take: Number(limit),
+            }),
+            this.prisma.activity.count({ where }),
+        ]);
+        return {
+            data,
+            meta: { total, page: Number(page), limit: Number(limit) },
+        };
     }
 };
 exports.ActivitiesService = ActivitiesService;

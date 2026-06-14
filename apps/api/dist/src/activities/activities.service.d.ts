@@ -1,44 +1,43 @@
 import { PrismaService } from '../prisma/prisma.service';
+import { Prisma } from '@prisma/client';
+interface TrackActivityParams {
+    tenantId: string;
+    userId?: string;
+    entityType: string;
+    entityId: string;
+    action: string;
+    description?: string;
+    metadata?: Prisma.InputJsonValue;
+    leadId?: string;
+}
 export declare class ActivitiesService {
     private readonly prisma;
     constructor(prisma: PrismaService);
-    findAll(tenantId: string, query: any): Promise<({
-        user: {
+    track(params: TrackActivityParams): Promise<void>;
+    findAll(tenantId: string, query: any): Promise<{
+        data: ({
+            user: {
+                id: string;
+                firstName: string;
+                lastName: string;
+            } | null;
+        } & {
             id: string;
-            firstName: string;
-            lastName: string;
-        } | null;
-    } & {
-        id: string;
-        createdAt: Date;
-        userId: string | null;
-        tenantId: string;
-        action: string;
-        description: string | null;
-        entityId: string;
-        leadId: string | null;
-        entityType: string;
-        metadata: import("@prisma/client/runtime/client").JsonValue | null;
-    })[]>;
-    logActivity(data: {
-        tenantId: string;
-        userId?: string;
-        entityType: string;
-        entityId: string;
-        action: string;
-        description?: string;
-        metadata?: any;
-        leadId?: string;
-    }): Promise<{
-        id: string;
-        createdAt: Date;
-        userId: string | null;
-        tenantId: string;
-        action: string;
-        description: string | null;
-        entityId: string;
-        leadId: string | null;
-        entityType: string;
-        metadata: import("@prisma/client/runtime/client").JsonValue | null;
+            createdAt: Date;
+            userId: string | null;
+            tenantId: string;
+            action: string;
+            description: string | null;
+            entityId: string;
+            entityType: string;
+            metadata: Prisma.JsonValue | null;
+            leadId: string | null;
+        })[];
+        meta: {
+            total: number;
+            page: number;
+            limit: number;
+        };
     }>;
 }
+export {};

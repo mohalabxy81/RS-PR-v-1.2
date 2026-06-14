@@ -40,8 +40,8 @@ export declare class DashboardService {
         action: string;
         description: string | null;
         entityId: string;
-        leadId: string | null;
         entityType: string;
         metadata: import("@prisma/client/runtime/client").JsonValue | null;
+        leadId: string | null;
     })[]>;
 }

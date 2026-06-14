@@ -1,9 +1,10 @@
 import { DealsService } from './deals.service';
 import type { CurrentUserPayload } from '../common/decorators/current-user.decorator';
+import { CreateDealDto, UpdateDealDto, UpdateDealStageDto, AddDealNoteDto } from './dto/deal.dto';
 export declare class DealsController {
     private readonly dealsService;
     constructor(dealsService: DealsService);
-    create(user: CurrentUserPayload, data: any): Promise<{
+    create(user: CurrentUserPayload, dto: CreateDealDto): Promise<{
         id: string;
         createdAt: Date;
         updatedAt: Date;
@@ -11,15 +12,24 @@ export declare class DealsController {
         title: string;
         currency: string;
         propertyId: string | null;
+        leadId: string | null;
         notes: string | null;
         assigneeId: string | null;
-        leadId: string | null;
         customerId: string | null;
         value: number;
         stage: import("@prisma/client").$Enums.DealStage;
         forecastCloseDate: Date | null;
     }>;
     findAll(user: CurrentUserPayload, query: any): Promise<({
+        property: {
+            id: string;
+            title: string;
+        } | null;
+        lead: {
+            id: string;
+            firstName: string;
+            lastName: string;
+        } | null;
         customer: {
             id: string;
             firstName: string;
@@ -38,9 +48,9 @@ export declare class DealsController {
         title: string;
         currency: string;
         propertyId: string | null;
+        leadId: string | null;
         notes: string | null;
         assigneeId: string | null;
-        leadId: string | null;
         customerId: string | null;
         value: number;
         stage: import("@prisma/client").$Enums.DealStage;
@@ -51,11 +61,23 @@ export declare class DealsController {
             id: string;
             title: string;
         } | null;
+        lead: {
+            id: string;
+            firstName: string;
+            lastName: string;
+        } | null;
         customer: {
             id: string;
             firstName: string;
             lastName: string;
         } | null;
+        appointments: {
+            id: string;
+            status: import("@prisma/client").$Enums.AppointmentStatus;
+            title: string;
+            type: import("@prisma/client").$Enums.AppointmentType;
+            startTime: Date;
+        }[];
         dealNotes: ({
             author: {
                 id: string;
@@ -67,8 +89,8 @@ export declare class DealsController {
             createdAt: Date;
             updatedAt: Date;
             content: string;
-            authorId: string;
             dealId: string;
+            authorId: string;
         })[];
         assignee: {
             id: string;
@@ -77,8 +99,8 @@ export declare class DealsController {
         } | null;
         stageHistory: {
             id: string;
-            changedAt: Date;
             dealId: string;
+            changedAt: Date;
             fromStage: import("@prisma/client").$Enums.DealStage | null;
             toStage: import("@prisma/client").$Enums.DealStage;
             changedBy: string | null;
@@ -91,15 +113,15 @@ export declare class DealsController {
         title: string;
         currency: string;
         propertyId: string | null;
+        leadId: string | null;
         notes: string | null;
         assigneeId: string | null;
-        leadId: string | null;
         customerId: string | null;
         value: number;
         stage: import("@prisma/client").$Enums.DealStage;
         forecastCloseDate: Date | null;
     }>;
-    update(user: CurrentUserPayload, id: string, data: any): Promise<{
+    update(user: CurrentUserPayload, id: string, dto: UpdateDealDto): Promise<{
         id: string;
         createdAt: Date;
         updatedAt: Date;
@@ -107,15 +129,15 @@ export declare class DealsController {
         title: string;
         currency: string;
         propertyId: string | null;
+        leadId: string | null;
         notes: string | null;
         assigneeId: string | null;
-        leadId: string | null;
         customerId: string | null;
         value: number;
         stage: import("@prisma/client").$Enums.DealStage;
         forecastCloseDate: Date | null;
     }>;
-    updateStage(user: CurrentUserPayload, id: string, stage: string): Promise<{
+    updateStage(user: CurrentUserPayload, id: string, dto: UpdateDealStageDto): Promise<{
         id: string;
         createdAt: Date;
         updatedAt: Date;
@@ -123,20 +145,26 @@ export declare class DealsController {
         title: string;
         currency: string;
         propertyId: string | null;
+        leadId: string | null;
         notes: string | null;
         assigneeId: string | null;
-        leadId: string | null;
         customerId: string | null;
         value: number;
         stage: import("@prisma/client").$Enums.DealStage;
         forecastCloseDate: Date | null;
     }>;
-    addNote(user: CurrentUserPayload, id: string, content: string): Promise<{
+    addNote(user: CurrentUserPayload, id: string, dto: AddDealNoteDto): Promise<{
+        author: {
+            id: string;
+            firstName: string;
+            lastName: string;
+        };
+    } & {
         id: string;
         createdAt: Date;
         updatedAt: Date;
         content: string;
-        authorId: string;
         dealId: string;
+        authorId: string;
     }>;
 }

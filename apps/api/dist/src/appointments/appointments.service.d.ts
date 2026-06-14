@@ -14,12 +14,12 @@ export declare class AppointmentsService {
         type: import("@prisma/client").$Enums.AppointmentType;
         leadId: string | null;
         customerId: string | null;
+        organizerId: string;
         dealId: string | null;
         startTime: Date;
         endTime: Date;
         location: string | null;
         reminderAt: Date | null;
-        organizerId: string;
     }>;
     findAll(tenantId: string, query: any): Promise<({
         property: {
@@ -53,12 +53,12 @@ export declare class AppointmentsService {
         type: import("@prisma/client").$Enums.AppointmentType;
         leadId: string | null;
         customerId: string | null;
+        organizerId: string;
         dealId: string | null;
         startTime: Date;
         endTime: Date;
         location: string | null;
         reminderAt: Date | null;
-        organizerId: string;
     })[]>;
     findOne(tenantId: string, id: string): Promise<{
         property: {
@@ -96,12 +96,12 @@ export declare class AppointmentsService {
         type: import("@prisma/client").$Enums.AppointmentType;
         leadId: string | null;
         customerId: string | null;
+        organizerId: string;
         dealId: string | null;
         startTime: Date;
         endTime: Date;
         location: string | null;
         reminderAt: Date | null;
-        organizerId: string;
     }>;
     update(tenantId: string, id: string, data: any): Promise<{
         id: string;
@@ -115,12 +115,12 @@ export declare class AppointmentsService {
         type: import("@prisma/client").$Enums.AppointmentType;
         leadId: string | null;
         customerId: string | null;
+        organizerId: string;
         dealId: string | null;
         startTime: Date;
         endTime: Date;
         location: string | null;
         reminderAt: Date | null;
-        organizerId: string;
     }>;
     remove(tenantId: string, id: string): Promise<{
         id: string;
@@ -134,11 +134,11 @@ export declare class AppointmentsService {
         type: import("@prisma/client").$Enums.AppointmentType;
         leadId: string | null;
         customerId: string | null;
+        organizerId: string;
         dealId: string | null;
         startTime: Date;
         endTime: Date;
         location: string | null;
         reminderAt: Date | null;
-        organizerId: string;
     }>;
 }

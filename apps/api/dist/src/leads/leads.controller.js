@@ -21,13 +21,14 @@ const permissions_guard_1 = require("../roles/guards/permissions.guard");
 const require_permissions_decorator_1 = require("../common/decorators/require-permissions.decorator");
 const permissions_constants_1 = require("../roles/permissions.constants");
 const current_user_decorator_1 = require("../common/decorators/current-user.decorator");
+const lead_dto_1 = require("./dto/lead.dto");
 let LeadsController = class LeadsController {
     leadsService;
     constructor(leadsService) {
         this.leadsService = leadsService;
     }
-    async create(user, data) {
-        return this.leadsService.create(user.tenantId, user.userId, data);
+    async create(user, dto) {
+        return this.leadsService.create(user.tenantId, user.userId, dto);
     }
     async findAll(user, query) {
         return this.leadsService.findAll(user.tenantId, query);
@@ -35,14 +36,20 @@ let LeadsController = class LeadsController {
     async findOne(user, id) {
         return this.leadsService.findOne(user.tenantId, id);
     }
-    async update(user, id, data) {
-        return this.leadsService.update(user.tenantId, id, data);
+    async update(user, id, dto) {
+        return this.leadsService.update(user.tenantId, id, dto, user.userId);
     }
-    async addNote(user, id, content) {
-        return this.leadsService.addNote(user.tenantId, id, user.userId, content);
+    async archive(user, id) {
+        return this.leadsService.archive(user.tenantId, id);
     }
-    async assign(user, id, assigneeId) {
-        return this.leadsService.assign(user.tenantId, id, assigneeId);
+    async addNote(user, id, dto) {
+        return this.leadsService.addNote(user.tenantId, id, user.userId, dto.content);
+    }
+    async assign(user, id, dto) {
+        return this.leadsService.assign(user.tenantId, id, dto.assigneeId, user.userId);
+    }
+    async getTimeline(user, id) {
+        return this.leadsService.getTimeline(user.tenantId, id);
     }
 };
 exports.LeadsController = LeadsController;
@@ -53,7 +60,7 @@ __decorate([
     __param(0, (0, current_user_decorator_1.CurrentUser)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:paramtypes", [Object, lead_dto_1.CreateLeadDto]),
     __metadata("design:returntype", Promise)
 ], LeadsController.prototype, "create", null);
 __decorate([
@@ -63,12 +70,13 @@ __decorate([
     __param(0, (0, current_user_decorator_1.CurrentUser)()),
     __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:paramtypes", [Object, lead_dto_1.QueryLeadDto]),
     __metadata("design:returntype", Promise)
 ], LeadsController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Get lead details' }),
+    (0, swagger_1.ApiParam)({ name: 'id', type: String }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.READ_LEAD),
     __param(0, (0, current_user_decorator_1.CurrentUser)()),
     __param(1, (0, common_1.Param)('id')),
@@ -79,36 +87,61 @@ __decorate([
 __decorate([
     (0, common_1.Put)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Update a lead' }),
+    (0, swagger_1.ApiParam)({ name: 'id', type: String }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.UPDATE_LEAD),
     __param(0, (0, current_user_decorator_1.CurrentUser)()),
     __param(1, (0, common_1.Param)('id')),
     __param(2, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String, Object]),
+    __metadata("design:paramtypes", [Object, String, lead_dto_1.UpdateLeadDto]),
     __metadata("design:returntype", Promise)
 ], LeadsController.prototype, "update", null);
 __decorate([
+    (0, common_1.Delete)(':id'),
+    (0, swagger_1.ApiOperation)({ summary: 'Archive a lead' }),
+    (0, swagger_1.ApiParam)({ name: 'id', type: String }),
+    (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.DELETE_LEAD),
+    __param(0, (0, current_user_decorator_1.CurrentUser)()),
+    __param(1, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:returntype", Promise)
+], LeadsController.prototype, "archive", null);
+__decorate([
     (0, common_1.Post)(':id/notes'),
     (0, swagger_1.ApiOperation)({ summary: 'Add a note to a lead' }),
+    (0, swagger_1.ApiParam)({ name: 'id', type: String }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.UPDATE_LEAD),
     __param(0, (0, current_user_decorator_1.CurrentUser)()),
     __param(1, (0, common_1.Param)('id')),
-    __param(2, (0, common_1.Body)('content')),
+    __param(2, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String, String]),
+    __metadata("design:paramtypes", [Object, String, lead_dto_1.AddLeadNoteDto]),
     __metadata("design:returntype", Promise)
 ], LeadsController.prototype, "addNote", null);
 __decorate([
     (0, common_1.Put)(':id/assign'),
     (0, swagger_1.ApiOperation)({ summary: 'Assign a lead to an agent' }),
+    (0, swagger_1.ApiParam)({ name: 'id', type: String }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.ASSIGN_LEAD),
     __param(0, (0, current_user_decorator_1.CurrentUser)()),
     __param(1, (0, common_1.Param)('id')),
-    __param(2, (0, common_1.Body)('assigneeId')),
+    __param(2, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String, String]),
+    __metadata("design:paramtypes", [Object, String, lead_dto_1.AssignLeadDto]),
     __metadata("design:returntype", Promise)
 ], LeadsController.prototype, "assign", null);
+__decorate([
+    (0, common_1.Get)(':id/timeline'),
+    (0, swagger_1.ApiOperation)({ summary: 'Get lead activity timeline' }),
+    (0, swagger_1.ApiParam)({ name: 'id', type: String }),
+    (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.READ_LEAD),
+    __param(0, (0, current_user_decorator_1.CurrentUser)()),
+    __param(1, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:returntype", Promise)
+], LeadsController.prototype, "getTimeline", null);
 exports.LeadsController = LeadsController = __decorate([
     (0, swagger_1.ApiTags)('leads'),
     (0, common_1.Controller)({ path: 'leads', version: '1' }),

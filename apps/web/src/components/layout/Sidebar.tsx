@@ -13,7 +13,8 @@ import {
   Settings,
   Building2,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Sparkles
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/lib/auth-store';
@@ -28,6 +29,7 @@ const navigation = [
   { name: 'Appointments', href: '/appointments', icon: CalendarDays },
   { name: 'Tasks', href: '/tasks', icon: CheckSquare },
   { name: 'Reports', href: '/reports', icon: BarChart3 },
+  { name: 'AI Copilot', href: '/ai', icon: Sparkles },
 ];
 
 export function Sidebar() {

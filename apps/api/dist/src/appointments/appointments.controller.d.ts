@@ -15,12 +15,12 @@ export declare class AppointmentsController {
         type: import("@prisma/client").$Enums.AppointmentType;
         leadId: string | null;
         customerId: string | null;
+        organizerId: string;
         dealId: string | null;
         startTime: Date;
         endTime: Date;
         location: string | null;
         reminderAt: Date | null;
-        organizerId: string;
     }>;
     findAll(user: CurrentUserPayload, query: any): Promise<({
         property: {
@@ -54,12 +54,12 @@ export declare class AppointmentsController {
         type: import("@prisma/client").$Enums.AppointmentType;
         leadId: string | null;
         customerId: string | null;
+        organizerId: string;
         dealId: string | null;
         startTime: Date;
         endTime: Date;
         location: string | null;
         reminderAt: Date | null;
-        organizerId: string;
     })[]>;
     findOne(user: CurrentUserPayload, id: string): Promise<{
         property: {
@@ -97,12 +97,12 @@ export declare class AppointmentsController {
         type: import("@prisma/client").$Enums.AppointmentType;
         leadId: string | null;
         customerId: string | null;
+        organizerId: string;
         dealId: string | null;
         startTime: Date;
         endTime: Date;
         location: string | null;
         reminderAt: Date | null;
-        organizerId: string;
     }>;
     update(user: CurrentUserPayload, id: string, data: any): Promise<{
         id: string;
@@ -116,12 +116,12 @@ export declare class AppointmentsController {
         type: import("@prisma/client").$Enums.AppointmentType;
         leadId: string | null;
         customerId: string | null;
+        organizerId: string;
         dealId: string | null;
         startTime: Date;
         endTime: Date;
         location: string | null;
         reminderAt: Date | null;
-        organizerId: string;
     }>;
     remove(user: CurrentUserPayload, id: string): Promise<{
         id: string;
@@ -135,11 +135,11 @@ export declare class AppointmentsController {
         type: import("@prisma/client").$Enums.AppointmentType;
         leadId: string | null;
         customerId: string | null;
+        organizerId: string;
         dealId: string | null;
         startTime: Date;
         endTime: Date;
         location: string | null;
         reminderAt: Date | null;
-        organizerId: string;
     }>;
 }

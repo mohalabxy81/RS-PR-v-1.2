@@ -12,28 +12,47 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DealsService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
+const activities_service_1 = require("../activities/activities.service");
 let DealsService = class DealsService {
     prisma;
-    constructor(prisma) {
+    activities;
+    constructor(prisma, activities) {
         this.prisma = prisma;
+        this.activities = activities;
     }
-    async create(tenantId, data) {
-        return this.prisma.deal.create({
-            data: { ...data, tenantId },
+    async create(tenantId, userId, dto) {
+        const deal = await this.prisma.deal.create({
+            data: { ...dto, tenantId, assigneeId: dto.assigneeId ?? userId },
         });
+        await this.activities.track({
+            tenantId,
+            userId,
+            entityType: 'Deal',
+            entityId: deal.id,
+            action: 'created',
+            description: `Deal "${deal.title}" was created`,
+        });
+        return deal;
     }
     async findAll(tenantId, query) {
-        const { stage, assigneeId } = query;
+        const { stage, assigneeId, search } = query;
         const where = { tenantId };
         if (stage)
             where.stage = stage;
         if (assigneeId)
             where.assigneeId = assigneeId;
+        if (search) {
+            where.OR = [
+                { title: { contains: search, mode: 'insensitive' } },
+            ];
+        }
         return this.prisma.deal.findMany({
             where,
             include: {
                 customer: { select: { id: true, firstName: true, lastName: true } },
                 assignee: { select: { id: true, firstName: true, lastName: true } },
+                property: { select: { id: true, title: true } },
+                lead: { select: { id: true, firstName: true, lastName: true } },
             },
             orderBy: { createdAt: 'desc' },
         });
@@ -45,16 +64,41 @@ let DealsService = class DealsService {
                 customer: { select: { id: true, firstName: true, lastName: true } },
                 assignee: { select: { id: true, firstName: true, lastName: true } },
                 property: { select: { id: true, title: true } },
+                lead: { select: { id: true, firstName: true, lastName: true } },
                 dealNotes: {
                     include: { author: { select: { id: true, firstName: true, lastName: true } } },
                     orderBy: { createdAt: 'desc' },
                 },
                 stageHistory: { orderBy: { changedAt: 'desc' } },
+                appointments: {
+                    select: { id: true, title: true, type: true, startTime: true, status: true },
+                    orderBy: { startTime: 'desc' },
+                },
             },
         });
         if (!deal)
             throw new common_1.NotFoundException('Deal not found');
         return deal;
+    }
+    async update(tenantId, id, dto, userId) {
+        const deal = await this.prisma.deal.findFirst({ where: { id, tenantId } });
+        if (!deal)
+            throw new common_1.NotFoundException('Deal not found');
+        const updated = await this.prisma.deal.update({
+            where: { id },
+            data: dto,
+        });
+        if (userId) {
+            await this.activities.track({
+                tenantId,
+                userId,
+                entityType: 'Deal',
+                entityId: id,
+                action: 'updated',
+                description: `Deal "${deal.title}" was updated`,
+            });
+        }
+        return updated;
     }
     async updateStage(tenantId, id, userId, stage) {
         const deal = await this.prisma.deal.findFirst({ where: { id, tenantId } });
@@ -62,7 +106,7 @@ let DealsService = class DealsService {
             throw new common_1.NotFoundException('Deal not found');
         if (deal.stage === stage)
             return deal;
-        return this.prisma.$transaction(async (tx) => {
+        const updated = await this.prisma.$transaction(async (tx) => {
             await tx.dealStageHistory.create({
                 data: {
                     dealId: id,
@@ -76,28 +120,40 @@ let DealsService = class DealsService {
                 data: { stage },
             });
         });
-    }
-    async update(tenantId, id, data) {
-        const deal = await this.prisma.deal.findFirst({ where: { id, tenantId } });
-        if (!deal)
-            throw new common_1.NotFoundException('Deal not found');
-        return this.prisma.deal.update({
-            where: { id },
-            data,
+        await this.activities.track({
+            tenantId,
+            userId,
+            entityType: 'Deal',
+            entityId: id,
+            action: 'stage_changed',
+            description: `Deal stage changed from ${deal.stage} to ${stage}`,
+            metadata: { from: deal.stage, to: stage },
         });
+        return updated;
     }
     async addNote(tenantId, dealId, authorId, content) {
         const deal = await this.prisma.deal.findFirst({ where: { id: dealId, tenantId } });
         if (!deal)
             throw new common_1.NotFoundException('Deal not found');
-        return this.prisma.dealNote.create({
+        const note = await this.prisma.dealNote.create({
             data: { dealId, authorId, content },
+            include: { author: { select: { id: true, firstName: true, lastName: true } } },
         });
+        await this.activities.track({
+            tenantId,
+            userId: authorId,
+            entityType: 'Deal',
+            entityId: dealId,
+            action: 'note_added',
+            description: 'A note was added to the deal',
+        });
+        return note;
     }
 };
 exports.DealsService = DealsService;
 exports.DealsService = DealsService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
+        activities_service_1.ActivitiesService])
 ], DealsService);
 //# sourceMappingURL=deals.service.js.map

@@ -65,8 +65,8 @@ export declare class CustomersService {
             createdAt: Date;
             updatedAt: Date;
             content: string;
-            authorId: string;
             customerId: string;
+            authorId: string;
         })[];
         assignee: {
             id: string;
@@ -117,7 +117,7 @@ export declare class CustomersService {
         createdAt: Date;
         updatedAt: Date;
         content: string;
-        authorId: string;
         customerId: string;
+        authorId: string;
     }>;
 }

@@ -20,6 +20,9 @@ import {
   MoreVertical
 } from 'lucide-react';
 import Link from 'next/link';
+import { Plus } from 'lucide-react';
+import { LeadScoreCard } from '@/components/ai/LeadScoreCard';
+import { EmailGenerator } from '@/components/ai/EmailGenerator';
 
 export default function LeadDetailPage({ params }: { params: { id: string } }) {
   const queryClient = useQueryClient();
@@ -84,6 +87,7 @@ export default function LeadDetailPage({ params }: { params: { id: string } }) {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Column: Details & Notes */}
         <div className="lg:col-span-2 space-y-6">
+          <LeadScoreCard leadId={params.id} />
           
           {/* Info Card */}
           <div className="card p-6">
@@ -111,7 +115,7 @@ export default function LeadDetailPage({ params }: { params: { id: string } }) {
               </div>
               <div>
                 <span className="text-xs text-[hsl(var(--foreground-muted))] block mb-1 flex items-center gap-1"><Calendar size={12}/> Created On</span>
-                <span className="font-medium">{formatDate(lead.createdAt)}</span>
+                <span className="font-medium">{formatDateTime(lead.createdAt)}</span>
               </div>
             </div>
 
@@ -174,6 +178,8 @@ export default function LeadDetailPage({ params }: { params: { id: string } }) {
 
         {/* Right Column: Timeline & Related Info */}
         <div className="space-y-6">
+          <EmailGenerator entityType="Lead" entityId={params.id} />
+
           <div className="card p-5">
             <h3 className="section-title !px-0 mb-4">Activity Timeline</h3>
             

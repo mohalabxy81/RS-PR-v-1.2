@@ -2,6 +2,8 @@
 
 import { Sidebar } from './Sidebar';
 import { Header } from './Header';
+import { AiCopilotButton } from '../ai/AiCopilotButton';
+import { AiCopilotPanel } from '../ai/AiCopilotPanel';
 
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -15,6 +17,10 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
           </div>
         </main>
       </div>
+      
+      {/* AI Copilot integration */}
+      <AiCopilotButton />
+      <AiCopilotPanel />
     </div>
   );
 }
