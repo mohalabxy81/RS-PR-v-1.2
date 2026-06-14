@@ -21,6 +21,15 @@ import { AuditLogsModule } from './audit-logs/audit-logs.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { FilesModule } from './files/files.module';
 import { RolesModule } from './roles/roles.module';
+import { AiCoreModule } from './ai/ai-core/ai-core.module';
+import { AiKnowledgeModule } from './ai/ai-knowledge/ai-knowledge.module';
+import { AiMemoryModule } from './ai/ai-memory/ai-memory.module';
+import { AiPromptsModule } from './ai/ai-prompts/ai-prompts.module';
+import { AiChatModule } from './ai/ai-chat/ai-chat.module';
+import { AiFeaturesModule } from './ai/ai-features/ai-features.module';
+import { AiAnalyticsModule } from './ai/ai-analytics/ai-analytics.module';
+import { AiFeedbackModule } from './ai/ai-feedback/ai-feedback.module';
+import { AiAdminModule } from './ai/ai-admin/ai-admin.module';
 
 @Module({
   imports: [
@@ -44,6 +53,15 @@ import { RolesModule } from './roles/roles.module';
     DashboardModule,
     FilesModule,
     QueueModule,
+    AiCoreModule,
+    AiKnowledgeModule,
+    AiMemoryModule,
+    AiPromptsModule,
+    AiChatModule,
+    AiFeaturesModule,
+    AiAnalyticsModule,
+    AiFeedbackModule,
+    AiAdminModule,
   ],
   controllers: [AppController],
   providers: [AppService],
