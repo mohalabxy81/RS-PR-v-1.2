@@ -6,6 +6,7 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { JwtStrategy } from './jwt.strategy';
 import { PrismaModule } from '../prisma/prisma.module';
+import { SessionBlocklistService } from './session-blocklist.service';
 
 @Module({
   imports: [
@@ -23,8 +24,8 @@ import { PrismaModule } from '../prisma/prisma.module';
       inject: [ConfigService],
     }),
   ],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy, SessionBlocklistService],
   controllers: [AuthController],
-  exports: [AuthService, JwtModule, PassportModule],
+  exports: [AuthService, JwtModule, PassportModule, SessionBlocklistService],
 })
 export class AuthModule {}

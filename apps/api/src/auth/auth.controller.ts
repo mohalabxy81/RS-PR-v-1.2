@@ -88,8 +88,11 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @ApiBearerAuth('access-token')
   @ApiOperation({ summary: 'Logout current session (revoke refresh token)' })
-  async logout(@Body() dto: RefreshTokenDto) {
-    return this.authService.logout(dto.refreshToken);
+  async logout(
+    @CurrentUser() user: CurrentUserPayload,
+    @Body() dto: RefreshTokenDto,
+  ) {
+    return this.authService.logout(user.sessionId, dto.refreshToken);
   }
 
   @UseGuards(JwtAuthGuard)

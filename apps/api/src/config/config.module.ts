@@ -9,6 +9,7 @@ import {
   smtpConfig,
   throttleConfig,
   uploadConfig,
+  cryptoConfig,
 } from './configuration';
 
 @Global()
@@ -25,6 +26,7 @@ import {
         smtpConfig,
         throttleConfig,
         uploadConfig,
+        cryptoConfig,
       ],
       envFilePath: ['.env.local', '.env'],
     }),

@@ -9,6 +9,8 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../prisma/prisma.service';
+import { SessionBlocklistService } from './session-blocklist.service';
+import { SecurityAuditService, SecurityEvent } from '../audit-logs/security-audit.service';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
 import {
@@ -44,6 +46,8 @@ export class AuthService {
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
     private readonly config: ConfigService,
+    private readonly sessionBlocklist: SessionBlocklistService,
+    private readonly securityAudit: SecurityAuditService,
   ) {}
 
   // ─────────────────────────────────────────────
@@ -173,6 +177,14 @@ export class AuthService {
           this.logger.warn(`Account locked for user ${user.id} due to failed login attempts`);
         }
         await this.prisma.user.update({ where: { id: user.id }, data: updates });
+
+        await this.securityAudit.logSecurityEvent(user.tenantId, SecurityEvent.LOGIN_FAILED, user.id, {
+          ipAddress,
+          userAgent,
+          userId: user.id,
+          reason: attempts >= 5 ? 'Account locked due to multiple failed attempts' : 'Invalid credentials',
+          severity: attempts >= 5 ? 'HIGH' : 'LOW'
+        });
       }
       // Generic error — never indicate whether email or password was wrong
       throw new UnauthorizedException('Invalid credentials');
@@ -203,6 +215,13 @@ export class AuthService {
       },
     });
 
+    await this.securityAudit.logSecurityEvent(user.tenantId, SecurityEvent.LOGIN_SUCCESS, user.id, {
+      ipAddress,
+      userAgent,
+      userId: user.id,
+      severity: 'INFO'
+    });
+
     return {
       accessToken,
       refreshToken,
@@ -220,13 +239,17 @@ export class AuthService {
   // ─────────────────────────────────────────────
   // LOGOUT — Revoke specific refresh token
   // ─────────────────────────────────────────────
-  async logout(refreshToken: string) {
+  async logout(sessionId: string | undefined, refreshToken: string) {
     const tokenHash = this.hashToken(refreshToken);
 
     await this.prisma.refreshToken.updateMany({
       where: { tokenHash, revokedAt: null },
       data: { revokedAt: new Date() },
     });
+
+    if (sessionId) {
+      await this.sessionBlocklist.blockSession(sessionId, 900); // 15 mins block
+    }
   }
 
   // ─────────────────────────────────────────────
@@ -237,6 +260,8 @@ export class AuthService {
       where: { userId, revokedAt: null },
       data: { revokedAt: new Date() },
     });
+    
+    await this.sessionBlocklist.blockAllUserSessions(userId, 900); // 15 mins max TTL
   }
 
   // ─────────────────────────────────────────────
@@ -321,6 +346,11 @@ export class AuthService {
     // TODO: Send email via queue with reset link
     this.logger.log(`Password reset requested for user ${user.id}`);
 
+    await this.securityAudit.logSecurityEvent(user.tenantId, SecurityEvent.PASSWORD_RESET_REQUESTED, user.id, {
+      userId: user.id,
+      severity: 'INFO'
+    });
+
     return { message: 'If that email is registered, a reset link has been sent.' };
   }
 
@@ -399,6 +429,11 @@ export class AuthService {
       }),
     ]);
 
+    await this.securityAudit.logSecurityEvent(user.tenantId, SecurityEvent.PASSWORD_CHANGED, user.id, {
+      userId: user.id,
+      severity: 'INFO'
+    });
+
     return { message: 'Password changed successfully. All sessions have been revoked.' };
   }
 
@@ -445,20 +480,6 @@ export class AuthService {
     ipAddress?: string,
     userAgent?: string,
   ) {
-    const payload = {
-      sub: user.id,
-      email: user.email,
-      tenantId: user.tenantId,
-      roleId: user.roleId,
-      roleName: user.role?.name,
-    };
-
-    const accessToken = this.jwtService.sign(payload, {
-      secret: this.config.get('jwt.accessSecret'),
-      expiresIn: this.config.get('jwt.accessExpiresIn'),
-      algorithm: 'HS256',
-    });
-
     const rawRefreshToken = crypto.randomBytes(64).toString('hex');
     const tokenHash = this.hashToken(rawRefreshToken);
 
@@ -467,7 +488,7 @@ export class AuthService {
     const days = parseInt(refreshExpiresIn.replace('d', ''), 10) || 7;
     expiresAt.setDate(expiresAt.getDate() + days);
 
-    await this.prisma.refreshToken.create({
+    const refreshTokenRecord = await this.prisma.refreshToken.create({
       data: {
         tenantId: user.tenantId,
         userId: user.id,
@@ -477,6 +498,19 @@ export class AuthService {
         userAgent,
         deviceInfo: userAgent ? this.parseDeviceInfo(userAgent) : undefined,
       },
+    });
+
+    const payload = {
+      sub: user.id,
+      tenantId: user.tenantId,
+      roleId: user.roleId,
+      sessionId: refreshTokenRecord.id,
+    };
+
+    const accessToken = this.jwtService.sign(payload, {
+      secret: this.config.get('jwt.accessSecret'),
+      expiresIn: this.config.get('jwt.accessExpiresIn'),
+      algorithm: 'HS256',
     });
 
     return { accessToken, refreshToken: rawRefreshToken };

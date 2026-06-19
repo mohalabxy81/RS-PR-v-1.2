@@ -1,4 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import * as crypto from 'crypto';
 
 @Injectable()
@@ -7,20 +8,20 @@ export class EncryptionService {
   private readonly algorithm = 'aes-256-gcm';
   private readonly key: Buffer;
 
-  constructor() {
-    const secretKey = process.env.ENCRYPTION_KEY;
+  constructor(private readonly config: ConfigService) {
+    const secretKey = this.config.get<string>('crypto.encryptionKey');
+    
     if (!secretKey) {
       if (process.env.NODE_ENV === 'production') {
         throw new Error('ENCRYPTION_KEY is required in production environment. System cannot start.');
       }
       this.logger.warn('ENCRYPTION_KEY is not set in environment variables! Using a fallback key for development.');
-      // Fallback for dev only. In prod, this should throw an error.
-      this.key = crypto.scryptSync(process.env.JWT_SECRET || 'fallback_dev_secret', 'salt', 32);
+      this.key = crypto.randomBytes(32);
     } else {
-      // Assuming ENCRYPTION_KEY is a 32-byte hex string
-      this.key = Buffer.from(secretKey, 'hex');
+      // Use the first 32 bytes if the secret is longer
+      this.key = Buffer.from(secretKey.substring(0, 64), 'hex');
       if (this.key.length !== 32) {
-        throw new Error('ENCRYPTION_KEY must be a 64-character hex string (32 bytes)');
+        throw new Error('ENCRYPTION_KEY must provide at least 32 bytes of hex data');
       }
     }
   }

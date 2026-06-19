@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { BullModule } from '@nestjs/bullmq';
 import { PrismaModule } from '../prisma/prisma.module';
+import { AuditLogsModule } from '../audit-logs/audit-logs.module';
 
 // Controllers
 import { DeveloperController } from './controllers/developer.controller';
@@ -27,6 +28,7 @@ import { WebhookWorker } from './workers/webhook.worker';
 @Module({
   imports: [
     PrismaModule,
+    AuditLogsModule,
     BullModule.registerQueue(
       { name: 'api-usage-queue' },
       { 

@@ -1,8 +1,10 @@
 import { Injectable, NotFoundException, BadRequestException, Logger, Inject } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service';
-import { randomBytes, createHash } from 'crypto';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import type { Cache } from 'cache-manager';
+import { validateScopes } from '../constants/api-scopes.constants';
+import { SecurityAuditService, SecurityEvent } from '../../audit-logs/security-audit.service';
+import { PrismaService } from '../../prisma/prisma.service';
+import { randomBytes, createHash } from 'crypto';
 
 @Injectable()
 export class ApiKeyService {
@@ -11,6 +13,7 @@ export class ApiKeyService {
   constructor(
     private readonly prisma: PrismaService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    private readonly securityAudit: SecurityAuditService,
   ) {}
 
   private hashKey(key: string): string {
@@ -31,6 +34,10 @@ export class ApiKeyService {
     createdIp?: string,
     createdUserAgent?: string
   ) {
+    if (!validateScopes(scopes)) {
+      throw new BadRequestException('Invalid API key scopes provided or wildcard scopes requested.');
+    }
+
     const rawKey = randomBytes(32).toString('base64url');
     const prefix = this.generatePrefix();
     const fullKey = prefix + rawKey;
@@ -59,6 +66,12 @@ export class ApiKeyService {
     });
 
     this.logger.log(`Created new API Key ${apiKeyRecord.id} for tenant ${tenantId}`);
+
+    await this.securityAudit.logSecurityEvent(tenantId, SecurityEvent.API_KEY_CREATED, apiKeyRecord.id, {
+      ipAddress: createdIp,
+      userAgent: createdUserAgent,
+      severity: 'INFO'
+    });
 
     return {
       id: apiKeyRecord.id,
@@ -115,7 +128,7 @@ export class ApiKeyService {
 
   hasScope(apiKeyRecord: any, requiredScope: string): boolean {
     if (!apiKeyRecord || !apiKeyRecord.scopes) return false;
-    return apiKeyRecord.scopes.includes(requiredScope) || apiKeyRecord.scopes.includes('*');
+    return apiKeyRecord.scopes.includes(requiredScope);
   }
 
   async listApiKeys(tenantId: string) {
@@ -146,6 +159,12 @@ export class ApiKeyService {
     });
     // Invalidate cache
     await this.cacheManager.del(`apikey_valid:${key.keyHash}`);
+
+    await this.securityAudit.logSecurityEvent(tenantId, SecurityEvent.API_KEY_REVOKED, id, {
+      severity: 'MEDIUM',
+      reason: 'User revoked API key'
+    });
+
     return key;
   }
 
@@ -175,6 +194,11 @@ export class ApiKeyService {
     });
 
     await this.cacheManager.del(`apikey_valid:${oldKey.keyHash}`);
+
+    await this.securityAudit.logSecurityEvent(tenantId, SecurityEvent.API_KEY_ROTATED, oldKey.id, {
+      severity: 'MEDIUM',
+      reason: 'API key rotation'
+    });
 
     return newKey;
   }

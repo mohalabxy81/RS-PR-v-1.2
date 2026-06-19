@@ -25,10 +25,17 @@ export class WebhookWorker extends WorkerHost {
       return;
     }
 
+    if (process.env.NODE_ENV === 'production' && !endpoint.url.startsWith('https://')) {
+      this.logger.error(`Webhook endpoint ${endpoint.url} rejected: HTTPS required in production`);
+      throw new UnrecoverableError('HTTPS required in production');
+    }
+
     const maxRetries = 5;
     const attempt = job.attemptsMade;
 
-    const signature = this.generateSignature(payload, endpoint.secret || '');
+    const timestamp = Math.floor(Date.now() / 1000).toString();
+    const eventId = payload.id || 'evt_' + Date.now();
+    const signature = this.generateSignature(payload, endpoint.secret || '', timestamp, endpointId);
 
     try {
       this.logger.log(`Delivering webhook ${eventType} to ${endpoint.url}`);
@@ -39,6 +46,8 @@ export class WebhookWorker extends WorkerHost {
           'Content-Type': 'application/json',
           'x-reis-signature': signature,
           'x-reis-event': eventType,
+          'X-Webhook-Timestamp': timestamp,
+          'X-Webhook-ID': eventId,
           'X-Hub-Signature': `sha256=${signature}`,
           'X-Hub-Signature-256': `sha256=${signature}`,
         },
@@ -51,7 +60,7 @@ export class WebhookWorker extends WorkerHost {
         data: {
           endpointId,
           tenantId: endpoint.tenantId,
-          eventId: payload.id || 'evt_' + Date.now(),
+          eventId: eventId,
           payload: payload,
           statusCode: response.status,
           response: { text: responseText.slice(0, 1000) },
@@ -79,7 +88,7 @@ export class WebhookWorker extends WorkerHost {
         data: {
           endpointId,
           tenantId: endpoint.tenantId,
-          eventId: payload.id || 'evt_' + Date.now(),
+          eventId: eventId,
           payload: payload,
           statusCode: 0,
           response: { error: error.message },
@@ -96,8 +105,9 @@ export class WebhookWorker extends WorkerHost {
     }
   }
 
-  private generateSignature(payload: any, secret: string): string {
+  private generateSignature(payload: any, secret: string, timestamp: string, webhookId: string): string {
     const payloadString = JSON.stringify(payload);
-    return createHmac('sha256', secret).update(payloadString).digest('hex');
+    const dataToSign = `${timestamp}.${webhookId}.${payloadString}`;
+    return createHmac('sha256', secret).update(dataToSign).digest('hex');
   }
 }

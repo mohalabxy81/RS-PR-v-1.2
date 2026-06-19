@@ -8,12 +8,14 @@ import {
 import { Reflector } from '@nestjs/core';
 import { ApiKeyService } from '../../platform/services/api-key.service';
 import { PERMISSIONS_KEY } from '../decorators/require-permissions.decorator';
+import { SecurityMonitorService } from '../security/security-monitor.service';
 
 @Injectable()
 export class ApiKeyGuard implements CanActivate {
   constructor(
     private readonly apiKeyService: ApiKeyService,
     private readonly reflector: Reflector,
+    private readonly securityMonitor: SecurityMonitorService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -27,9 +29,12 @@ export class ApiKeyGuard implements CanActivate {
       throw new UnauthorizedException('API Key is missing');
     }
 
-    const apiKeyData = await this.apiKeyService.validateApiKey(apiKeyHeader);
+    const ip = request.ip || request.socket.remoteAddress;
+    const referer = request.headers['referer'] || request.headers['origin'];
+    const apiKeyData = await this.apiKeyService.validateApiKey(apiKeyHeader, ip, referer);
     
     if (!apiKeyData) {
+      await this.securityMonitor.recordInvalidApiKey(ip).catch((e: any) => console.error(e));
       throw new UnauthorizedException('Invalid or expired API Key');
     }
 
@@ -42,8 +47,7 @@ export class ApiKeyGuard implements CanActivate {
     if (requiredPermissions && requiredPermissions.length > 0) {
       // apiKeyData.scopes should exist, but let's be safe
       const keyScopes = apiKeyData.scopes || [];
-      // An API key might have a '*' wildcard scope, or needs specific match
-      const hasScope = keyScopes.includes('*') || requiredPermissions.every((p) => keyScopes.includes(p));
+      const hasScope = requiredPermissions.every((p) => keyScopes.includes(p));
       if (!hasScope) {
         throw new ForbiddenException('API Key lacks required scopes');
       }

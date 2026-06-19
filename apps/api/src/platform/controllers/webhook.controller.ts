@@ -1,5 +1,7 @@
 import { Version, Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
 import { RequirePermissions } from '../../common/decorators/require-permissions.decorator';
+import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import type { CurrentUserPayload } from '../../common/decorators/current-user.decorator';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 import { WebhookService } from '../services/webhook.service';
 import { RegisterWebhookDto, UpdateWebhookDto } from '../dto/webhook.dto';
@@ -16,18 +18,22 @@ export class WebhookController {
   @ApiResponse({ status: 201, description: 'Webhook registered. Secret returned for signature verification.' })
   @ApiBody({ type: RegisterWebhookDto })
   async registerWebhook(
+    @CurrentUser() user: CurrentUserPayload,
     @Param('projectId') projectId: string,
     @Body() body: RegisterWebhookDto
   ) {
-    return this.webhookService.registerWebhook(projectId, body);
+    return this.webhookService.registerWebhook(user.tenantId, projectId, body);
   }
 
   @RequirePermissions('platform.manage')
   @Get('projects/:projectId')
   @ApiOperation({ summary: 'List all webhook endpoints for a project' })
   @ApiResponse({ status: 200, description: 'List of webhook endpoints' })
-  async getWebhooks(@Param('projectId') projectId: string) {
-    return this.webhookService.getWebhooks(projectId);
+  async getWebhooks(
+    @CurrentUser() user: CurrentUserPayload,
+    @Param('projectId') projectId: string
+  ) {
+    return this.webhookService.getWebhooks(user.tenantId, projectId);
   }
 
   @RequirePermissions('platform.manage')
@@ -36,26 +42,44 @@ export class WebhookController {
   @ApiResponse({ status: 200, description: 'Webhook updated' })
   @ApiBody({ type: UpdateWebhookDto })
   async updateWebhook(
+    @CurrentUser() user: CurrentUserPayload,
     @Param('webhookId') webhookId: string,
     @Body() data: UpdateWebhookDto
   ) {
-    return this.webhookService.updateWebhook(webhookId, data);
+    return this.webhookService.updateWebhook(user.tenantId, webhookId, data);
   }
 
   @RequirePermissions('platform.manage')
   @Delete(':webhookId')
   @ApiOperation({ summary: 'Delete a webhook endpoint' })
   @ApiResponse({ status: 200, description: 'Webhook deleted' })
-  async deleteWebhook(@Param('webhookId') webhookId: string) {
-    return this.webhookService.deleteWebhook(webhookId);
+  async deleteWebhook(
+    @CurrentUser() user: CurrentUserPayload,
+    @Param('webhookId') webhookId: string
+  ) {
+    return this.webhookService.deleteWebhook(user.tenantId, webhookId);
   }
 
   @RequirePermissions('platform.manage')
   @Get(':webhookId/deliveries')
   @ApiOperation({ summary: 'Get recent delivery logs for a webhook endpoint' })
   @ApiResponse({ status: 200, description: 'Delivery log list (max 100 recent)' })
-  async getDeliveries(@Param('webhookId') webhookId: string) {
-    return this.webhookService.getDeliveries(webhookId);
+  async getDeliveries(
+    @CurrentUser() user: CurrentUserPayload,
+    @Param('webhookId') webhookId: string
+  ) {
+    return this.webhookService.getDeliveries(user.tenantId, webhookId);
+  }
+
+  @RequirePermissions('platform.manage')
+  @Post(':webhookId/rotate-secret')
+  @ApiOperation({ summary: 'Rotate a webhook endpoint secret' })
+  @ApiResponse({ status: 200, description: 'Secret rotated' })
+  async rotateSecret(
+    @CurrentUser() user: CurrentUserPayload,
+    @Param('webhookId') webhookId: string
+  ) {
+    return this.webhookService.rotateSecret(user.tenantId, webhookId);
   }
 
   // --- Events (Internal / Admin mostly) ---
@@ -64,7 +88,7 @@ export class WebhookController {
   @Get('events/logs')
   @ApiOperation({ summary: 'Get recent platform event logs (admin only)' })
   @ApiResponse({ status: 200, description: 'List of event logs' })
-  async getEventLogs() {
-    return this.webhookService.getEventLogs();
+  async getEventLogs(@CurrentUser() user: CurrentUserPayload) {
+    return this.webhookService.getEventLogs(user.tenantId);
   }
 }

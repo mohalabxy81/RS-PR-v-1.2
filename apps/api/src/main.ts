@@ -5,8 +5,10 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
 import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
 import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
+import { validateEnvironmentVariables } from './config/env-validation';
 
 async function bootstrap() {
+  validateEnvironmentVariables();
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
   app.useLogger(app.get(Logger));
   app.useGlobalInterceptors(new LoggerErrorInterceptor());

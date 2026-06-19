@@ -59,6 +59,10 @@ export const uploadConfig = registerAs('upload', () => ({
   maxFileSizeMb: parseInt(process.env.MAX_FILE_SIZE_MB || '10', 10),
 }));
 
+export const cryptoConfig = registerAs('crypto', () => ({
+  encryptionKey: getSecret('ENCRYPTION_KEY', 'Database Encryption Key'),
+}));
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Secure secret resolution: env → random ephemeral (with severe warning)
 // Never use a hardcoded literal or literal fallback.

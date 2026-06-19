@@ -3,10 +3,14 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
 import { CurrentUserPayload } from '../common/decorators/current-user.decorator';
+import { SessionBlocklistService } from './session-blocklist.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
-  constructor(private readonly configService: ConfigService) {
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly sessionBlocklist: SessionBlocklistService,
+  ) {
     const secret = configService.get<string>('jwt.accessSecret');
 
     if (!secret) {
@@ -26,13 +30,17 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   /**
    * Called after JWT signature is verified.
    * Return value is attached to request.user.
+   *
+   * Security checks performed here:
+   * 1. Payload structural validity
+   * 2. Session-level revocation check (Redis blocklist)
+   * 3. User-level block check (logout-all / password change)
    */
   async validate(payload: {
     sub: string;
-    email: string;
     tenantId: string;
     roleId?: string;
-    roleName?: string;
+    sessionId?: string;
     iat: number;
     exp: number;
   }): Promise<CurrentUserPayload> {
@@ -40,12 +48,25 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       throw new UnauthorizedException('Invalid token payload');
     }
 
+    // Check session-level blocklist (logout of specific session)
+    if (payload.sessionId) {
+      const blocked = await this.sessionBlocklist.isBlocked(payload.sessionId);
+      if (blocked) {
+        throw new UnauthorizedException('Session has been revoked');
+      }
+    }
+
+    // Check user-level block (logout-all / password change / suspension)
+    const userBlocked = await this.sessionBlocklist.isUserBlocked(payload.sub);
+    if (userBlocked) {
+      throw new UnauthorizedException('All sessions have been revoked');
+    }
+
     return {
       userId: payload.sub,
-      email: payload.email,
       tenantId: payload.tenantId,
       roleId: payload.roleId,
-      roleName: payload.roleName,
+      sessionId: payload.sessionId,
     };
   }
 }

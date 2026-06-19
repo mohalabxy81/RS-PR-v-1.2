@@ -1,15 +1,22 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
+import { ConfigService } from '@nestjs/config';
 import { randomBytes } from 'crypto';
 import { RegisterWebhookDto, UpdateWebhookDto } from '../dto/webhook.dto';
 
 @Injectable()
 export class WebhookService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly config: ConfigService,
+  ) {}
 
   // --- Webhooks ---
 
   async registerWebhook(tenantId: string, projectId: string, data: RegisterWebhookDto) {
+    if (this.config.get('NODE_ENV') === 'production' && !data.url.startsWith('https://')) {
+      throw new BadRequestException('Webhook URLs must use HTTPS in production');
+    }
     const secret = `whsec_${randomBytes(24).toString('hex')}`;
     return this.prisma.webhookEndpoint.create({
       data: {
@@ -26,6 +33,16 @@ export class WebhookService {
   async getWebhooks(tenantId: string, projectId: string) {
     return this.prisma.webhookEndpoint.findMany({
       where: { projectId, tenantId },
+      select: {
+        id: true,
+        tenantId: true,
+        projectId: true,
+        url: true,
+        events: true,
+        status: true,
+        createdAt: true,
+        updatedAt: true,
+      },
     });
   }
 
@@ -54,6 +71,22 @@ export class WebhookService {
     return this.prisma.webhookEndpoint.delete({
       where: { id: webhookId },
     });
+  }
+
+  async rotateSecret(tenantId: string, webhookId: string) {
+    const endpoint = await this.prisma.webhookEndpoint.findFirst({
+      where: { id: webhookId, tenantId },
+    });
+    if (!endpoint) throw new NotFoundException('Webhook not found');
+
+    const newSecret = `whsec_${randomBytes(24).toString('hex')}`;
+    
+    await this.prisma.webhookEndpoint.update({
+      where: { id: webhookId },
+      data: { secret: newSecret },
+    });
+
+    return { secret: newSecret };
   }
 
   // --- Delivery Logs ---

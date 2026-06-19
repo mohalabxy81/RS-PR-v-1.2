@@ -12,17 +12,26 @@ export class ApiUsageInterceptor implements NestInterceptor {
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const request = context.switchToHttp().getRequest();
-    const apiKey = request.headers['x-api-key'];
+    const startTime = Date.now();
     
-    // We only log if there is an API key (assuming external developer request)
     return next.handle().pipe(
       tap(() => {
-        if (apiKey) {
+        const response = context.switchToHttp().getResponse();
+        // Log if it was an API key request (identified by ApiKeyGuard)
+        if (request.apiKeyId && request.tenantId) {
           // Push to BullMQ queue asynchronously to avoid blocking the response
           this.usageQueue.add('log-usage', {
-            apiKey,
-            path: request.url,
+            apiKeyId: request.apiKeyId,
+            tenantId: request.tenantId,
+            endpoint: request.url,
             method: request.method,
+            statusCode: response.statusCode || 200,
+            requestSize: request.socket?.bytesRead || 0,
+            responseSize: response.socket?.bytesWritten || 0,
+            latencyMs: Date.now() - startTime,
+            costUnit: 1, // Standard cost
+            ipAddress: request.ip || request.socket?.remoteAddress,
+            userAgent: request.headers['user-agent'],
             timestamp: new Date().toISOString(),
           }, {
             removeOnComplete: true,
