@@ -48,6 +48,7 @@ let DealsController = class DealsController {
 };
 exports.DealsController = DealsController;
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('create:deals'),
     (0, common_1.Post)(),
     (0, swagger_1.ApiOperation)({ summary: 'Create a new deal' }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.CREATE_DEAL),
@@ -58,6 +59,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], DealsController.prototype, "create", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('read:deals'),
     (0, common_1.Get)(),
     (0, swagger_1.ApiOperation)({ summary: 'List all deals (useful for Kanban board)' }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.READ_DEAL),
@@ -68,6 +70,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], DealsController.prototype, "findAll", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('read:deals'),
     (0, common_1.Get)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Get deal details' }),
     (0, swagger_1.ApiParam)({ name: 'id', type: String }),
@@ -79,6 +82,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], DealsController.prototype, "findOne", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('update:deals'),
     (0, common_1.Put)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Update a deal' }),
     (0, swagger_1.ApiParam)({ name: 'id', type: String }),
@@ -91,6 +95,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], DealsController.prototype, "update", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('update:deals'),
     (0, common_1.Put)(':id/stage'),
     (0, swagger_1.ApiOperation)({ summary: 'Change deal stage (records history)' }),
     (0, swagger_1.ApiParam)({ name: 'id', type: String }),
@@ -103,6 +108,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], DealsController.prototype, "updateStage", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('create:deals'),
     (0, common_1.Post)(':id/notes'),
     (0, swagger_1.ApiOperation)({ summary: 'Add a note to a deal' }),
     (0, swagger_1.ApiParam)({ name: 'id', type: String }),

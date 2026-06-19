@@ -14,9 +14,9 @@ export declare class DealsService {
         title: string;
         currency: string;
         propertyId: string | null;
-        leadId: string | null;
-        notes: string | null;
         assigneeId: string | null;
+        notes: string | null;
+        leadId: string | null;
         customerId: string | null;
         value: number;
         stage: import("@prisma/client").$Enums.DealStage;
@@ -50,9 +50,9 @@ export declare class DealsService {
         title: string;
         currency: string;
         propertyId: string | null;
-        leadId: string | null;
-        notes: string | null;
         assigneeId: string | null;
+        notes: string | null;
+        leadId: string | null;
         customerId: string | null;
         value: number;
         stage: import("@prisma/client").$Enums.DealStage;
@@ -76,8 +76,8 @@ export declare class DealsService {
         appointments: {
             status: import("@prisma/client").$Enums.AppointmentStatus;
             id: string;
-            type: import("@prisma/client").$Enums.AppointmentType;
             title: string;
+            type: import("@prisma/client").$Enums.AppointmentType;
             startTime: Date;
         }[];
         dealNotes: ({
@@ -90,9 +90,9 @@ export declare class DealsService {
             id: string;
             createdAt: Date;
             updatedAt: Date;
+            authorId: string;
             content: string;
             dealId: string;
-            authorId: string;
         })[];
         assignee: {
             id: string;
@@ -102,9 +102,9 @@ export declare class DealsService {
         stageHistory: {
             id: string;
             dealId: string;
-            changedAt: Date;
             fromStage: import("@prisma/client").$Enums.DealStage | null;
             toStage: import("@prisma/client").$Enums.DealStage;
+            changedAt: Date;
             changedBy: string | null;
         }[];
     } & {
@@ -115,9 +115,9 @@ export declare class DealsService {
         title: string;
         currency: string;
         propertyId: string | null;
-        leadId: string | null;
-        notes: string | null;
         assigneeId: string | null;
+        notes: string | null;
+        leadId: string | null;
         customerId: string | null;
         value: number;
         stage: import("@prisma/client").$Enums.DealStage;
@@ -131,9 +131,9 @@ export declare class DealsService {
         title: string;
         currency: string;
         propertyId: string | null;
-        leadId: string | null;
-        notes: string | null;
         assigneeId: string | null;
+        notes: string | null;
+        leadId: string | null;
         customerId: string | null;
         value: number;
         stage: import("@prisma/client").$Enums.DealStage;
@@ -147,9 +147,9 @@ export declare class DealsService {
         title: string;
         currency: string;
         propertyId: string | null;
-        leadId: string | null;
-        notes: string | null;
         assigneeId: string | null;
+        notes: string | null;
+        leadId: string | null;
         customerId: string | null;
         value: number;
         stage: import("@prisma/client").$Enums.DealStage;
@@ -165,8 +165,8 @@ export declare class DealsService {
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        authorId: string;
         content: string;
         dealId: string;
-        authorId: string;
     }>;
 }

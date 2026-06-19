@@ -31,8 +31,8 @@ export declare class RolesService implements OnModuleInit {
             permissionId: string;
         })[];
     } & {
-        name: string;
         id: string;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
@@ -53,8 +53,8 @@ export declare class RolesService implements OnModuleInit {
             permissionId: string;
         })[];
     } & {
-        name: string;
         id: string;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
@@ -75,8 +75,8 @@ export declare class RolesService implements OnModuleInit {
             permissionId: string;
         })[];
     } & {
-        name: string;
         id: string;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
@@ -97,16 +97,16 @@ export declare class RolesService implements OnModuleInit {
             permissionId: string;
         })[];
     } & {
-        name: string;
         id: string;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
         isSystem: boolean;
     }) | null>;
     deleteRole(roleId: string, tenantId: string): Promise<{
-        name: string;
         id: string;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;

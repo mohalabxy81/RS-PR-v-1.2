@@ -30,22 +30,30 @@ let PermissionsGuard = class PermissionsGuard {
         if (isPublic)
             return true;
         const requiredPermissions = this.reflector.getAllAndOverride(require_permissions_decorator_1.PERMISSIONS_KEY, [context.getHandler(), context.getClass()]);
-        if (!requiredPermissions || requiredPermissions.length === 0) {
-            return true;
+        const hasRoles = this.reflector.getAllAndOverride('roles', [context.getHandler(), context.getClass()]);
+        const hasScopes = this.reflector.getAllAndOverride('scopes', [context.getHandler(), context.getClass()]);
+        const hasOwnership = this.reflector.getAllAndOverride('ownership', [context.getHandler(), context.getClass()]);
+        if ((!requiredPermissions || requiredPermissions.length === 0) &&
+            (!hasRoles || hasRoles.length === 0) &&
+            (!hasScopes || hasScopes.length === 0) &&
+            !hasOwnership) {
+            throw new common_1.ForbiddenException('Missing security metadata. Endpoint is locked by default.');
         }
-        const request = context.switchToHttp().getRequest();
-        const user = request.user;
-        if (!user?.roleId) {
-            throw new common_1.ForbiddenException('No role assigned');
-        }
-        const rolePermissions = await this.prisma.rolePermission.findMany({
-            where: { roleId: user.roleId },
-            include: { permission: true },
-        });
-        const userPermissions = new Set(rolePermissions.map((rp) => rp.permission.action));
-        const hasAll = requiredPermissions.every((p) => userPermissions.has(p));
-        if (!hasAll) {
-            throw new common_1.ForbiddenException('Insufficient permissions');
+        if (requiredPermissions && requiredPermissions.length > 0) {
+            const request = context.switchToHttp().getRequest();
+            const user = request.user;
+            if (!user?.roleId) {
+                throw new common_1.ForbiddenException('No role assigned');
+            }
+            const rolePermissions = await this.prisma.rolePermission.findMany({
+                where: { roleId: user.roleId },
+                include: { permission: true },
+            });
+            const userPermissions = new Set(rolePermissions.map((rp) => rp.permission.action));
+            const hasAll = requiredPermissions.every((p) => userPermissions.has(p));
+            if (!hasAll) {
+                throw new common_1.ForbiddenException('Insufficient permissions');
+            }
         }
         return true;
     }

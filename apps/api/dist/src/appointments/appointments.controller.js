@@ -45,6 +45,7 @@ let AppointmentsController = class AppointmentsController {
 };
 exports.AppointmentsController = AppointmentsController;
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('create:appointments'),
     (0, common_1.Post)(),
     (0, swagger_1.ApiOperation)({ summary: 'Create a new appointment' }),
     (0, swagger_1.ApiBody)({ type: appointment_dto_1.CreateAppointmentDto }),
@@ -56,6 +57,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AppointmentsController.prototype, "create", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('read:appointments'),
     (0, common_1.Get)(),
     (0, swagger_1.ApiOperation)({ summary: 'List all appointments in a date range' }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.READ_APPOINTMENT),
@@ -66,6 +68,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AppointmentsController.prototype, "findAll", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('read:appointments'),
     (0, common_1.Get)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Get appointment details' }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.READ_APPOINTMENT),
@@ -76,6 +79,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AppointmentsController.prototype, "findOne", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('update:appointments'),
     (0, common_1.Put)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Update an appointment' }),
     (0, swagger_1.ApiBody)({ type: appointment_dto_1.UpdateAppointmentDto }),
@@ -88,6 +92,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AppointmentsController.prototype, "update", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('delete:appointments'),
     (0, common_1.Delete)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Delete an appointment' }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.DELETE_APPOINTMENT),

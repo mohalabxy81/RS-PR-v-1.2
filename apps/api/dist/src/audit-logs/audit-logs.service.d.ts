@@ -13,13 +13,13 @@ export declare class AuditLogsService {
         } & {
             id: string;
             createdAt: Date;
-            userId: string | null;
             tenantId: string;
-            action: string;
+            userId: string | null;
             ipAddress: string | null;
             userAgent: string | null;
-            entity: string;
+            action: string;
             entityId: string;
+            entity: string;
             before: import("@prisma/client/runtime/client").JsonValue | null;
             after: import("@prisma/client/runtime/client").JsonValue | null;
         })[];
@@ -40,13 +40,13 @@ export declare class AuditLogsService {
     }): Promise<{
         id: string;
         createdAt: Date;
-        userId: string | null;
         tenantId: string;
-        action: string;
+        userId: string | null;
         ipAddress: string | null;
         userAgent: string | null;
-        entity: string;
+        action: string;
         entityId: string;
+        entity: string;
         before: import("@prisma/client/runtime/client").JsonValue | null;
         after: import("@prisma/client/runtime/client").JsonValue | null;
     }>;

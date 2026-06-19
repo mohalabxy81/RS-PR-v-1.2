@@ -92,7 +92,10 @@ let FilesService = FilesService_1 = class FilesService {
             throw new Error('Could not generate upload URL');
         }
     }
-    async getDownloadUrl(key, expiresInSeconds = 3600) {
+    async getDownloadUrl(tenantId, key, expiresInSeconds = 3600) {
+        if (!key.startsWith(`tenants/${tenantId}/`)) {
+            throw new common_1.NotFoundException('File not found or access denied');
+        }
         const command = new client_s3_1.GetObjectCommand({
             Bucket: this.bucketName,
             Key: key,
@@ -117,9 +120,12 @@ let FilesService = FilesService_1 = class FilesService {
             Metadata: { tenantId },
         });
         await this.s3Client.send(command);
-        return { key, url: await this.getDownloadUrl(key) };
+        return { key, url: await this.getDownloadUrl(tenantId, key) };
     }
-    async deleteFile(key) {
+    async deleteFile(tenantId, key) {
+        if (!key.startsWith(`tenants/${tenantId}/`)) {
+            throw new common_1.NotFoundException('File not found or access denied');
+        }
         const command = new client_s3_1.DeleteObjectCommand({
             Bucket: this.bucketName,
             Key: key,

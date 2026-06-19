@@ -14,6 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ActivitiesController = void 0;
 const common_1 = require("@nestjs/common");
+const require_permissions_decorator_1 = require("../common/decorators/require-permissions.decorator");
 const swagger_1 = require("@nestjs/swagger");
 const activities_service_1 = require("./activities.service");
 const jwt_auth_guard_1 = require("../auth/guards/jwt-auth.guard");
@@ -29,6 +30,7 @@ let ActivitiesController = class ActivitiesController {
 };
 exports.ActivitiesController = ActivitiesController;
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('read:activities'),
     (0, common_1.Get)(),
     (0, swagger_1.ApiOperation)({ summary: 'List activities (with optional entity filters)' }),
     __param(0, (0, current_user_decorator_1.CurrentUser)()),

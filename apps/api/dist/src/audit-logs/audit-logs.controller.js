@@ -32,6 +32,7 @@ let AuditLogsController = class AuditLogsController {
 };
 exports.AuditLogsController = AuditLogsController;
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('read:audit-logs'),
     (0, common_1.Get)(),
     (0, swagger_1.ApiOperation)({ summary: 'List audit logs with pagination and filters' }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.VIEW_AUDIT_LOGS),

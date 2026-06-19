@@ -31,7 +31,7 @@ export declare class AuthController {
     resetPassword(dto: ResetPasswordDto): Promise<{
         message: string;
     }>;
-    logout(dto: RefreshTokenDto): Promise<void>;
+    logout(user: CurrentUserPayload, dto: RefreshTokenDto): Promise<void>;
     logoutAll(user: CurrentUserPayload): Promise<void>;
     changePassword(user: CurrentUserPayload, dto: ChangePasswordDto): Promise<{
         message: string;
@@ -39,9 +39,9 @@ export declare class AuthController {
     getSessions(user: CurrentUserPayload): Promise<{
         id: string;
         createdAt: Date;
-        deviceInfo: string | null;
-        ipAddress: string | null;
         expiresAt: Date;
+        ipAddress: string | null;
+        deviceInfo: string | null;
     }[]>;
     revokeSession(user: CurrentUserPayload, sessionId: string): Promise<{
         message: string;

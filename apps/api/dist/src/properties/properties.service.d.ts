@@ -10,9 +10,10 @@ export declare class PropertiesService {
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
-        title: string;
-        branchId: string | null;
         address: string;
+        branchId: string | null;
+        agentId: string | null;
+        title: string;
         propertyType: import("@prisma/client").$Enums.PropertyType;
         listingType: import("@prisma/client").$Enums.ListingType;
         price: number;
@@ -25,7 +26,6 @@ export declare class PropertiesService {
         district: string | null;
         latitude: number | null;
         longitude: number | null;
-        agentId: string | null;
     }>;
     findAll(tenantId: string, query: QueryPropertyDto): Promise<{
         data: ({
@@ -38,9 +38,9 @@ export declare class PropertiesService {
                 url: string;
                 id: string;
                 createdAt: Date;
-                isPrimary: boolean;
                 propertyId: string;
                 s3Key: string | null;
+                isPrimary: boolean;
                 order: number;
             }[];
         } & {
@@ -50,9 +50,10 @@ export declare class PropertiesService {
             createdAt: Date;
             updatedAt: Date;
             tenantId: string;
-            title: string;
-            branchId: string | null;
             address: string;
+            branchId: string | null;
+            agentId: string | null;
+            title: string;
             propertyType: import("@prisma/client").$Enums.PropertyType;
             listingType: import("@prisma/client").$Enums.ListingType;
             price: number;
@@ -65,7 +66,6 @@ export declare class PropertiesService {
             district: string | null;
             latitude: number | null;
             longitude: number | null;
-            agentId: string | null;
         })[];
         meta: {
             total: number;
@@ -83,15 +83,15 @@ export declare class PropertiesService {
             url: string;
             id: string;
             createdAt: Date;
-            isPrimary: boolean;
             propertyId: string;
             s3Key: string | null;
+            isPrimary: boolean;
             order: number;
         }[];
         documents: {
             url: string;
-            name: string;
             id: string;
+            name: string;
             createdAt: Date;
             propertyId: string;
             s3Key: string | null;
@@ -106,9 +106,10 @@ export declare class PropertiesService {
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
-        title: string;
-        branchId: string | null;
         address: string;
+        branchId: string | null;
+        agentId: string | null;
+        title: string;
         propertyType: import("@prisma/client").$Enums.PropertyType;
         listingType: import("@prisma/client").$Enums.ListingType;
         price: number;
@@ -121,7 +122,6 @@ export declare class PropertiesService {
         district: string | null;
         latitude: number | null;
         longitude: number | null;
-        agentId: string | null;
     }>;
     update(tenantId: string, id: string, data: UpdatePropertyDto): Promise<{
         description: string | null;
@@ -130,9 +130,10 @@ export declare class PropertiesService {
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
-        title: string;
-        branchId: string | null;
         address: string;
+        branchId: string | null;
+        agentId: string | null;
+        title: string;
         propertyType: import("@prisma/client").$Enums.PropertyType;
         listingType: import("@prisma/client").$Enums.ListingType;
         price: number;
@@ -145,7 +146,6 @@ export declare class PropertiesService {
         district: string | null;
         latitude: number | null;
         longitude: number | null;
-        agentId: string | null;
     }>;
     assign(tenantId: string, id: string, agentId: string | null): Promise<{
         description: string | null;
@@ -154,9 +154,10 @@ export declare class PropertiesService {
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
-        title: string;
-        branchId: string | null;
         address: string;
+        branchId: string | null;
+        agentId: string | null;
+        title: string;
         propertyType: import("@prisma/client").$Enums.PropertyType;
         listingType: import("@prisma/client").$Enums.ListingType;
         price: number;
@@ -169,6 +170,5 @@ export declare class PropertiesService {
         district: string | null;
         latitude: number | null;
         longitude: number | null;
-        agentId: string | null;
     }>;
 }

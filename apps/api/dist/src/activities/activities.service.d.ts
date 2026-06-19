@@ -25,13 +25,13 @@ export declare class ActivitiesService {
             description: string | null;
             id: string;
             createdAt: Date;
-            userId: string | null;
             tenantId: string;
+            userId: string | null;
             action: string;
-            entityId: string;
-            entityType: string;
-            metadata: Prisma.JsonValue | null;
             leadId: string | null;
+            entityType: string;
+            entityId: string;
+            metadata: Prisma.JsonValue | null;
         })[];
         meta: {
             total: number;

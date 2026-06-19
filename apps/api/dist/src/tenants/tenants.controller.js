@@ -46,6 +46,7 @@ let TenantsController = class TenantsController {
 };
 exports.TenantsController = TenantsController;
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('read:tenants'),
     (0, common_1.Get)('me'),
     (0, swagger_1.ApiOperation)({ summary: 'Get current tenant details' }),
     __param(0, (0, current_user_decorator_1.CurrentUser)()),
@@ -54,6 +55,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], TenantsController.prototype, "getMyTenant", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('update:tenants'),
     (0, common_1.Put)('me'),
     (0, swagger_1.ApiOperation)({ summary: 'Update current tenant settings' }),
     (0, swagger_1.ApiBody)({ type: tenant_dto_1.UpdateTenantSettingsDto }),
@@ -65,6 +67,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], TenantsController.prototype, "updateMyTenant", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('read:tenants'),
     (0, common_1.Get)(),
     (0, swagger_1.ApiOperation)({ summary: '(Super Admin) List all tenants' }),
     __metadata("design:type", Function),
@@ -72,6 +75,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], TenantsController.prototype, "getAllTenants", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('read:tenants'),
     (0, common_1.Get)(':id'),
     (0, swagger_1.ApiOperation)({ summary: '(Super Admin) Get tenant by ID' }),
     __param(0, (0, common_1.Param)('id')),

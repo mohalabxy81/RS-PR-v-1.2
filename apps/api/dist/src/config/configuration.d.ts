@@ -78,3 +78,8 @@ export declare const uploadConfig: (() => {
 }) & import("@nestjs/config").ConfigFactoryKeyHost<{
     maxFileSizeMb: number;
 }>;
+export declare const cryptoConfig: (() => {
+    encryptionKey: string;
+}) & import("@nestjs/config").ConfigFactoryKeyHost<{
+    encryptionKey: string;
+}>;

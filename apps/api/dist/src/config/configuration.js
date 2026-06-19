@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.uploadConfig = exports.throttleConfig = exports.smtpConfig = exports.s3Config = exports.redisConfig = exports.databaseConfig = exports.jwtConfig = exports.appConfig = void 0;
+exports.cryptoConfig = exports.uploadConfig = exports.throttleConfig = exports.smtpConfig = exports.s3Config = exports.redisConfig = exports.databaseConfig = exports.jwtConfig = exports.appConfig = void 0;
 const config_1 = require("@nestjs/config");
 exports.appConfig = (0, config_1.registerAs)('app', () => ({
     nodeEnv: process.env.NODE_ENV || 'development',
@@ -49,6 +49,9 @@ exports.throttleConfig = (0, config_1.registerAs)('throttle', () => ({
 }));
 exports.uploadConfig = (0, config_1.registerAs)('upload', () => ({
     maxFileSizeMb: parseInt(process.env.MAX_FILE_SIZE_MB || '10', 10),
+}));
+exports.cryptoConfig = (0, config_1.registerAs)('crypto', () => ({
+    encryptionKey: getSecret('ENCRYPTION_KEY', 'Database Encryption Key'),
 }));
 function getSecret(envVar, label) {
     if (process.env[envVar]) {

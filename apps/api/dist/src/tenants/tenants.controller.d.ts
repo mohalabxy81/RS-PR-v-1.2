@@ -13,11 +13,11 @@ export declare class TenantsController {
         };
     } & {
         status: import("@prisma/client").$Enums.TenantStatus;
+        id: string;
         name: string;
         slug: string;
-        logoUrl: string | null;
-        id: string;
         domain: string | null;
+        logoUrl: string | null;
         subscriptionPlan: import("@prisma/client").$Enums.SubscriptionPlan;
         subscriptionStatus: string;
         trialEndsAt: Date | null;
@@ -26,11 +26,11 @@ export declare class TenantsController {
     }>;
     updateMyTenant(user: CurrentUserPayload, data: UpdateTenantSettingsDto): Promise<{
         status: import("@prisma/client").$Enums.TenantStatus;
+        id: string;
         name: string;
         slug: string;
-        logoUrl: string | null;
-        id: string;
         domain: string | null;
+        logoUrl: string | null;
         subscriptionPlan: import("@prisma/client").$Enums.SubscriptionPlan;
         subscriptionStatus: string;
         trialEndsAt: Date | null;
@@ -39,11 +39,11 @@ export declare class TenantsController {
     }>;
     getAllTenants(): Promise<{
         status: import("@prisma/client").$Enums.TenantStatus;
+        id: string;
         name: string;
         slug: string;
-        logoUrl: string | null;
-        id: string;
         domain: string | null;
+        logoUrl: string | null;
         subscriptionPlan: import("@prisma/client").$Enums.SubscriptionPlan;
         subscriptionStatus: string;
         trialEndsAt: Date | null;
@@ -59,11 +59,11 @@ export declare class TenantsController {
         };
     } & {
         status: import("@prisma/client").$Enums.TenantStatus;
+        id: string;
         name: string;
         slug: string;
-        logoUrl: string | null;
-        id: string;
         domain: string | null;
+        logoUrl: string | null;
         subscriptionPlan: import("@prisma/client").$Enums.SubscriptionPlan;
         subscriptionStatus: string;
         trialEndsAt: Date | null;

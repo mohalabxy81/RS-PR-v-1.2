@@ -14,13 +14,13 @@ export declare class ActivitiesController {
             description: string | null;
             id: string;
             createdAt: Date;
-            userId: string | null;
             tenantId: string;
+            userId: string | null;
             action: string;
-            entityId: string;
-            entityType: string;
-            metadata: import("@prisma/client/runtime/client").JsonValue | null;
             leadId: string | null;
+            entityType: string;
+            entityId: string;
+            metadata: import("@prisma/client/runtime/client").JsonValue | null;
         })[];
         meta: {
             total: number;

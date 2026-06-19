@@ -44,8 +44,8 @@ let AuthController = class AuthController {
     async resetPassword(dto) {
         return this.authService.resetPassword(dto);
     }
-    async logout(dto) {
-        return this.authService.logout(dto.refreshToken);
+    async logout(user, dto) {
+        return this.authService.logout(user.sessionId, dto.refreshToken);
     }
     async logoutAll(user) {
         return this.authService.logoutAll(user.userId);
@@ -125,9 +125,10 @@ __decorate([
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     (0, swagger_1.ApiBearerAuth)('access-token'),
     (0, swagger_1.ApiOperation)({ summary: 'Logout current session (revoke refresh token)' }),
-    __param(0, (0, common_1.Body)()),
+    __param(0, (0, current_user_decorator_1.CurrentUser)()),
+    __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [auth_dto_1.RefreshTokenDto]),
+    __metadata("design:paramtypes", [Object, auth_dto_1.RefreshTokenDto]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "logout", null);
 __decorate([

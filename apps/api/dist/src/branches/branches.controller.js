@@ -45,6 +45,7 @@ let BranchesController = class BranchesController {
 };
 exports.BranchesController = BranchesController;
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('create:branches'),
     (0, common_1.Post)(),
     (0, swagger_1.ApiOperation)({ summary: 'Create a new branch' }),
     (0, swagger_1.ApiBody)({ type: branch_dto_1.CreateBranchDto }),
@@ -56,6 +57,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], BranchesController.prototype, "create", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('read:branches'),
     (0, common_1.Get)(),
     (0, swagger_1.ApiOperation)({ summary: 'List all branches' }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.READ_BRANCH),
@@ -65,6 +67,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], BranchesController.prototype, "findAll", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('read:branches'),
     (0, common_1.Get)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Get branch details' }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.READ_BRANCH),
@@ -75,6 +78,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], BranchesController.prototype, "findOne", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('update:branches'),
     (0, common_1.Put)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Update a branch' }),
     (0, swagger_1.ApiBody)({ type: branch_dto_1.UpdateBranchDto }),
@@ -87,6 +91,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], BranchesController.prototype, "update", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('delete:branches'),
     (0, common_1.Delete)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Delete a branch' }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.DELETE_BRANCH),

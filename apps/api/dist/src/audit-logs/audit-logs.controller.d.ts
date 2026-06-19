@@ -14,13 +14,13 @@ export declare class AuditLogsController {
         } & {
             id: string;
             createdAt: Date;
-            userId: string | null;
             tenantId: string;
-            action: string;
+            userId: string | null;
             ipAddress: string | null;
             userAgent: string | null;
-            entity: string;
+            action: string;
             entityId: string;
+            entity: string;
             before: import("@prisma/client/runtime/client").JsonValue | null;
             after: import("@prisma/client/runtime/client").JsonValue | null;
         })[];

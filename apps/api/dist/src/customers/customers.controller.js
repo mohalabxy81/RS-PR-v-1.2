@@ -45,6 +45,7 @@ let CustomersController = class CustomersController {
 };
 exports.CustomersController = CustomersController;
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('create:customers'),
     (0, common_1.Post)(),
     (0, swagger_1.ApiOperation)({ summary: 'Create a new customer' }),
     (0, swagger_1.ApiBody)({ type: customer_dto_1.CreateCustomerDto }),
@@ -56,6 +57,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], CustomersController.prototype, "create", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('read:customers'),
     (0, common_1.Get)(),
     (0, swagger_1.ApiOperation)({ summary: 'List all customers' }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.READ_CUSTOMER),
@@ -66,6 +68,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], CustomersController.prototype, "findAll", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('read:customers'),
     (0, common_1.Get)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Get customer details' }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.READ_CUSTOMER),
@@ -76,6 +79,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], CustomersController.prototype, "findOne", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('update:customers'),
     (0, common_1.Put)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Update a customer' }),
     (0, swagger_1.ApiBody)({ type: customer_dto_1.UpdateCustomerDto }),
@@ -88,6 +92,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], CustomersController.prototype, "update", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('create:customers'),
     (0, common_1.Post)(':id/notes'),
     (0, swagger_1.ApiOperation)({ summary: 'Add a note to a customer' }),
     (0, swagger_1.ApiBody)({ type: customer_dto_1.AddCustomerNoteDto }),

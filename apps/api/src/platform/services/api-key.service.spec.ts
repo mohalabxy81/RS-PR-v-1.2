@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ApiKeyService } from './api-key.service';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { SecurityAuditService } from '../../audit-logs/security-audit.service';
 
 describe('ApiKeyService', () => {
   let service: ApiKeyService;
@@ -24,11 +25,16 @@ describe('ApiKeyService', () => {
       del: jest.fn(),
     };
 
+    const mockSecurityAudit = {
+      logSecurityEvent: jest.fn().mockResolvedValue(undefined),
+    };
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ApiKeyService,
         { provide: PrismaService, useValue: mockPrisma },
         { provide: CACHE_MANAGER, useValue: mockCacheManager },
+        { provide: SecurityAuditService, useValue: mockSecurityAudit },
       ],
     }).compile();
 
@@ -41,14 +47,16 @@ describe('ApiKeyService', () => {
       const mockRecord = {
         id: 'key-id-123',
         name: 'My Test Key',
-        scopes: ['read:leads'],
+        scopes: ['leads:read'],
         prefix: 'reis_abc123_',
         expiresAt: null,
+        ipWhitelist: [],
+        referrers: [],
       };
 
       (prismaService.apiKey.create as jest.Mock).mockResolvedValue(mockRecord);
 
-      const result = await service.createApiKey('tenant-1', 'My Test Key', ['read:leads']);
+      const result = await service.createApiKey('tenant-1', 'My Test Key', ['leads:read']);
 
       expect(result.id).toBe('key-id-123');
       expect(result.key).toBeDefined();

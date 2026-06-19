@@ -1,13 +1,17 @@
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../prisma/prisma.service';
+import { SessionBlocklistService } from './session-blocklist.service';
+import { SecurityAuditService } from '../audit-logs/security-audit.service';
 import { RegisterDto, LoginDto, ForgotPasswordDto, ResetPasswordDto, ChangePasswordDto } from './dto/auth.dto';
 export declare class AuthService {
     private readonly prisma;
     private readonly jwtService;
     private readonly config;
+    private readonly sessionBlocklist;
+    private readonly securityAudit;
     private readonly logger;
-    constructor(prisma: PrismaService, jwtService: JwtService, config: ConfigService);
+    constructor(prisma: PrismaService, jwtService: JwtService, config: ConfigService, sessionBlocklist: SessionBlocklistService, securityAudit: SecurityAuditService);
     register(dto: RegisterDto): Promise<{
         message: string;
         tenantSlug: string;
@@ -24,7 +28,7 @@ export declare class AuthService {
             roleName: string | undefined;
         };
     }>;
-    logout(refreshToken: string): Promise<void>;
+    logout(sessionId: string | undefined, refreshToken: string): Promise<void>;
     logoutAll(userId: string): Promise<void>;
     refreshTokens(rawRefreshToken: string, ipAddress?: string, userAgent?: string): Promise<{
         accessToken: string;
@@ -42,9 +46,9 @@ export declare class AuthService {
     getSessions(userId: string): Promise<{
         id: string;
         createdAt: Date;
-        deviceInfo: string | null;
-        ipAddress: string | null;
         expiresAt: Date;
+        ipAddress: string | null;
+        deviceInfo: string | null;
     }[]>;
     revokeSession(userId: string, sessionId: string): Promise<{
         message: string;
@@ -52,4 +56,5 @@ export declare class AuthService {
     private generateTokenPair;
     private hashToken;
     private parseDeviceInfo;
+    private validatePasswordStrength;
 }

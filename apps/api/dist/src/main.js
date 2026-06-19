@@ -10,7 +10,9 @@ const swagger_1 = require("@nestjs/swagger");
 const helmet_1 = __importDefault(require("helmet"));
 const global_exception_filter_1 = require("./common/filters/global-exception.filter");
 const nestjs_pino_1 = require("nestjs-pino");
+const env_validation_1 = require("./config/env-validation");
 async function bootstrap() {
+    (0, env_validation_1.validateEnvironmentVariables)();
     const app = await core_1.NestFactory.create(app_module_1.AppModule, { bufferLogs: true });
     app.useLogger(app.get(nestjs_pino_1.Logger));
     app.useGlobalInterceptors(new nestjs_pino_1.LoggerErrorInterceptor());

@@ -10,10 +10,10 @@ export declare class FilesService {
         key: string;
         filename: string;
     }>;
-    getDownloadUrl(key: string, expiresInSeconds?: number): Promise<string>;
+    getDownloadUrl(tenantId: string, key: string, expiresInSeconds?: number): Promise<string>;
     uploadBuffer(tenantId: string, fileBuffer: Buffer, filename: string, contentType: string, folder?: string): Promise<{
         key: string;
         url: string;
     }>;
-    deleteFile(key: string): Promise<boolean>;
+    deleteFile(tenantId: string, key: string): Promise<boolean>;
 }

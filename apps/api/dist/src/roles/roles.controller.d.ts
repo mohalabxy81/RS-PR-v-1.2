@@ -27,8 +27,8 @@ export declare class RolesController {
             permissionId: string;
         })[];
     } & {
-        name: string;
         id: string;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
@@ -49,8 +49,8 @@ export declare class RolesController {
             permissionId: string;
         })[];
     } & {
-        name: string;
         id: string;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
@@ -71,8 +71,8 @@ export declare class RolesController {
             permissionId: string;
         })[];
     } & {
-        name: string;
         id: string;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
@@ -93,8 +93,8 @@ export declare class RolesController {
             permissionId: string;
         })[];
     } & {
-        name: string;
         id: string;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;

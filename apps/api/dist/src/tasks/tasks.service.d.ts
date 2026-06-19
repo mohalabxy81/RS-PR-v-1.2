@@ -11,15 +11,15 @@ export declare class TasksService {
         updatedAt: Date;
         tenantId: string;
         title: string;
-        entityId: string | null;
-        entityType: string | null;
         assigneeId: string | null;
         createdById: string | null;
         priority: import("@prisma/client").$Enums.TaskPriority;
         dueDate: Date | null;
+        completedAt: Date | null;
         isRecurring: boolean;
         recurrenceRule: string | null;
-        completedAt: Date | null;
+        entityType: string | null;
+        entityId: string | null;
     }>;
     findAll(tenantId: string, query: any): Promise<({
         _count: {
@@ -44,15 +44,15 @@ export declare class TasksService {
         updatedAt: Date;
         tenantId: string;
         title: string;
-        entityId: string | null;
-        entityType: string | null;
         assigneeId: string | null;
         createdById: string | null;
         priority: import("@prisma/client").$Enums.TaskPriority;
         dueDate: Date | null;
+        completedAt: Date | null;
         isRecurring: boolean;
         recurrenceRule: string | null;
-        completedAt: Date | null;
+        entityType: string | null;
+        entityId: string | null;
     })[]>;
     findOne(tenantId: string, id: string): Promise<{
         taskComments: ({
@@ -65,8 +65,8 @@ export declare class TasksService {
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            content: string;
             authorId: string;
+            content: string;
             taskId: string;
         })[];
         assignee: {
@@ -81,8 +81,8 @@ export declare class TasksService {
         } | null;
         taskAttachments: {
             url: string;
-            name: string;
             id: string;
+            name: string;
             createdAt: Date;
             s3Key: string | null;
             mimeType: string | null;
@@ -97,15 +97,15 @@ export declare class TasksService {
         updatedAt: Date;
         tenantId: string;
         title: string;
-        entityId: string | null;
-        entityType: string | null;
         assigneeId: string | null;
         createdById: string | null;
         priority: import("@prisma/client").$Enums.TaskPriority;
         dueDate: Date | null;
+        completedAt: Date | null;
         isRecurring: boolean;
         recurrenceRule: string | null;
-        completedAt: Date | null;
+        entityType: string | null;
+        entityId: string | null;
     }>;
     update(tenantId: string, id: string, data: UpdateTaskDto): Promise<{
         description: string | null;
@@ -115,22 +115,22 @@ export declare class TasksService {
         updatedAt: Date;
         tenantId: string;
         title: string;
-        entityId: string | null;
-        entityType: string | null;
         assigneeId: string | null;
         createdById: string | null;
         priority: import("@prisma/client").$Enums.TaskPriority;
         dueDate: Date | null;
+        completedAt: Date | null;
         isRecurring: boolean;
         recurrenceRule: string | null;
-        completedAt: Date | null;
+        entityType: string | null;
+        entityId: string | null;
     }>;
     addComment(tenantId: string, taskId: string, authorId: string, content: string): Promise<{
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        content: string;
         authorId: string;
+        content: string;
         taskId: string;
     }>;
     remove(tenantId: string, id: string): Promise<{
@@ -141,14 +141,14 @@ export declare class TasksService {
         updatedAt: Date;
         tenantId: string;
         title: string;
-        entityId: string | null;
-        entityType: string | null;
         assigneeId: string | null;
         createdById: string | null;
         priority: import("@prisma/client").$Enums.TaskPriority;
         dueDate: Date | null;
+        completedAt: Date | null;
         isRecurring: boolean;
         recurrenceRule: string | null;
-        completedAt: Date | null;
+        entityType: string | null;
+        entityId: string | null;
     }>;
 }

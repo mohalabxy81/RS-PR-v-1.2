@@ -6,11 +6,11 @@ export declare class TenantsService {
     constructor(prisma: PrismaService);
     findAll(): Promise<{
         status: import("@prisma/client").$Enums.TenantStatus;
+        id: string;
         name: string;
         slug: string;
-        logoUrl: string | null;
-        id: string;
         domain: string | null;
+        logoUrl: string | null;
         subscriptionPlan: import("@prisma/client").$Enums.SubscriptionPlan;
         subscriptionStatus: string;
         trialEndsAt: Date | null;
@@ -26,11 +26,11 @@ export declare class TenantsService {
         };
     } & {
         status: import("@prisma/client").$Enums.TenantStatus;
+        id: string;
         name: string;
         slug: string;
-        logoUrl: string | null;
-        id: string;
         domain: string | null;
+        logoUrl: string | null;
         subscriptionPlan: import("@prisma/client").$Enums.SubscriptionPlan;
         subscriptionStatus: string;
         trialEndsAt: Date | null;
@@ -39,11 +39,11 @@ export declare class TenantsService {
     }>;
     update(id: string, data: UpdateTenantDto): Promise<{
         status: import("@prisma/client").$Enums.TenantStatus;
+        id: string;
         name: string;
         slug: string;
-        logoUrl: string | null;
-        id: string;
         domain: string | null;
+        logoUrl: string | null;
         subscriptionPlan: import("@prisma/client").$Enums.SubscriptionPlan;
         subscriptionStatus: string;
         trialEndsAt: Date | null;
@@ -52,11 +52,11 @@ export declare class TenantsService {
     }>;
     updateStatus(id: string, status: TenantStatus): Promise<{
         status: import("@prisma/client").$Enums.TenantStatus;
+        id: string;
         name: string;
         slug: string;
-        logoUrl: string | null;
-        id: string;
         domain: string | null;
+        logoUrl: string | null;
         subscriptionPlan: import("@prisma/client").$Enums.SubscriptionPlan;
         subscriptionStatus: string;
         trialEndsAt: Date | null;

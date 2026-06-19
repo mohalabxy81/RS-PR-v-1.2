@@ -8,14 +8,14 @@ export declare class CustomersController {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        email: string | null;
         tenantId: string;
+        address: string | null;
+        phone: string | null;
+        email: string | null;
         firstName: string;
         lastName: string;
-        phone: string | null;
-        address: string | null;
-        notes: string | null;
         assigneeId: string | null;
+        notes: string | null;
         nationality: string | null;
     }>;
     findAll(user: CurrentUserPayload, query: QueryCustomerDto): Promise<{
@@ -32,14 +32,14 @@ export declare class CustomersController {
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            email: string | null;
             tenantId: string;
+            address: string | null;
+            phone: string | null;
+            email: string | null;
             firstName: string;
             lastName: string;
-            phone: string | null;
-            address: string | null;
-            notes: string | null;
             assigneeId: string | null;
+            notes: string | null;
             nationality: string | null;
         })[];
         meta: {
@@ -66,9 +66,9 @@ export declare class CustomersController {
             id: string;
             createdAt: Date;
             updatedAt: Date;
+            authorId: string;
             content: string;
             customerId: string;
-            authorId: string;
         })[];
         assignee: {
             id: string;
@@ -77,8 +77,8 @@ export declare class CustomersController {
         } | null;
         customerDocs: {
             url: string;
-            name: string;
             id: string;
+            name: string;
             createdAt: Date;
             s3Key: string | null;
             mimeType: string | null;
@@ -90,36 +90,36 @@ export declare class CustomersController {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        email: string | null;
         tenantId: string;
+        address: string | null;
+        phone: string | null;
+        email: string | null;
         firstName: string;
         lastName: string;
-        phone: string | null;
-        address: string | null;
-        notes: string | null;
         assigneeId: string | null;
+        notes: string | null;
         nationality: string | null;
     }>;
     update(user: CurrentUserPayload, id: string, data: UpdateCustomerDto): Promise<{
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        email: string | null;
         tenantId: string;
+        address: string | null;
+        phone: string | null;
+        email: string | null;
         firstName: string;
         lastName: string;
-        phone: string | null;
-        address: string | null;
-        notes: string | null;
         assigneeId: string | null;
+        notes: string | null;
         nationality: string | null;
     }>;
     addNote(user: CurrentUserPayload, id: string, body: AddCustomerNoteDto): Promise<{
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        authorId: string;
         content: string;
         customerId: string;
-        authorId: string;
     }>;
 }

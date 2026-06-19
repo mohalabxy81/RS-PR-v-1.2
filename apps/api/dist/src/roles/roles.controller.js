@@ -62,6 +62,7 @@ let RolesController = class RolesController {
 };
 exports.RolesController = RolesController;
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('read:roles'),
     (0, common_1.Get)('permissions'),
     (0, swagger_1.ApiOperation)({ summary: 'List all available permissions' }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.READ_ROLE),
@@ -70,6 +71,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], RolesController.prototype, "getAllPermissions", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('read:roles'),
     (0, common_1.Get)(),
     (0, swagger_1.ApiOperation)({ summary: 'List all roles for the current tenant' }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.READ_ROLE),
@@ -79,6 +81,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], RolesController.prototype, "getRoles", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('read:roles'),
     (0, common_1.Get)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Get a specific role by ID' }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.READ_ROLE),
@@ -89,6 +92,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], RolesController.prototype, "getRoleById", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('create:roles'),
     (0, common_1.Post)(),
     (0, swagger_1.ApiOperation)({ summary: 'Create a new custom role' }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.CREATE_ROLE),
@@ -100,6 +104,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], RolesController.prototype, "createRole", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('update:roles'),
     (0, common_1.Put)(':id/permissions'),
     (0, swagger_1.ApiOperation)({ summary: 'Update permissions for a custom role' }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.UPDATE_ROLE),
@@ -111,6 +116,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], RolesController.prototype, "updateRolePermissions", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('delete:roles'),
     (0, common_1.Delete)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Delete a custom role' }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.DELETE_ROLE),

@@ -3,6 +3,8 @@ import { AuthService } from './auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../prisma/prisma.service';
+import { SessionBlocklistService } from './session-blocklist.service';
+import { SecurityAuditService } from '../audit-logs/security-audit.service';
 import { ConflictException, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
@@ -30,6 +32,15 @@ describe('AuthService', () => {
       $transaction: jest.fn(),
     };
 
+    const mockSessionBlocklist = {
+      isBlocked: jest.fn().mockResolvedValue(false),
+      block: jest.fn().mockResolvedValue(undefined),
+    };
+
+    const mockSecurityAudit = {
+      logSecurityEvent: jest.fn().mockResolvedValue(undefined),
+    };
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AuthService,
@@ -52,6 +63,8 @@ describe('AuthService', () => {
             }),
           },
         },
+        { provide: SessionBlocklistService, useValue: mockSessionBlocklist },
+        { provide: SecurityAuditService, useValue: mockSecurityAudit },
       ],
     }).compile();
 
@@ -135,7 +148,7 @@ describe('AuthService', () => {
   describe('logout', () => {
     it('should revoke the refresh token', async () => {
       prismaService.refreshToken.updateMany.mockResolvedValue({ count: 1 });
-      await service.logout('some-refresh-token');
+      await service.logout(undefined, 'some-refresh-token');
       expect(prismaService.refreshToken.updateMany).toHaveBeenCalledWith(
         expect.objectContaining({ data: { revokedAt: expect.any(Date) } }),
       );

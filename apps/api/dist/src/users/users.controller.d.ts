@@ -27,12 +27,12 @@ export declare class UsersController {
     findOne(user: CurrentUserPayload, id: string): Promise<{
         status: import("@prisma/client").$Enums.UserStatus;
         branch: {
-            name: string;
             id: string;
+            name: string;
         } | null;
         role: {
-            name: string;
             id: string;
+            name: string;
         } | null;
         id: string;
         email: string;
@@ -51,16 +51,20 @@ export declare class UsersController {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        email: string;
         tenantId: string;
+        phone: string | null;
+        branchId: string | null;
         roleId: string | null;
+        email: string;
+        passwordHash: string;
         firstName: string;
         lastName: string;
-        branchId: string | null;
-        passwordHash: string;
-        phone: string | null;
         avatarUrl: string | null;
         emailVerifiedAt: Date | null;
         lastLoginAt: Date | null;
+        failedLoginAttempts: number;
+        lockedUntil: Date | null;
+        isMfaEnabled: boolean;
+        mfaSecret: string | null;
     }>;
 }

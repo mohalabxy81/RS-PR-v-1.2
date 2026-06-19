@@ -45,6 +45,7 @@ let UsersController = class UsersController {
 };
 exports.UsersController = UsersController;
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('create:users'),
     (0, common_1.Post)(),
     (0, swagger_1.ApiOperation)({ summary: 'Create a new user' }),
     (0, swagger_1.ApiBody)({ type: user_dto_1.CreateUserDto }),
@@ -56,6 +57,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "create", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('read:users'),
     (0, common_1.Get)(),
     (0, swagger_1.ApiOperation)({ summary: 'List all users in tenant' }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.READ_USER),
@@ -65,6 +67,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "findAll", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('read:users'),
     (0, common_1.Get)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Get user details' }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.READ_USER),
@@ -75,6 +78,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "findOne", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('update:users'),
     (0, common_1.Put)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Update a user' }),
     (0, swagger_1.ApiBody)({ type: user_dto_1.UpdateUserDto }),
@@ -87,6 +91,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "update", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('delete:users'),
     (0, common_1.Delete)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Delete a user' }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.DELETE_USER),

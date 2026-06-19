@@ -15,6 +15,7 @@ const auth_service_1 = require("./auth.service");
 const auth_controller_1 = require("./auth.controller");
 const jwt_strategy_1 = require("./jwt.strategy");
 const prisma_module_1 = require("../prisma/prisma.module");
+const session_blocklist_service_1 = require("./session-blocklist.service");
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
@@ -35,9 +36,9 @@ exports.AuthModule = AuthModule = __decorate([
                 inject: [config_1.ConfigService],
             }),
         ],
-        providers: [auth_service_1.AuthService, jwt_strategy_1.JwtStrategy],
+        providers: [auth_service_1.AuthService, jwt_strategy_1.JwtStrategy, session_blocklist_service_1.SessionBlocklistService],
         controllers: [auth_controller_1.AuthController],
-        exports: [auth_service_1.AuthService, jwt_1.JwtModule, passport_1.PassportModule],
+        exports: [auth_service_1.AuthService, jwt_1.JwtModule, passport_1.PassportModule, session_blocklist_service_1.SessionBlocklistService],
     })
 ], AuthModule);
 //# sourceMappingURL=auth.module.js.map

@@ -54,6 +54,7 @@ let LeadsController = class LeadsController {
 };
 exports.LeadsController = LeadsController;
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('create:leads'),
     (0, common_1.Post)(),
     (0, swagger_1.ApiOperation)({ summary: 'Create a new lead' }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.CREATE_LEAD),
@@ -64,6 +65,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], LeadsController.prototype, "create", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('read:leads'),
     (0, common_1.Get)(),
     (0, swagger_1.ApiOperation)({ summary: 'List all leads with pagination and filters' }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.READ_LEAD),
@@ -74,6 +76,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], LeadsController.prototype, "findAll", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('read:leads'),
     (0, common_1.Get)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Get lead details' }),
     (0, swagger_1.ApiParam)({ name: 'id', type: String }),
@@ -85,6 +88,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], LeadsController.prototype, "findOne", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('update:leads'),
     (0, common_1.Put)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Update a lead' }),
     (0, swagger_1.ApiParam)({ name: 'id', type: String }),
@@ -97,6 +101,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], LeadsController.prototype, "update", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('delete:leads'),
     (0, common_1.Delete)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Archive a lead' }),
     (0, swagger_1.ApiParam)({ name: 'id', type: String }),
@@ -108,6 +113,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], LeadsController.prototype, "archive", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('create:leads'),
     (0, common_1.Post)(':id/notes'),
     (0, swagger_1.ApiOperation)({ summary: 'Add a note to a lead' }),
     (0, swagger_1.ApiParam)({ name: 'id', type: String }),
@@ -120,6 +126,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], LeadsController.prototype, "addNote", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('update:leads'),
     (0, common_1.Put)(':id/assign'),
     (0, swagger_1.ApiOperation)({ summary: 'Assign a lead to an agent' }),
     (0, swagger_1.ApiParam)({ name: 'id', type: String }),
@@ -132,6 +139,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], LeadsController.prototype, "assign", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('read:leads'),
     (0, common_1.Get)(':id/timeline'),
     (0, swagger_1.ApiOperation)({ summary: 'Get lead activity timeline' }),
     (0, swagger_1.ApiParam)({ name: 'id', type: String }),

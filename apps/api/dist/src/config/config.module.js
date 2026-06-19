@@ -28,6 +28,7 @@ exports.ConfigModule = ConfigModule = __decorate([
                     configuration_1.smtpConfig,
                     configuration_1.throttleConfig,
                     configuration_1.uploadConfig,
+                    configuration_1.cryptoConfig,
                 ],
                 envFilePath: ['.env.local', '.env'],
             }),

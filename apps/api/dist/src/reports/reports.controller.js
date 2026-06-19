@@ -58,6 +58,7 @@ let ReportsController = class ReportsController {
 };
 exports.ReportsController = ReportsController;
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('read:reports'),
     (0, common_1.Get)('leads'),
     (0, swagger_1.ApiOperation)({ summary: 'Lead conversion and funnel report' }),
     (0, swagger_1.ApiQuery)({ name: 'startDate', required: false }),
@@ -71,6 +72,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ReportsController.prototype, "getLeadReport", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('read:reports'),
     (0, common_1.Get)('deals'),
     (0, swagger_1.ApiOperation)({ summary: 'Deal pipeline and revenue report' }),
     (0, swagger_1.ApiQuery)({ name: 'startDate', required: false }),
@@ -83,6 +85,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ReportsController.prototype, "getDealReport", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('read:reports'),
     (0, common_1.Get)('properties'),
     (0, swagger_1.ApiOperation)({ summary: 'Property inventory and status report' }),
     (0, swagger_1.ApiQuery)({ name: 'startDate', required: false }),
@@ -95,6 +98,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ReportsController.prototype, "getPropertyReport", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('read:reports'),
     (0, common_1.Get)('agents'),
     (0, swagger_1.ApiOperation)({ summary: 'Agent performance report' }),
     (0, swagger_1.ApiQuery)({ name: 'startDate', required: false }),
@@ -108,6 +112,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ReportsController.prototype, "getAgentReport", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('read:reports'),
     (0, common_1.Get)('appointments'),
     (0, swagger_1.ApiOperation)({ summary: 'Appointment activity report' }),
     (0, swagger_1.ApiQuery)({ name: 'startDate', required: false }),
@@ -120,6 +125,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ReportsController.prototype, "getAppointmentReport", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('read:reports'),
     (0, common_1.Get)('export/leads'),
     (0, swagger_1.ApiOperation)({ summary: 'Export leads as CSV' }),
     (0, swagger_1.ApiQuery)({ name: 'startDate', required: false }),
@@ -133,6 +139,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ReportsController.prototype, "exportLeadsCsv", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('read:reports'),
     (0, common_1.Get)('export/deals'),
     (0, swagger_1.ApiOperation)({ summary: 'Export deals as CSV' }),
     (0, swagger_1.ApiQuery)({ name: 'startDate', required: false }),

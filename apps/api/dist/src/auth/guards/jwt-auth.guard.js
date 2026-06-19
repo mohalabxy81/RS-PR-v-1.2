@@ -14,11 +14,14 @@ const common_1 = require("@nestjs/common");
 const passport_1 = require("@nestjs/passport");
 const core_1 = require("@nestjs/core");
 const public_decorator_1 = require("../../common/decorators/public.decorator");
+const security_monitor_service_1 = require("../../common/security/security-monitor.service");
 let JwtAuthGuard = class JwtAuthGuard extends (0, passport_1.AuthGuard)('jwt') {
     reflector;
-    constructor(reflector) {
+    securityMonitor;
+    constructor(reflector, securityMonitor) {
         super();
         this.reflector = reflector;
+        this.securityMonitor = securityMonitor;
     }
     canActivate(context) {
         const isPublic = this.reflector.getAllAndOverride(public_decorator_1.IS_PUBLIC_KEY, [
@@ -30,8 +33,12 @@ let JwtAuthGuard = class JwtAuthGuard extends (0, passport_1.AuthGuard)('jwt') {
         }
         return super.canActivate(context);
     }
-    handleRequest(err, user) {
+    handleRequest(err, user, info, context) {
         if (err || !user) {
+            const req = context.switchToHttp().getRequest();
+            if (req && req.ip) {
+                this.securityMonitor.recordInvalidToken(req.ip).catch((e) => console.error(e));
+            }
             throw new common_1.UnauthorizedException('Authentication required');
         }
         return user;
@@ -40,6 +47,7 @@ let JwtAuthGuard = class JwtAuthGuard extends (0, passport_1.AuthGuard)('jwt') {
 exports.JwtAuthGuard = JwtAuthGuard;
 exports.JwtAuthGuard = JwtAuthGuard = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [core_1.Reflector])
+    __metadata("design:paramtypes", [core_1.Reflector,
+        security_monitor_service_1.SecurityMonitorService])
 ], JwtAuthGuard);
 //# sourceMappingURL=jwt-auth.guard.js.map

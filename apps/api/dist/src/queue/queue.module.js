@@ -28,7 +28,13 @@ exports.QueueModule = QueueModule = __decorate([
                 }),
                 inject: [config_1.ConfigService],
             }),
-            bullmq_1.BullModule.registerQueue({ name: 'inbound-messages' }, { name: 'outbound-messages' }, { name: 'webhooks' }, { name: 'campaigns' }, { name: 'automations' }, { name: 'embedding-generation' }, { name: 'feature-extraction' }, { name: 'ranking-jobs' }, { name: 'recommendation-generation' }, { name: 'intent-prediction' }, { name: 'feedback-processing' }),
+            bullmq_1.BullModule.registerQueue({ name: 'inbound-messages' }, { name: 'outbound-messages' }, { name: 'webhooks' }, { name: 'campaigns' }, { name: 'automations' }, { name: 'api-usage-queue' }, {
+                name: 'webhook-queue',
+                defaultJobOptions: {
+                    attempts: 5,
+                    backoff: { type: 'exponential', delay: 1000 },
+                },
+            }, { name: 'email-queue' }, { name: 'notification-queue' }, { name: 'report-queue' }, { name: 'cleanup-queue' }, { name: 'embedding-generation' }, { name: 'feature-extraction' }, { name: 'ranking-jobs' }, { name: 'recommendation-generation' }, { name: 'intent-prediction' }, { name: 'feedback-processing' }),
         ],
         exports: [bullmq_1.BullModule],
     })

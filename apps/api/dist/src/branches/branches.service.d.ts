@@ -4,13 +4,13 @@ export declare class BranchesService {
     private readonly prisma;
     constructor(prisma: PrismaService);
     create(tenantId: string, data: CreateBranchDto): Promise<{
-        name: string;
         id: string;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
-        phone: string | null;
         address: string | null;
+        phone: string | null;
         isActive: boolean;
     }>;
     findAll(tenantId: string): Promise<({
@@ -20,13 +20,13 @@ export declare class BranchesService {
             leads: number;
         };
     } & {
-        name: string;
         id: string;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
-        phone: string | null;
         address: string | null;
+        phone: string | null;
         isActive: boolean;
     })[]>;
     findOne(tenantId: string, id: string): Promise<{
@@ -37,33 +37,33 @@ export declare class BranchesService {
             lastName: string;
         }[];
     } & {
-        name: string;
         id: string;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
-        phone: string | null;
         address: string | null;
+        phone: string | null;
         isActive: boolean;
     }>;
     update(tenantId: string, id: string, data: UpdateBranchDto): Promise<{
-        name: string;
         id: string;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
-        phone: string | null;
         address: string | null;
+        phone: string | null;
         isActive: boolean;
     }>;
     remove(tenantId: string, id: string): Promise<{
-        name: string;
         id: string;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
-        phone: string | null;
         address: string | null;
+        phone: string | null;
         isActive: boolean;
     }>;
 }

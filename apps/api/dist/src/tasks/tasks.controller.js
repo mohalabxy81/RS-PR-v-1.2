@@ -48,6 +48,7 @@ let TasksController = class TasksController {
 };
 exports.TasksController = TasksController;
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('create:tasks'),
     (0, common_1.Post)(),
     (0, swagger_1.ApiOperation)({ summary: 'Create a new task' }),
     (0, swagger_1.ApiBody)({ type: task_dto_1.CreateTaskDto }),
@@ -59,6 +60,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], TasksController.prototype, "create", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('read:tasks'),
     (0, common_1.Get)(),
     (0, swagger_1.ApiOperation)({ summary: 'List all tasks' }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.READ_TASK),
@@ -69,6 +71,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], TasksController.prototype, "findAll", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('read:tasks'),
     (0, common_1.Get)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Get task details' }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.READ_TASK),
@@ -79,6 +82,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], TasksController.prototype, "findOne", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('update:tasks'),
     (0, common_1.Put)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Update a task' }),
     (0, swagger_1.ApiBody)({ type: task_dto_1.UpdateTaskDto }),
@@ -91,6 +95,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], TasksController.prototype, "update", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('create:tasks'),
     (0, common_1.Post)(':id/comments'),
     (0, swagger_1.ApiOperation)({ summary: 'Add a comment to a task' }),
     (0, swagger_1.ApiBody)({ type: task_dto_1.AddTaskCommentDto }),
@@ -103,6 +108,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], TasksController.prototype, "addComment", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('delete:tasks'),
     (0, common_1.Delete)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Delete a task' }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.DELETE_TASK),

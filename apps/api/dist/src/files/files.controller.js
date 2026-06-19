@@ -39,6 +39,7 @@ let FilesController = class FilesController {
 };
 exports.FilesController = FilesController;
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('create:files'),
     (0, common_1.Post)('upload-url'),
     (0, swagger_1.ApiOperation)({ summary: 'Request a pre-signed URL to upload a file directly to S3' }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.UPLOAD_FILE),
@@ -51,6 +52,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], FilesController.prototype, "getUploadUrl", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('read:files'),
     (0, common_1.Get)('download-url'),
     (0, swagger_1.ApiOperation)({ summary: 'Request a pre-signed URL to download a private file' }),
     __param(0, (0, current_user_decorator_1.CurrentUser)()),

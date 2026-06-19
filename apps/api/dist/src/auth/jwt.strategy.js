@@ -14,9 +14,11 @@ const common_1 = require("@nestjs/common");
 const passport_1 = require("@nestjs/passport");
 const passport_jwt_1 = require("passport-jwt");
 const config_1 = require("@nestjs/config");
+const session_blocklist_service_1 = require("./session-blocklist.service");
 let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(passport_jwt_1.Strategy, 'jwt') {
     configService;
-    constructor(configService) {
+    sessionBlocklist;
+    constructor(configService, sessionBlocklist) {
         const secret = configService.get('jwt.accessSecret');
         if (!secret) {
             throw new Error('JWT access secret is not configured');
@@ -28,23 +30,34 @@ let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(pas
             secretOrKey: secret,
         });
         this.configService = configService;
+        this.sessionBlocklist = sessionBlocklist;
     }
     async validate(payload) {
         if (!payload.sub || !payload.tenantId) {
             throw new common_1.UnauthorizedException('Invalid token payload');
         }
+        if (payload.sessionId) {
+            const blocked = await this.sessionBlocklist.isBlocked(payload.sessionId);
+            if (blocked) {
+                throw new common_1.UnauthorizedException('Session has been revoked');
+            }
+        }
+        const userBlocked = await this.sessionBlocklist.isUserBlocked(payload.sub);
+        if (userBlocked) {
+            throw new common_1.UnauthorizedException('All sessions have been revoked');
+        }
         return {
             userId: payload.sub,
-            email: payload.email,
             tenantId: payload.tenantId,
             roleId: payload.roleId,
-            roleName: payload.roleName,
+            sessionId: payload.sessionId,
         };
     }
 };
 exports.JwtStrategy = JwtStrategy;
 exports.JwtStrategy = JwtStrategy = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [config_1.ConfigService])
+    __metadata("design:paramtypes", [config_1.ConfigService,
+        session_blocklist_service_1.SessionBlocklistService])
 ], JwtStrategy);
 //# sourceMappingURL=jwt.strategy.js.map

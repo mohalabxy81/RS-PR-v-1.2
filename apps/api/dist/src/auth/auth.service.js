@@ -48,6 +48,8 @@ const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
 const config_1 = require("@nestjs/config");
 const prisma_service_1 = require("../prisma/prisma.service");
+const session_blocklist_service_1 = require("./session-blocklist.service");
+const security_audit_service_1 = require("../audit-logs/security-audit.service");
 const bcrypt = __importStar(require("bcrypt"));
 const crypto = __importStar(require("crypto"));
 const BCRYPT_ROUNDS = 12;
@@ -63,11 +65,15 @@ let AuthService = AuthService_1 = class AuthService {
     prisma;
     jwtService;
     config;
+    sessionBlocklist;
+    securityAudit;
     logger = new common_1.Logger(AuthService_1.name);
-    constructor(prisma, jwtService, config) {
+    constructor(prisma, jwtService, config, sessionBlocklist, securityAudit) {
         this.prisma = prisma;
         this.jwtService = jwtService;
         this.config = config;
+        this.sessionBlocklist = sessionBlocklist;
+        this.securityAudit = securityAudit;
     }
     async register(dto) {
         const existingTenant = await this.prisma.tenant.findUnique({
@@ -82,6 +88,7 @@ let AuthService = AuthService_1 = class AuthService {
         if (existingUser) {
             throw new common_1.ConflictException('Email is already registered');
         }
+        this.validatePasswordStrength(dto.password);
         const passwordHash = await bcrypt.hash(dto.password, BCRYPT_ROUNDS);
         const result = await this.prisma.$transaction(async (tx) => {
             const tenant = await tx.tenant.create({
@@ -139,8 +146,29 @@ let AuthService = AuthService_1 = class AuthService {
             where: { email: dto.email.toLowerCase() },
             include: { role: true, tenant: true },
         });
+        if (user && user.lockedUntil && user.lockedUntil > new Date()) {
+            throw new common_1.UnauthorizedException('Account is temporarily locked. Please try again later.');
+        }
         const passwordValid = user && (await bcrypt.compare(dto.password, user.passwordHash));
         if (!user || !passwordValid) {
+            if (user) {
+                const attempts = user.failedLoginAttempts + 1;
+                const updates = { failedLoginAttempts: attempts };
+                if (attempts >= 5) {
+                    const lockUntil = new Date();
+                    lockUntil.setMinutes(lockUntil.getMinutes() + 15 * Math.pow(2, attempts - 5));
+                    updates.lockedUntil = lockUntil;
+                    this.logger.warn(`Account locked for user ${user.id} due to failed login attempts`);
+                }
+                await this.prisma.user.update({ where: { id: user.id }, data: updates });
+                await this.securityAudit.logSecurityEvent(user.tenantId, security_audit_service_1.SecurityEvent.LOGIN_FAILED, user.id, {
+                    ipAddress,
+                    userAgent,
+                    userId: user.id,
+                    reason: attempts >= 5 ? 'Account locked due to multiple failed attempts' : 'Invalid credentials',
+                    severity: attempts >= 5 ? 'HIGH' : 'LOW'
+                });
+            }
             throw new common_1.UnauthorizedException('Invalid credentials');
         }
         if (user.status === 'SUSPENDED' || user.tenant.status === 'SUSPENDED') {
@@ -152,7 +180,17 @@ let AuthService = AuthService_1 = class AuthService {
         const { accessToken, refreshToken } = await this.generateTokenPair(user, ipAddress, userAgent);
         await this.prisma.user.update({
             where: { id: user.id },
-            data: { lastLoginAt: new Date() },
+            data: {
+                lastLoginAt: new Date(),
+                failedLoginAttempts: 0,
+                lockedUntil: null
+            },
+        });
+        await this.securityAudit.logSecurityEvent(user.tenantId, security_audit_service_1.SecurityEvent.LOGIN_SUCCESS, user.id, {
+            ipAddress,
+            userAgent,
+            userId: user.id,
+            severity: 'INFO'
         });
         return {
             accessToken,
@@ -167,18 +205,22 @@ let AuthService = AuthService_1 = class AuthService {
             },
         };
     }
-    async logout(refreshToken) {
+    async logout(sessionId, refreshToken) {
         const tokenHash = this.hashToken(refreshToken);
         await this.prisma.refreshToken.updateMany({
             where: { tokenHash, revokedAt: null },
             data: { revokedAt: new Date() },
         });
+        if (sessionId) {
+            await this.sessionBlocklist.blockSession(sessionId, 900);
+        }
     }
     async logoutAll(userId) {
         await this.prisma.refreshToken.updateMany({
             where: { userId, revokedAt: null },
             data: { revokedAt: new Date() },
         });
+        await this.sessionBlocklist.blockAllUserSessions(userId, 900);
     }
     async refreshTokens(rawRefreshToken, ipAddress, userAgent) {
         let payload;
@@ -224,17 +266,18 @@ let AuthService = AuthService_1 = class AuthService {
             .digest('hex');
         const expiresAt = new Date();
         expiresAt.setHours(expiresAt.getHours() + RESET_TOKEN_TTL_HOURS);
-        await this.prisma.auditLog.create({
+        await this.prisma.passwordResetToken.create({
             data: {
-                tenantId: user.tenantId,
                 userId: user.id,
-                action: 'password_reset_requested',
-                entity: 'User',
-                entityId: user.id,
-                after: { resetTokenHash, expiresAt: expiresAt.toISOString() },
+                tokenHash: resetTokenHash,
+                expiresAt,
             },
         });
         this.logger.log(`Password reset requested for user ${user.id}`);
+        await this.securityAudit.logSecurityEvent(user.tenantId, security_audit_service_1.SecurityEvent.PASSWORD_RESET_REQUESTED, user.id, {
+            userId: user.id,
+            severity: 'INFO'
+        });
         return { message: 'If that email is registered, a reset link has been sent.' };
     }
     async resetPassword(dto) {
@@ -242,28 +285,31 @@ let AuthService = AuthService_1 = class AuthService {
             .createHash('sha256')
             .update(dto.token)
             .digest('hex');
-        const auditEntry = await this.prisma.auditLog.findFirst({
+        const resetRequest = await this.prisma.passwordResetToken.findFirst({
             where: {
-                action: 'password_reset_requested',
-                after: { path: ['resetTokenHash'], equals: resetTokenHash },
+                tokenHash: resetTokenHash,
+                usedAt: null,
             },
-            orderBy: { createdAt: 'desc' },
         });
-        if (!auditEntry || !auditEntry.after) {
+        if (!resetRequest) {
             throw new common_1.BadRequestException('Invalid or expired reset token');
         }
-        const tokenData = auditEntry.after;
-        if (new Date(tokenData.expiresAt) < new Date()) {
+        if (new Date(resetRequest.expiresAt) < new Date()) {
             throw new common_1.BadRequestException('Reset token has expired');
         }
+        this.validatePasswordStrength(dto.password);
         const passwordHash = await bcrypt.hash(dto.password, BCRYPT_ROUNDS);
         await this.prisma.$transaction([
+            this.prisma.passwordResetToken.update({
+                where: { id: resetRequest.id },
+                data: { usedAt: new Date() },
+            }),
             this.prisma.user.update({
-                where: { id: auditEntry.userId },
+                where: { id: resetRequest.userId },
                 data: { passwordHash, status: 'ACTIVE' },
             }),
             this.prisma.refreshToken.updateMany({
-                where: { userId: auditEntry.userId, revokedAt: null },
+                where: { userId: resetRequest.userId, revokedAt: null },
                 data: { revokedAt: new Date() },
             }),
         ]);
@@ -276,6 +322,7 @@ let AuthService = AuthService_1 = class AuthService {
         const valid = await bcrypt.compare(dto.currentPassword, user.passwordHash);
         if (!valid)
             throw new common_1.UnauthorizedException('Current password is incorrect');
+        this.validatePasswordStrength(dto.newPassword);
         const passwordHash = await bcrypt.hash(dto.newPassword, BCRYPT_ROUNDS);
         await this.prisma.$transaction([
             this.prisma.user.update({
@@ -287,6 +334,10 @@ let AuthService = AuthService_1 = class AuthService {
                 data: { revokedAt: new Date() },
             }),
         ]);
+        await this.securityAudit.logSecurityEvent(user.tenantId, security_audit_service_1.SecurityEvent.PASSWORD_CHANGED, user.id, {
+            userId: user.id,
+            severity: 'INFO'
+        });
         return { message: 'Password changed successfully. All sessions have been revoked.' };
     }
     async getSessions(userId) {
@@ -316,25 +367,13 @@ let AuthService = AuthService_1 = class AuthService {
         return { message: 'Session revoked successfully' };
     }
     async generateTokenPair(user, ipAddress, userAgent) {
-        const payload = {
-            sub: user.id,
-            email: user.email,
-            tenantId: user.tenantId,
-            roleId: user.roleId,
-            roleName: user.role?.name,
-        };
-        const accessToken = this.jwtService.sign(payload, {
-            secret: this.config.get('jwt.accessSecret'),
-            expiresIn: this.config.get('jwt.accessExpiresIn'),
-            algorithm: 'HS256',
-        });
         const rawRefreshToken = crypto.randomBytes(64).toString('hex');
         const tokenHash = this.hashToken(rawRefreshToken);
         const refreshExpiresIn = this.config.get('jwt.refreshExpiresIn') || '7d';
         const expiresAt = new Date();
         const days = parseInt(refreshExpiresIn.replace('d', ''), 10) || 7;
         expiresAt.setDate(expiresAt.getDate() + days);
-        await this.prisma.refreshToken.create({
+        const refreshTokenRecord = await this.prisma.refreshToken.create({
             data: {
                 tenantId: user.tenantId,
                 userId: user.id,
@@ -344,6 +383,17 @@ let AuthService = AuthService_1 = class AuthService {
                 userAgent,
                 deviceInfo: userAgent ? this.parseDeviceInfo(userAgent) : undefined,
             },
+        });
+        const payload = {
+            sub: user.id,
+            tenantId: user.tenantId,
+            roleId: user.roleId,
+            sessionId: refreshTokenRecord.id,
+        };
+        const accessToken = this.jwtService.sign(payload, {
+            secret: this.config.get('jwt.accessSecret'),
+            expiresIn: this.config.get('jwt.accessExpiresIn'),
+            algorithm: 'HS256',
         });
         return { accessToken, refreshToken: rawRefreshToken };
     }
@@ -361,12 +411,31 @@ let AuthService = AuthService_1 = class AuthService {
             return 'Safari Browser';
         return 'Unknown Device';
     }
+    validatePasswordStrength(password) {
+        if (password.length < 12) {
+            throw new common_1.BadRequestException('Password must be at least 12 characters long');
+        }
+        if (!/[A-Z]/.test(password)) {
+            throw new common_1.BadRequestException('Password must contain at least one uppercase letter');
+        }
+        if (!/[a-z]/.test(password)) {
+            throw new common_1.BadRequestException('Password must contain at least one lowercase letter');
+        }
+        if (!/[0-9]/.test(password)) {
+            throw new common_1.BadRequestException('Password must contain at least one number');
+        }
+        if (!/[^A-Za-z0-9]/.test(password)) {
+            throw new common_1.BadRequestException('Password must contain at least one special character');
+        }
+    }
 };
 exports.AuthService = AuthService;
 exports.AuthService = AuthService = AuthService_1 = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,
         jwt_1.JwtService,
-        config_1.ConfigService])
+        config_1.ConfigService,
+        session_blocklist_service_1.SessionBlocklistService,
+        security_audit_service_1.SecurityAuditService])
 ], AuthService);
 //# sourceMappingURL=auth.service.js.map

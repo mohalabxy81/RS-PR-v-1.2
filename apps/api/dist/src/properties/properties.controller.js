@@ -45,6 +45,7 @@ let PropertiesController = class PropertiesController {
 };
 exports.PropertiesController = PropertiesController;
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('create:properties'),
     (0, common_1.Post)(),
     (0, swagger_1.ApiOperation)({ summary: 'Create a new property' }),
     (0, swagger_1.ApiBody)({ type: property_dto_1.CreatePropertyDto }),
@@ -56,6 +57,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], PropertiesController.prototype, "create", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('read:properties'),
     (0, common_1.Get)(),
     (0, swagger_1.ApiOperation)({ summary: 'List properties with filters' }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.READ_PROPERTY),
@@ -66,6 +68,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], PropertiesController.prototype, "findAll", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('read:properties'),
     (0, common_1.Get)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Get property details' }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.READ_PROPERTY),
@@ -76,6 +79,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], PropertiesController.prototype, "findOne", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('update:properties'),
     (0, common_1.Put)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Update property details' }),
     (0, swagger_1.ApiBody)({ type: property_dto_1.UpdatePropertyDto }),
@@ -88,6 +92,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], PropertiesController.prototype, "update", null);
 __decorate([
+    (0, require_permissions_decorator_1.RequirePermissions)('update:properties'),
     (0, common_1.Put)(':id/assign'),
     (0, swagger_1.ApiOperation)({ summary: 'Assign a property to an agent' }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.UPDATE_PROPERTY),

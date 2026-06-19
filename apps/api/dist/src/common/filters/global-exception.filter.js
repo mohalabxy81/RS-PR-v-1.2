@@ -25,7 +25,7 @@ let GlobalExceptionFilter = GlobalExceptionFilter_1 = class GlobalExceptionFilte
             if (typeof exceptionResponse === 'string') {
                 message = exceptionResponse;
             }
-            else if (typeof exceptionResponse === 'object') {
+            else if (typeof exceptionResponse === 'object' && exceptionResponse !== null) {
                 const resp = exceptionResponse;
                 message = resp.message || message;
                 error = resp.error || error;
@@ -49,16 +49,19 @@ let GlobalExceptionFilter = GlobalExceptionFilter_1 = class GlobalExceptionFilte
         else if (exception instanceof Error) {
             this.logger.error(`Unhandled exception: ${exception.message}`, exception.stack, { path: request.url, method: request.method });
         }
-        const requestId = request.headers['x-request-id'] || request.id;
-        const correlationId = request.headers['x-correlation-id'] || requestId;
+        const requestId = request.id || request.headers['x-request-id'] || 'unknown';
+        const correlationId = request.correlationId || request.headers['x-correlation-id'] || requestId;
         response.status(status).json({
-            statusCode: status,
-            error,
-            message,
+            success: false,
+            error: {
+                code: status,
+                type: error,
+                message,
+            },
             path: request.url,
-            timestamp: new Date().toISOString(),
             requestId,
             correlationId,
+            timestamp: new Date().toISOString(),
         });
     }
 };

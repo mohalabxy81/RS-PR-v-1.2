@@ -5,13 +5,13 @@ export declare class BranchesController {
     private readonly branchesService;
     constructor(branchesService: BranchesService);
     create(user: CurrentUserPayload, data: CreateBranchDto): Promise<{
-        name: string;
         id: string;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
-        phone: string | null;
         address: string | null;
+        phone: string | null;
         isActive: boolean;
     }>;
     findAll(user: CurrentUserPayload): Promise<({
@@ -21,13 +21,13 @@ export declare class BranchesController {
             leads: number;
         };
     } & {
-        name: string;
         id: string;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
-        phone: string | null;
         address: string | null;
+        phone: string | null;
         isActive: boolean;
     })[]>;
     findOne(user: CurrentUserPayload, id: string): Promise<{
@@ -38,33 +38,33 @@ export declare class BranchesController {
             lastName: string;
         }[];
     } & {
-        name: string;
         id: string;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
-        phone: string | null;
         address: string | null;
+        phone: string | null;
         isActive: boolean;
     }>;
     update(user: CurrentUserPayload, id: string, data: UpdateBranchDto): Promise<{
-        name: string;
         id: string;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
-        phone: string | null;
         address: string | null;
+        phone: string | null;
         isActive: boolean;
     }>;
     remove(user: CurrentUserPayload, id: string): Promise<{
-        name: string;
         id: string;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
-        phone: string | null;
         address: string | null;
+        phone: string | null;
         isActive: boolean;
     }>;
 }
