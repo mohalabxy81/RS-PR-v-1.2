@@ -1,4 +1,5 @@
 import { Version, Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { RequirePermissions } from '../../common/decorators/require-permissions.decorator';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 import { DeveloperService } from '../services/developer.service';
 import { RegisterDeveloperDto, CreateOrganizationDto, CreateTeamDto, CreateProjectDto } from '../dto/developer.dto';
@@ -9,6 +10,7 @@ import { RegisterDeveloperDto, CreateOrganizationDto, CreateTeamDto, CreateProje
 export class DeveloperController {
   constructor(private readonly developerService: DeveloperService) {}
 
+  @RequirePermissions('platform.manage')
   @Post('register')
   @ApiOperation({ summary: 'Register a new developer account' })
   @ApiResponse({ status: 201, description: 'Developer registered successfully' })
@@ -18,6 +20,7 @@ export class DeveloperController {
     return this.developerService.registerDeveloper(userId, data);
   }
 
+  @RequirePermissions('platform.manage')
   @Get('profile/:userId')
   @ApiOperation({ summary: 'Get developer profile by user ID' })
   @ApiResponse({ status: 200, description: 'Developer profile returned' })
@@ -26,6 +29,7 @@ export class DeveloperController {
     return this.developerService.getDeveloperProfile(userId);
   }
 
+  @RequirePermissions('platform.manage')
   @Post(':developerId/organizations')
   @ApiOperation({ summary: 'Create a developer organization' })
   @ApiResponse({ status: 201, description: 'Organization created' })
@@ -37,6 +41,7 @@ export class DeveloperController {
     return this.developerService.createOrganization(developerId, data);
   }
 
+  @RequirePermissions('platform.manage')
   @Get('organizations/:orgId')
   @ApiOperation({ summary: 'Get a developer organization by ID' })
   @ApiResponse({ status: 200, description: 'Organization returned' })
@@ -44,6 +49,7 @@ export class DeveloperController {
     return this.developerService.getOrganization(orgId);
   }
 
+  @RequirePermissions('platform.manage')
   @Post('organizations/:orgId/teams')
   @ApiOperation({ summary: 'Create a team within an organization' })
   @ApiResponse({ status: 201, description: 'Team created' })
@@ -55,6 +61,7 @@ export class DeveloperController {
     return this.developerService.createTeam(orgId, data);
   }
 
+  @RequirePermissions('platform.manage')
   @Post(':developerId/projects')
   @ApiOperation({ summary: 'Create a developer project' })
   @ApiResponse({ status: 201, description: 'Project created' })
@@ -66,6 +73,7 @@ export class DeveloperController {
     return this.developerService.createProject(developerId, data);
   }
 
+  @RequirePermissions('platform.manage')
   @Get('projects/:projectId')
   @ApiOperation({ summary: 'Get a project by ID' })
   @ApiResponse({ status: 200, description: 'Project returned' })

@@ -16,6 +16,7 @@ import { CreateDealDto, UpdateDealDto, UpdateDealStageDto, AddDealNoteDto, Query
 export class DealsController {
   constructor(private readonly dealsService: DealsService) {}
 
+  @RequirePermissions('create:deals')
   @Post()
   @ApiOperation({ summary: 'Create a new deal' })
   @RequirePermissions(PERMISSIONS.CREATE_DEAL)
@@ -23,6 +24,7 @@ export class DealsController {
     return this.dealsService.create(user.tenantId, user.userId, dto);
   }
 
+  @RequirePermissions('read:deals')
   @Get()
   @ApiOperation({ summary: 'List all deals (useful for Kanban board)' })
   @RequirePermissions(PERMISSIONS.READ_DEAL)
@@ -30,6 +32,7 @@ export class DealsController {
     return this.dealsService.findAll(user.tenantId, query);
   }
 
+  @RequirePermissions('read:deals')
   @Get(':id')
   @ApiOperation({ summary: 'Get deal details' })
   @ApiParam({ name: 'id', type: String })
@@ -38,6 +41,7 @@ export class DealsController {
     return this.dealsService.findOne(user.tenantId, id);
   }
 
+  @RequirePermissions('update:deals')
   @Put(':id')
   @ApiOperation({ summary: 'Update a deal' })
   @ApiParam({ name: 'id', type: String })
@@ -50,6 +54,7 @@ export class DealsController {
     return this.dealsService.update(user.tenantId, id, dto, user.userId);
   }
 
+  @RequirePermissions('update:deals')
   @Put(':id/stage')
   @ApiOperation({ summary: 'Change deal stage (records history)' })
   @ApiParam({ name: 'id', type: String })
@@ -62,6 +67,7 @@ export class DealsController {
     return this.dealsService.updateStage(user.tenantId, id, user.userId, dto.stage);
   }
 
+  @RequirePermissions('create:deals')
   @Post(':id/notes')
   @ApiOperation({ summary: 'Add a note to a deal' })
   @ApiParam({ name: 'id', type: String })

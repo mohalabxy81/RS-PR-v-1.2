@@ -1,4 +1,5 @@
 import { Version, Controller, Get, Query, UseGuards, Request } from '@nestjs/common';
+import { RequirePermissions } from '../../common/decorators/require-permissions.decorator';
 import { AiAnalyticsService } from './ai-analytics.service';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
@@ -10,18 +11,21 @@ import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 export class AiAnalyticsController {
   constructor(private readonly aiAnalyticsService: AiAnalyticsService) {}
 
+  @RequirePermissions('ai.manage')
   @Get()
   @ApiOperation({ summary: 'Get AI usage analytics dashboard metrics' })
   async getDashboard(@Request() req: any, @Query('days') days = '30') {
     return this.aiAnalyticsService.getDashboardMetrics(req.user.tenantId, undefined, +days);
   }
 
+  @RequirePermissions('ai.manage')
   @Get('my-usage')
   @ApiOperation({ summary: 'Get current user AI usage stats' })
   async getMyUsage(@Request() req: any, @Query('days') days = '30') {
     return this.aiAnalyticsService.getDashboardMetrics(req.user.tenantId, req.user.id, +days);
   }
 
+  @RequirePermissions('ai.manage')
   @Get('by-user')
   @ApiOperation({ summary: 'Get AI usage breakdown per user (manager/admin only)' })
   async getByUser(@Request() req: any, @Query('days') days = '30') {

@@ -1,4 +1,5 @@
 import { Version, Controller, Get, Query, UseGuards } from '@nestjs/common';
+import { RequirePermissions } from '../common/decorators/require-permissions.decorator';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { ActivitiesService } from './activities.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -12,6 +13,7 @@ import type { CurrentUserPayload } from '../common/decorators/current-user.decor
 export class ActivitiesController {
   constructor(private readonly activitiesService: ActivitiesService) {}
 
+  @RequirePermissions('read:activities')
   @Get()
   @ApiOperation({ summary: 'List activities (with optional entity filters)' })
   async findAll(@CurrentUser() user: CurrentUserPayload, @Query() query: any) {

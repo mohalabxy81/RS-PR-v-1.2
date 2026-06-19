@@ -1,15 +1,18 @@
 import { Version, Controller, Get, Post, Param, Delete, Body } from '@nestjs/common';
+import { RequirePermissions } from '../../common/decorators/require-permissions.decorator';
 import { AssetService } from '../services/asset.service';
 
 @Controller('branding/assets')
 export class AssetController {
   constructor(private readonly assetService: AssetService) {}
 
+  @RequirePermissions('branding.manage')
   @Get('brand/:brandId')
   async getAssets(@Param('brandId') brandId: string) {
     return this.assetService.getAssets(brandId);
   }
 
+  @RequirePermissions('branding.manage')
   @Post('brand/:brandId')
   async uploadAsset(
     @Param('brandId') brandId: string,
@@ -18,6 +21,7 @@ export class AssetController {
     return this.assetService.uploadAsset(brandId, body.file, body.assetType);
   }
 
+  @RequirePermissions('branding.manage')
   @Delete(':assetId')
   async deleteAsset(@Param('assetId') assetId: string) {
     return this.assetService.deleteAsset(assetId);

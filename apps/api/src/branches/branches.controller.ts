@@ -16,6 +16,7 @@ import type { CurrentUserPayload } from '../common/decorators/current-user.decor
 export class BranchesController {
   constructor(private readonly branchesService: BranchesService) {}
 
+  @RequirePermissions('create:branches')
   @Post()
   @ApiOperation({ summary: 'Create a new branch' })
   @ApiBody({ type: CreateBranchDto })
@@ -24,6 +25,7 @@ export class BranchesController {
     return this.branchesService.create(user.tenantId, data);
   }
 
+  @RequirePermissions('read:branches')
   @Get()
   @ApiOperation({ summary: 'List all branches' })
   @RequirePermissions(PERMISSIONS.READ_BRANCH)
@@ -31,6 +33,7 @@ export class BranchesController {
     return this.branchesService.findAll(user.tenantId);
   }
 
+  @RequirePermissions('read:branches')
   @Get(':id')
   @ApiOperation({ summary: 'Get branch details' })
   @RequirePermissions(PERMISSIONS.READ_BRANCH)
@@ -38,6 +41,7 @@ export class BranchesController {
     return this.branchesService.findOne(user.tenantId, id);
   }
 
+  @RequirePermissions('update:branches')
   @Put(':id')
   @ApiOperation({ summary: 'Update a branch' })
   @ApiBody({ type: UpdateBranchDto })
@@ -50,6 +54,7 @@ export class BranchesController {
     return this.branchesService.update(user.tenantId, id, data);
   }
 
+  @RequirePermissions('delete:branches')
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a branch' })
   @RequirePermissions(PERMISSIONS.DELETE_BRANCH)

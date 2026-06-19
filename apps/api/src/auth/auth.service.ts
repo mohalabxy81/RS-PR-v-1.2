@@ -66,6 +66,8 @@ export class AuthService {
       throw new ConflictException('Email is already registered');
     }
 
+    this.validatePasswordStrength(dto.password);
+
     // Hash password — MUST NOT log plain password
     const passwordHash = await bcrypt.hash(dto.password, BCRYPT_ROUNDS);
 
@@ -152,11 +154,26 @@ export class AuthService {
       include: { role: true, tenant: true },
     });
 
+    if (user && user.lockedUntil && user.lockedUntil > new Date()) {
+      throw new UnauthorizedException('Account is temporarily locked. Please try again later.');
+    }
+
     // Use constant-time comparison to prevent timing attacks
     const passwordValid =
       user && (await bcrypt.compare(dto.password, user.passwordHash));
 
     if (!user || !passwordValid) {
+      if (user) {
+        const attempts = user.failedLoginAttempts + 1;
+        const updates: any = { failedLoginAttempts: attempts };
+        if (attempts >= 5) {
+          const lockUntil = new Date();
+          lockUntil.setMinutes(lockUntil.getMinutes() + 15 * Math.pow(2, attempts - 5)); // Progressive delay
+          updates.lockedUntil = lockUntil;
+          this.logger.warn(`Account locked for user ${user.id} due to failed login attempts`);
+        }
+        await this.prisma.user.update({ where: { id: user.id }, data: updates });
+      }
       // Generic error — never indicate whether email or password was wrong
       throw new UnauthorizedException('Invalid credentials');
     }
@@ -176,10 +193,14 @@ export class AuthService {
       userAgent,
     );
 
-    // Update last login timestamp
+    // Update last login timestamp and reset lockout counters
     await this.prisma.user.update({
       where: { id: user.id },
-      data: { lastLoginAt: new Date() },
+      data: { 
+        lastLoginAt: new Date(),
+        failedLoginAttempts: 0,
+        lockedUntil: null
+      },
     });
 
     return {
@@ -328,6 +349,8 @@ export class AuthService {
       throw new BadRequestException('Reset token has expired');
     }
 
+    this.validatePasswordStrength(dto.password);
+
     const passwordHash = await bcrypt.hash(dto.password, BCRYPT_ROUNDS);
 
     await this.prisma.$transaction([
@@ -359,6 +382,8 @@ export class AuthService {
 
     const valid = await bcrypt.compare(dto.currentPassword, user.passwordHash);
     if (!valid) throw new UnauthorizedException('Current password is incorrect');
+
+    this.validatePasswordStrength(dto.newPassword);
 
     const passwordHash = await bcrypt.hash(dto.newPassword, BCRYPT_ROUNDS);
 
@@ -468,5 +493,23 @@ export class AuthService {
     if (userAgent.includes('Firefox')) return 'Firefox Browser';
     if (userAgent.includes('Safari')) return 'Safari Browser';
     return 'Unknown Device';
+  }
+
+  private validatePasswordStrength(password: string) {
+    if (password.length < 12) {
+      throw new BadRequestException('Password must be at least 12 characters long');
+    }
+    if (!/[A-Z]/.test(password)) {
+      throw new BadRequestException('Password must contain at least one uppercase letter');
+    }
+    if (!/[a-z]/.test(password)) {
+      throw new BadRequestException('Password must contain at least one lowercase letter');
+    }
+    if (!/[0-9]/.test(password)) {
+      throw new BadRequestException('Password must contain at least one number');
+    }
+    if (!/[^A-Za-z0-9]/.test(password)) {
+      throw new BadRequestException('Password must contain at least one special character');
+    }
   }
 }

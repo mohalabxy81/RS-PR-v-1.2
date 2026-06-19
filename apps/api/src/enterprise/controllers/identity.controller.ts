@@ -1,4 +1,5 @@
 import { CreateAdministratorDto, CreateAccessReviewDto, CreateSsoProviderDto, UpdateSsoProviderDto } from '../dto/enterprise.dto';
+import { RequirePermissions } from '../../common/decorators/require-permissions.decorator';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Version, Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
 import { SsoService } from '../services/sso.service';
@@ -14,11 +15,13 @@ export class IdentityController {
 
   // --- SSO Providers ---
 
+  @RequirePermissions('enterprise.manage')
   @Get(':organizationId/sso-providers')
   async getSsoProviders(@Param('organizationId') organizationId: string) {
     return this.ssoService.getProviders(organizationId);
   }
 
+  @RequirePermissions('enterprise.manage')
   @Post(':organizationId/sso-providers')
   async configureSsoProvider(
     @Param('organizationId') organizationId: string,
@@ -27,6 +30,7 @@ export class IdentityController {
     return this.ssoService.configureProvider(organizationId, data);
   }
 
+  @RequirePermissions('enterprise.manage')
   @Put('sso-providers/:providerId')
   async updateSsoProvider(
     @Param('providerId') providerId: string,
@@ -35,6 +39,7 @@ export class IdentityController {
     return this.ssoService.updateProvider(providerId, data);
   }
 
+  @RequirePermissions('enterprise.manage')
   @Delete('sso-providers/:providerId')
   async deleteSsoProvider(@Param('providerId') providerId: string) {
     return this.ssoService.deleteProvider(providerId);
@@ -42,11 +47,13 @@ export class IdentityController {
 
   // --- Administrators ---
 
+  @RequirePermissions('enterprise.manage')
   @Get(':organizationId/administrators')
   async getAdministrators(@Param('organizationId') organizationId: string) {
     return this.securityService.getAdministrators(organizationId);
   }
 
+  @RequirePermissions('enterprise.manage')
   @Post(':organizationId/administrators')
   async addAdministrator(
     @Param('organizationId') organizationId: string,
@@ -57,11 +64,13 @@ export class IdentityController {
 
   // --- Access Reviews ---
 
+  @RequirePermissions('enterprise.manage')
   @Get(':organizationId/access-reviews')
   async getAccessReviews(@Param('organizationId') organizationId: string) {
     return this.securityService.getAccessReviews(organizationId);
   }
 
+  @RequirePermissions('enterprise.manage')
   @Post(':organizationId/access-reviews')
   async createAccessReview(
     @Param('organizationId') organizationId: string,

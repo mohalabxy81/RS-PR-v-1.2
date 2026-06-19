@@ -26,6 +26,7 @@ import type { CurrentUserPayload } from '../common/decorators/current-user.decor
 export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
 
+  @RequirePermissions('read:roles')
   @Get('permissions')
   @ApiOperation({ summary: 'List all available permissions' })
   @RequirePermissions(PERMISSIONS.READ_ROLE)
@@ -33,6 +34,7 @@ export class RolesController {
     return this.rolesService.getAllPermissions();
   }
 
+  @RequirePermissions('read:roles')
   @Get()
   @ApiOperation({ summary: 'List all roles for the current tenant' })
   @RequirePermissions(PERMISSIONS.READ_ROLE)
@@ -40,6 +42,7 @@ export class RolesController {
     return this.rolesService.getRolesForTenant(user.tenantId);
   }
 
+  @RequirePermissions('read:roles')
   @Get(':id')
   @ApiOperation({ summary: 'Get a specific role by ID' })
   @RequirePermissions(PERMISSIONS.READ_ROLE)
@@ -49,6 +52,7 @@ export class RolesController {
     return role;
   }
 
+  @RequirePermissions('create:roles')
   @Post()
   @ApiOperation({ summary: 'Create a new custom role' })
   @RequirePermissions(PERMISSIONS.CREATE_ROLE)
@@ -63,6 +67,7 @@ export class RolesController {
     return this.rolesService.createRole(user.tenantId, name, permissionIds);
   }
 
+  @RequirePermissions('update:roles')
   @Put(':id/permissions')
   @ApiOperation({ summary: 'Update permissions for a custom role' })
   @RequirePermissions(PERMISSIONS.UPDATE_ROLE)
@@ -79,6 +84,7 @@ export class RolesController {
     return updated;
   }
 
+  @RequirePermissions('delete:roles')
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a custom role' })
   @RequirePermissions(PERMISSIONS.DELETE_ROLE)

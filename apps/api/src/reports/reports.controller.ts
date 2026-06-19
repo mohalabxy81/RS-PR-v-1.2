@@ -16,6 +16,7 @@ import type { CurrentUserPayload } from '../common/decorators/current-user.decor
 export class ReportsController {
   constructor(private readonly reportsService: ReportsService) {}
 
+  @RequirePermissions('read:reports')
   @Get('leads')
   @ApiOperation({ summary: 'Lead conversion and funnel report' })
   @ApiQuery({ name: 'startDate', required: false })
@@ -26,6 +27,7 @@ export class ReportsController {
     return this.reportsService.getLeadReport(user.tenantId, query);
   }
 
+  @RequirePermissions('read:reports')
   @Get('deals')
   @ApiOperation({ summary: 'Deal pipeline and revenue report' })
   @ApiQuery({ name: 'startDate', required: false })
@@ -35,6 +37,7 @@ export class ReportsController {
     return this.reportsService.getDealReport(user.tenantId, query);
   }
 
+  @RequirePermissions('read:reports')
   @Get('properties')
   @ApiOperation({ summary: 'Property inventory and status report' })
   @ApiQuery({ name: 'startDate', required: false })
@@ -44,6 +47,7 @@ export class ReportsController {
     return this.reportsService.getPropertyReport(user.tenantId, query);
   }
 
+  @RequirePermissions('read:reports')
   @Get('agents')
   @ApiOperation({ summary: 'Agent performance report' })
   @ApiQuery({ name: 'startDate', required: false })
@@ -54,6 +58,7 @@ export class ReportsController {
     return this.reportsService.getAgentReport(user.tenantId, query);
   }
 
+  @RequirePermissions('read:reports')
   @Get('appointments')
   @ApiOperation({ summary: 'Appointment activity report' })
   @ApiQuery({ name: 'startDate', required: false })
@@ -63,6 +68,7 @@ export class ReportsController {
     return this.reportsService.getAppointmentReport(user.tenantId, query);
   }
 
+  @RequirePermissions('read:reports')
   @Get('export/leads')
   @ApiOperation({ summary: 'Export leads as CSV' })
   @ApiQuery({ name: 'startDate', required: false })
@@ -80,6 +86,7 @@ export class ReportsController {
     res.send(csv);
   }
 
+  @RequirePermissions('read:reports')
   @Get('export/deals')
   @ApiOperation({ summary: 'Export deals as CSV' })
   @ApiQuery({ name: 'startDate', required: false })

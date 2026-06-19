@@ -1,4 +1,5 @@
 import {
+import { RequirePermissions } from '../../common/decorators/require-permissions.decorator';
   Controller, Post, Get, Delete, Body, Param, Query,
   UseGuards, Request, HttpCode, HttpStatus,
 } from '@nestjs/common';
@@ -13,6 +14,7 @@ import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 export class AiChatController {
   constructor(private readonly aiChatService: AiChatService) {}
 
+  @RequirePermissions('ai.manage')
   @Post()
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Send a message to the AI Copilot' })
@@ -24,6 +26,7 @@ export class AiChatController {
     });
   }
 
+  @RequirePermissions('ai.manage')
   @Get('conversations')
   @ApiOperation({ summary: 'List all AI conversations for the current user' })
   async listConversations(
@@ -34,12 +37,14 @@ export class AiChatController {
     return this.aiChatService.listConversations(req.user.tenantId, req.user.id, +page, +limit);
   }
 
+  @RequirePermissions('ai.manage')
   @Get('conversations/:id')
   @ApiOperation({ summary: 'Get a conversation with all messages' })
   async getConversation(@Param('id') id: string, @Request() req: any) {
     return this.aiChatService.getConversation(id, req.user.tenantId, req.user.id);
   }
 
+  @RequirePermissions('ai.manage')
   @Delete('conversations/:id')
   @ApiOperation({ summary: 'Delete a conversation' })
   async deleteConversation(@Param('id') id: string, @Request() req: any) {

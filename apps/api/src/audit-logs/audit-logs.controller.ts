@@ -15,6 +15,7 @@ import type { CurrentUserPayload } from '../common/decorators/current-user.decor
 export class AuditLogsController {
   constructor(private readonly auditLogsService: AuditLogsService) {}
 
+  @RequirePermissions('read:audit-logs')
   @Get()
   @ApiOperation({ summary: 'List audit logs with pagination and filters' })
   @RequirePermissions(PERMISSIONS.VIEW_AUDIT_LOGS)

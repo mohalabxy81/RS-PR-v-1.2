@@ -1,4 +1,5 @@
 import { CreateOrganizationDto, UpdateOrganizationDto, CreateRegionDto, CreateDepartmentDto, CreateBusinessUnitDto, CreateHierarchyDto } from '../dto/enterprise.dto';
+import { RequirePermissions } from '../../common/decorators/require-permissions.decorator';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Version, Controller, Get, Post, Put, Body, Param } from '@nestjs/common';
 import { OrganizationService } from '../services/organization.service';
@@ -8,11 +9,13 @@ import { OrganizationService } from '../services/organization.service';
 export class OrganizationController {
   constructor(private readonly organizationService: OrganizationService) {}
 
+  @RequirePermissions('enterprise.manage')
   @Get(':tenantId')
   async getOrganization(@Param('tenantId') tenantId: string) {
     return this.organizationService.getOrganization(tenantId);
   }
 
+  @RequirePermissions('enterprise.manage')
   @Post(':tenantId')
   async createOrganization(
     @Param('tenantId') tenantId: string,
@@ -21,6 +24,7 @@ export class OrganizationController {
     return this.organizationService.createOrganization(tenantId, data);
   }
 
+  @RequirePermissions('enterprise.manage')
   @Put(':tenantId')
   async updateOrganization(
     @Param('tenantId') tenantId: string,
@@ -31,6 +35,7 @@ export class OrganizationController {
 
   // --- Regions ---
 
+  @RequirePermissions('enterprise.manage')
   @Post(':organizationId/regions')
   async createRegion(
     @Param('organizationId') organizationId: string,
@@ -39,6 +44,7 @@ export class OrganizationController {
     return this.organizationService.createRegion(organizationId, data);
   }
 
+  @RequirePermissions('enterprise.manage')
   @Get(':organizationId/regions')
   async getRegions(@Param('organizationId') organizationId: string) {
     return this.organizationService.getRegions(organizationId);
@@ -46,6 +52,7 @@ export class OrganizationController {
 
   // --- Departments ---
 
+  @RequirePermissions('enterprise.manage')
   @Post(':organizationId/departments')
   async createDepartment(
     @Param('organizationId') organizationId: string,
@@ -54,6 +61,7 @@ export class OrganizationController {
     return this.organizationService.createDepartment(organizationId, data);
   }
 
+  @RequirePermissions('enterprise.manage')
   @Get(':organizationId/departments')
   async getDepartments(@Param('organizationId') organizationId: string) {
     return this.organizationService.getDepartments(organizationId);
@@ -61,6 +69,7 @@ export class OrganizationController {
 
   // --- Business Units ---
 
+  @RequirePermissions('enterprise.manage')
   @Post(':organizationId/business-units')
   async createBusinessUnit(
     @Param('organizationId') organizationId: string,
@@ -69,6 +78,7 @@ export class OrganizationController {
     return this.organizationService.createBusinessUnit(organizationId, data);
   }
 
+  @RequirePermissions('enterprise.manage')
   @Get(':organizationId/business-units')
   async getBusinessUnits(@Param('organizationId') organizationId: string) {
     return this.organizationService.getBusinessUnits(organizationId);
@@ -76,6 +86,7 @@ export class OrganizationController {
 
   // --- Hierarchies ---
 
+  @RequirePermissions('enterprise.manage')
   @Post(':organizationId/hierarchies')
   async createHierarchy(
     @Param('organizationId') organizationId: string,

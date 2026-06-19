@@ -16,6 +16,7 @@ import type { CurrentUserPayload } from '../common/decorators/current-user.decor
 export class AppointmentsController {
   constructor(private readonly appointmentsService: AppointmentsService) {}
 
+  @RequirePermissions('create:appointments')
   @Post()
   @ApiOperation({ summary: 'Create a new appointment' })
   @ApiBody({ type: CreateAppointmentDto })
@@ -24,6 +25,7 @@ export class AppointmentsController {
     return this.appointmentsService.create(user.tenantId, user.userId, data);
   }
 
+  @RequirePermissions('read:appointments')
   @Get()
   @ApiOperation({ summary: 'List all appointments in a date range' })
   @RequirePermissions(PERMISSIONS.READ_APPOINTMENT)
@@ -31,6 +33,7 @@ export class AppointmentsController {
     return this.appointmentsService.findAll(user.tenantId, query);
   }
 
+  @RequirePermissions('read:appointments')
   @Get(':id')
   @ApiOperation({ summary: 'Get appointment details' })
   @RequirePermissions(PERMISSIONS.READ_APPOINTMENT)
@@ -38,6 +41,7 @@ export class AppointmentsController {
     return this.appointmentsService.findOne(user.tenantId, id);
   }
 
+  @RequirePermissions('update:appointments')
   @Put(':id')
   @ApiOperation({ summary: 'Update an appointment' })
   @ApiBody({ type: UpdateAppointmentDto })
@@ -50,6 +54,7 @@ export class AppointmentsController {
     return this.appointmentsService.update(user.tenantId, id, data);
   }
 
+  @RequirePermissions('delete:appointments')
   @Delete(':id')
   @ApiOperation({ summary: 'Delete an appointment' })
   @RequirePermissions(PERMISSIONS.DELETE_APPOINTMENT)

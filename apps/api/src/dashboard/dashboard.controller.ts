@@ -1,4 +1,5 @@
 import { Version, Controller, Get, UseGuards } from '@nestjs/common';
+import { RequirePermissions } from '../common/decorators/require-permissions.decorator';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { DashboardService } from './dashboard.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -12,12 +13,14 @@ import type { CurrentUserPayload } from '../common/decorators/current-user.decor
 export class DashboardController {
   constructor(private readonly dashboardService: DashboardService) {}
 
+  @RequirePermissions('read:dashboard')
   @Get('metrics')
   @ApiOperation({ summary: 'Get role-based dashboard metrics' })
   async getMetrics(@CurrentUser() user: CurrentUserPayload) {
     return this.dashboardService.getMetrics(user.tenantId, user.userId, user.roleName);
   }
 
+  @RequirePermissions('read:dashboard')
   @Get('activities')
   @ApiOperation({ summary: 'Get recent activities for dashboard feed' })
   async getRecentActivities(@CurrentUser() user: CurrentUserPayload) {

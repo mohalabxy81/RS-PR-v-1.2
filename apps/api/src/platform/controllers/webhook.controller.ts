@@ -1,4 +1,5 @@
 import { Version, Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
+import { RequirePermissions } from '../../common/decorators/require-permissions.decorator';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 import { WebhookService } from '../services/webhook.service';
 import { RegisterWebhookDto, UpdateWebhookDto } from '../dto/webhook.dto';
@@ -9,6 +10,7 @@ import { RegisterWebhookDto, UpdateWebhookDto } from '../dto/webhook.dto';
 export class WebhookController {
   constructor(private readonly webhookService: WebhookService) {}
 
+  @RequirePermissions('platform.manage')
   @Post('projects/:projectId')
   @ApiOperation({ summary: 'Register a new webhook endpoint for a project' })
   @ApiResponse({ status: 201, description: 'Webhook registered. Secret returned for signature verification.' })
@@ -20,6 +22,7 @@ export class WebhookController {
     return this.webhookService.registerWebhook(projectId, body);
   }
 
+  @RequirePermissions('platform.manage')
   @Get('projects/:projectId')
   @ApiOperation({ summary: 'List all webhook endpoints for a project' })
   @ApiResponse({ status: 200, description: 'List of webhook endpoints' })
@@ -27,6 +30,7 @@ export class WebhookController {
     return this.webhookService.getWebhooks(projectId);
   }
 
+  @RequirePermissions('platform.manage')
   @Put(':webhookId')
   @ApiOperation({ summary: 'Update a webhook endpoint configuration' })
   @ApiResponse({ status: 200, description: 'Webhook updated' })
@@ -38,6 +42,7 @@ export class WebhookController {
     return this.webhookService.updateWebhook(webhookId, data);
   }
 
+  @RequirePermissions('platform.manage')
   @Delete(':webhookId')
   @ApiOperation({ summary: 'Delete a webhook endpoint' })
   @ApiResponse({ status: 200, description: 'Webhook deleted' })
@@ -45,6 +50,7 @@ export class WebhookController {
     return this.webhookService.deleteWebhook(webhookId);
   }
 
+  @RequirePermissions('platform.manage')
   @Get(':webhookId/deliveries')
   @ApiOperation({ summary: 'Get recent delivery logs for a webhook endpoint' })
   @ApiResponse({ status: 200, description: 'Delivery log list (max 100 recent)' })
@@ -54,6 +60,7 @@ export class WebhookController {
 
   // --- Events (Internal / Admin mostly) ---
 
+  @RequirePermissions('platform.manage')
   @Get('events/logs')
   @ApiOperation({ summary: 'Get recent platform event logs (admin only)' })
   @ApiResponse({ status: 200, description: 'List of event logs' })

@@ -1,4 +1,5 @@
 import { Version, Controller, Get, Post, Body, Param, Req, UnauthorizedException, UseInterceptors } from '@nestjs/common';
+import { RequirePermissions } from '../../common/decorators/require-permissions.decorator';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 import { ApiGatewayService } from '../services/api-gateway.service';
 import { ApiUsageInterceptor } from '../interceptors/api-usage.interceptor';
@@ -13,6 +14,7 @@ export class ApiGatewayController {
 
   // --- API Keys & Auth ---
 
+  @RequirePermissions('platform.manage')
   @Post('developers/:developerId/keys')
   @ApiOperation({ summary: 'Generate a new API key for a developer' })
   @ApiResponse({ status: 201, description: 'API Key generated successfully' })
@@ -24,6 +26,7 @@ export class ApiGatewayController {
     return this.gatewayService.generateApiKey(developerId, body.name, body.scopes);
   }
 
+  @RequirePermissions('platform.manage')
   @Post('developers/:developerId/oauth-clients')
   @ApiOperation({ summary: 'Register a new OAuth client' })
   @ApiResponse({ status: 201, description: 'OAuth client registered successfully' })
@@ -37,6 +40,7 @@ export class ApiGatewayController {
 
   // --- API Catalog ---
 
+  @RequirePermissions('platform.manage')
   @Get('products')
   @ApiOperation({ summary: 'List all active API products' })
   @ApiResponse({ status: 200, description: 'List of products' })
@@ -44,6 +48,7 @@ export class ApiGatewayController {
     return this.gatewayService.getApiProducts();
   }
 
+  @RequirePermissions('platform.manage')
   @Post('products')
   @ApiOperation({ summary: 'Create a new API product' })
   @ApiResponse({ status: 201, description: 'Product created successfully' })
@@ -52,6 +57,7 @@ export class ApiGatewayController {
     return this.gatewayService.createApiProduct(data);
   }
 
+  @RequirePermissions('platform.manage')
   @Post('products/:productId/plans')
   @ApiOperation({ summary: 'Add a pricing plan to a product' })
   @ApiResponse({ status: 201, description: 'Plan created successfully' })
@@ -65,6 +71,7 @@ export class ApiGatewayController {
 
   // --- Subscriptions ---
 
+  @RequirePermissions('platform.manage')
   @Post('developers/:developerId/subscriptions')
   @ApiOperation({ summary: 'Subscribe a developer to an API plan' })
   @ApiResponse({ status: 201, description: 'Subscription successful' })
@@ -76,6 +83,7 @@ export class ApiGatewayController {
     return this.gatewayService.subscribeToPlan(developerId, body.planId);
   }
 
+  @RequirePermissions('platform.manage')
   @Get('developers/:developerId/subscriptions')
   @ApiOperation({ summary: 'Get all subscriptions for a developer' })
   @ApiResponse({ status: 200, description: 'List of subscriptions' })

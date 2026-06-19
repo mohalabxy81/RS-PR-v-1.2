@@ -16,6 +16,7 @@ import type { CurrentUserPayload } from '../common/decorators/current-user.decor
 export class PropertiesController {
   constructor(private readonly propertiesService: PropertiesService) {}
 
+  @RequirePermissions('create:properties')
   @Post()
   @ApiOperation({ summary: 'Create a new property' })
   @ApiBody({ type: CreatePropertyDto })
@@ -24,6 +25,7 @@ export class PropertiesController {
     return this.propertiesService.create(user.tenantId, data);
   }
 
+  @RequirePermissions('read:properties')
   @Get()
   @ApiOperation({ summary: 'List properties with filters' })
   @RequirePermissions(PERMISSIONS.READ_PROPERTY)
@@ -31,6 +33,7 @@ export class PropertiesController {
     return this.propertiesService.findAll(user.tenantId, query);
   }
 
+  @RequirePermissions('read:properties')
   @Get(':id')
   @ApiOperation({ summary: 'Get property details' })
   @RequirePermissions(PERMISSIONS.READ_PROPERTY)
@@ -38,6 +41,7 @@ export class PropertiesController {
     return this.propertiesService.findOne(user.tenantId, id);
   }
 
+  @RequirePermissions('update:properties')
   @Put(':id')
   @ApiOperation({ summary: 'Update property details' })
   @ApiBody({ type: UpdatePropertyDto })
@@ -50,6 +54,7 @@ export class PropertiesController {
     return this.propertiesService.update(user.tenantId, id, data);
   }
 
+  @RequirePermissions('update:properties')
   @Put(':id/assign')
   @ApiOperation({ summary: 'Assign a property to an agent' })
   @RequirePermissions(PERMISSIONS.UPDATE_PROPERTY)

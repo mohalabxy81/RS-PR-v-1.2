@@ -1,4 +1,5 @@
 import { Version, Controller, Post, Body, Param, UseGuards, Request, HttpCode, HttpStatus } from '@nestjs/common';
+import { RequirePermissions } from '../../common/decorators/require-permissions.decorator';
 import { AiFeaturesService } from './ai-features.service';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
@@ -10,6 +11,7 @@ import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 export class AiFeaturesController {
   constructor(private readonly aiFeaturesService: AiFeaturesService) {}
 
+  @RequirePermissions('ai.manage')
   @Post('generate/property-description')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Generate AI property descriptions in multiple formats' })
@@ -22,6 +24,7 @@ export class AiFeaturesController {
     );
   }
 
+  @RequirePermissions('ai.manage')
   @Post('generate/property-seo')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Generate SEO content for a property' })
@@ -29,6 +32,7 @@ export class AiFeaturesController {
     return this.aiFeaturesService.generatePropertySeo(body.propertyId, req.user.tenantId, req.user.id);
   }
 
+  @RequirePermissions('ai.manage')
   @Post('score/lead/:id')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'AI-powered lead scoring with recommendations' })
@@ -36,6 +40,7 @@ export class AiFeaturesController {
     return this.aiFeaturesService.scoreLeadAi(id, req.user.tenantId, req.user.id);
   }
 
+  @RequirePermissions('ai.manage')
   @Post('insights/customer/:id')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Generate AI customer insights' })
@@ -43,6 +48,7 @@ export class AiFeaturesController {
     return this.aiFeaturesService.generateCustomerInsights(id, req.user.tenantId, req.user.id);
   }
 
+  @RequirePermissions('ai.manage')
   @Post('insights/deal/:id')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Generate AI deal summary and recommendations' })
@@ -50,6 +56,7 @@ export class AiFeaturesController {
     return this.aiFeaturesService.generateDealSummary(id, req.user.tenantId, req.user.id);
   }
 
+  @RequirePermissions('ai.manage')
   @Post('insights/appointment/:id')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Generate AI appointment agenda and preparation' })
@@ -57,6 +64,7 @@ export class AiFeaturesController {
     return this.aiFeaturesService.generateAppointmentAgenda(id, req.user.tenantId, req.user.id);
   }
 
+  @RequirePermissions('ai.manage')
   @Post('generate/email')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'AI-generated emails for various scenarios' })
@@ -67,6 +75,7 @@ export class AiFeaturesController {
     return this.aiFeaturesService.generateEmail({ ...body, tenantId: req.user.tenantId, userId: req.user.id });
   }
 
+  @RequirePermissions('ai.manage')
   @Post('generate/whatsapp')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'AI-generated WhatsApp messages' })
@@ -77,6 +86,7 @@ export class AiFeaturesController {
     return this.aiFeaturesService.generateWhatsApp({ ...body, tenantId: req.user.tenantId, userId: req.user.id });
   }
 
+  @RequirePermissions('ai.manage')
   @Post('summarize/call')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Summarize a call transcript and extract action items' })

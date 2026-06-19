@@ -16,6 +16,7 @@ import { CreateLeadDto, UpdateLeadDto, AssignLeadDto, AddLeadNoteDto, QueryLeadD
 export class LeadsController {
   constructor(private readonly leadsService: LeadsService) {}
 
+  @RequirePermissions('create:leads')
   @Post()
   @ApiOperation({ summary: 'Create a new lead' })
   @RequirePermissions(PERMISSIONS.CREATE_LEAD)
@@ -23,6 +24,7 @@ export class LeadsController {
     return this.leadsService.create(user.tenantId, user.userId, dto);
   }
 
+  @RequirePermissions('read:leads')
   @Get()
   @ApiOperation({ summary: 'List all leads with pagination and filters' })
   @RequirePermissions(PERMISSIONS.READ_LEAD)
@@ -30,6 +32,7 @@ export class LeadsController {
     return this.leadsService.findAll(user.tenantId, query);
   }
 
+  @RequirePermissions('read:leads')
   @Get(':id')
   @ApiOperation({ summary: 'Get lead details' })
   @ApiParam({ name: 'id', type: String })
@@ -38,6 +41,7 @@ export class LeadsController {
     return this.leadsService.findOne(user.tenantId, id);
   }
 
+  @RequirePermissions('update:leads')
   @Put(':id')
   @ApiOperation({ summary: 'Update a lead' })
   @ApiParam({ name: 'id', type: String })
@@ -50,6 +54,7 @@ export class LeadsController {
     return this.leadsService.update(user.tenantId, id, dto, user.userId);
   }
 
+  @RequirePermissions('delete:leads')
   @Delete(':id')
   @ApiOperation({ summary: 'Archive a lead' })
   @ApiParam({ name: 'id', type: String })
@@ -58,6 +63,7 @@ export class LeadsController {
     return this.leadsService.archive(user.tenantId, id);
   }
 
+  @RequirePermissions('create:leads')
   @Post(':id/notes')
   @ApiOperation({ summary: 'Add a note to a lead' })
   @ApiParam({ name: 'id', type: String })
@@ -70,6 +76,7 @@ export class LeadsController {
     return this.leadsService.addNote(user.tenantId, id, user.userId, dto.content);
   }
 
+  @RequirePermissions('update:leads')
   @Put(':id/assign')
   @ApiOperation({ summary: 'Assign a lead to an agent' })
   @ApiParam({ name: 'id', type: String })
@@ -82,6 +89,7 @@ export class LeadsController {
     return this.leadsService.assign(user.tenantId, id, dto.assigneeId, user.userId);
   }
 
+  @RequirePermissions('read:leads')
   @Get(':id/timeline')
   @ApiOperation({ summary: 'Get lead activity timeline' })
   @ApiParam({ name: 'id', type: String })

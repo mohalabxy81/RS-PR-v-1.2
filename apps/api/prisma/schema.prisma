@@ -243,10 +243,14 @@ model User {
   phone           String?
   avatarUrl       String?
   status          UserStatus @default(INVITED)
-  emailVerifiedAt DateTime?
-  lastLoginAt     DateTime?
-  createdAt       DateTime   @default(now())
-  updatedAt       DateTime   @updatedAt
+  emailVerifiedAt     DateTime?
+  lastLoginAt         DateTime?
+  failedLoginAttempts Int        @default(0)
+  lockedUntil         DateTime?
+  isMfaEnabled        Boolean    @default(false)
+  mfaSecret           String?
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
 
   refreshTokens         RefreshToken[]
   passwordResetTokens   PasswordResetToken[]

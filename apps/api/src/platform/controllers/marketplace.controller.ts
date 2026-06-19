@@ -1,4 +1,5 @@
 import { Version, Controller, Get, Post, Body, Param, Put } from '@nestjs/common';
+import { RequirePermissions } from '../../common/decorators/require-permissions.decorator';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 import { MarketplaceService } from '../services/marketplace.service';
 import { RegisterAppDto, CreateAppVersionDto, InstallAppDto } from '../dto/marketplace.dto';
@@ -11,6 +12,7 @@ export class MarketplaceController {
 
   // --- Public App Directory ---
 
+  @RequirePermissions('platform.manage')
   @Get('apps')
   @ApiOperation({ summary: 'Browse published marketplace apps' })
   @ApiResponse({ status: 200, description: 'List of published apps returned' })
@@ -18,6 +20,7 @@ export class MarketplaceController {
     return this.marketplaceService.getPublishedApps();
   }
 
+  @RequirePermissions('platform.manage')
   @Get('apps/:appId')
   @ApiOperation({ summary: 'Get app details by ID' })
   @ApiResponse({ status: 200, description: 'App details returned' })
@@ -28,6 +31,7 @@ export class MarketplaceController {
 
   // --- Developer App Management ---
 
+  @RequirePermissions('platform.manage')
   @Post('projects/:projectId/apps')
   @ApiOperation({ summary: 'Register a new app for a developer project' })
   @ApiResponse({ status: 201, description: 'App registered (DRAFT)' })
@@ -39,6 +43,7 @@ export class MarketplaceController {
     return this.marketplaceService.registerApp(projectId, data);
   }
 
+  @RequirePermissions('platform.manage')
   @Post('apps/:appId/versions')
   @ApiOperation({ summary: 'Submit a new version of an app for review' })
   @ApiResponse({ status: 201, description: 'Version submitted for review' })
@@ -52,6 +57,7 @@ export class MarketplaceController {
 
   // --- Admin Endpoints (requires advanced RBAC) ---
 
+  @RequirePermissions('platform.manage')
   @Put('versions/:versionId/approve')
   @ApiOperation({ summary: 'Approve an app version (admin only)' })
   @ApiResponse({ status: 200, description: 'Version approved and app published' })
@@ -61,6 +67,7 @@ export class MarketplaceController {
 
   // --- Tenant Installations ---
 
+  @RequirePermissions('platform.manage')
   @Post('apps/:appId/install')
   @ApiOperation({ summary: 'Install a marketplace app for a tenant' })
   @ApiResponse({ status: 201, description: 'App installed successfully' })
@@ -72,6 +79,7 @@ export class MarketplaceController {
     return this.marketplaceService.installApp(appId, body.tenantId, body.installedBy);
   }
 
+  @RequirePermissions('platform.manage')
   @Get('tenants/:tenantId/installations')
   @ApiOperation({ summary: 'List all installed apps for a tenant' })
   @ApiResponse({ status: 200, description: 'List of tenant app installations' })

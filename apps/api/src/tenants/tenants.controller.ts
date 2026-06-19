@@ -16,12 +16,14 @@ import type { CurrentUserPayload } from '../common/decorators/current-user.decor
 export class TenantsController {
   constructor(private readonly tenantsService: TenantsService) {}
 
+  @RequirePermissions('read:tenants')
   @Get('me')
   @ApiOperation({ summary: 'Get current tenant details' })
   async getMyTenant(@CurrentUser() user: CurrentUserPayload) {
     return this.tenantsService.findOne(user.tenantId);
   }
 
+  @RequirePermissions('update:tenants')
   @Put('me')
   @ApiOperation({ summary: 'Update current tenant settings' })
   @ApiBody({ type: UpdateTenantSettingsDto })
@@ -36,12 +38,14 @@ export class TenantsController {
   }
 
   // Super-Admin endpoints (in a real app, these would be protected by a SuperAdmin guard)
+  @RequirePermissions('read:tenants')
   @Get()
   @ApiOperation({ summary: '(Super Admin) List all tenants' })
   async getAllTenants() {
     return this.tenantsService.findAll();
   }
 
+  @RequirePermissions('read:tenants')
   @Get(':id')
   @ApiOperation({ summary: '(Super Admin) Get tenant by ID' })
   async getTenantById(@Param('id') id: string) {

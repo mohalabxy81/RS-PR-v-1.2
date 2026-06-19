@@ -16,6 +16,7 @@ import type { CurrentUserPayload } from '../common/decorators/current-user.decor
 export class CustomersController {
   constructor(private readonly customersService: CustomersService) {}
 
+  @RequirePermissions('create:customers')
   @Post()
   @ApiOperation({ summary: 'Create a new customer' })
   @ApiBody({ type: CreateCustomerDto })
@@ -24,6 +25,7 @@ export class CustomersController {
     return this.customersService.create(user.tenantId, data);
   }
 
+  @RequirePermissions('read:customers')
   @Get()
   @ApiOperation({ summary: 'List all customers' })
   @RequirePermissions(PERMISSIONS.READ_CUSTOMER)
@@ -31,6 +33,7 @@ export class CustomersController {
     return this.customersService.findAll(user.tenantId, query);
   }
 
+  @RequirePermissions('read:customers')
   @Get(':id')
   @ApiOperation({ summary: 'Get customer details' })
   @RequirePermissions(PERMISSIONS.READ_CUSTOMER)
@@ -38,6 +41,7 @@ export class CustomersController {
     return this.customersService.findOne(user.tenantId, id);
   }
 
+  @RequirePermissions('update:customers')
   @Put(':id')
   @ApiOperation({ summary: 'Update a customer' })
   @ApiBody({ type: UpdateCustomerDto })
@@ -50,6 +54,7 @@ export class CustomersController {
     return this.customersService.update(user.tenantId, id, data);
   }
 
+  @RequirePermissions('create:customers')
   @Post(':id/notes')
   @ApiOperation({ summary: 'Add a note to a customer' })
   @ApiBody({ type: AddCustomerNoteDto })

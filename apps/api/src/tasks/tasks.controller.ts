@@ -16,6 +16,7 @@ import type { CurrentUserPayload } from '../common/decorators/current-user.decor
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
+  @RequirePermissions('create:tasks')
   @Post()
   @ApiOperation({ summary: 'Create a new task' })
   @ApiBody({ type: CreateTaskDto })
@@ -24,6 +25,7 @@ export class TasksController {
     return this.tasksService.create(user.tenantId, user.userId, data);
   }
 
+  @RequirePermissions('read:tasks')
   @Get()
   @ApiOperation({ summary: 'List all tasks' })
   @RequirePermissions(PERMISSIONS.READ_TASK)
@@ -31,6 +33,7 @@ export class TasksController {
     return this.tasksService.findAll(user.tenantId, query);
   }
 
+  @RequirePermissions('read:tasks')
   @Get(':id')
   @ApiOperation({ summary: 'Get task details' })
   @RequirePermissions(PERMISSIONS.READ_TASK)
@@ -38,6 +41,7 @@ export class TasksController {
     return this.tasksService.findOne(user.tenantId, id);
   }
 
+  @RequirePermissions('update:tasks')
   @Put(':id')
   @ApiOperation({ summary: 'Update a task' })
   @ApiBody({ type: UpdateTaskDto })
@@ -50,6 +54,7 @@ export class TasksController {
     return this.tasksService.update(user.tenantId, id, data);
   }
 
+  @RequirePermissions('create:tasks')
   @Post(':id/comments')
   @ApiOperation({ summary: 'Add a comment to a task' })
   @ApiBody({ type: AddTaskCommentDto })
@@ -62,6 +67,7 @@ export class TasksController {
     return this.tasksService.addComment(user.tenantId, id, user.userId, body.content);
   }
 
+  @RequirePermissions('delete:tasks')
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a task' })
   @RequirePermissions(PERMISSIONS.DELETE_TASK)

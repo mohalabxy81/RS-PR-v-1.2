@@ -15,6 +15,7 @@ import type { CurrentUserPayload } from '../common/decorators/current-user.decor
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
+  @RequirePermissions('create:files')
   @Post('upload-url')
   @ApiOperation({ summary: 'Request a pre-signed URL to upload a file directly to S3' })
   @RequirePermissions(PERMISSIONS.UPLOAD_FILE)
@@ -27,6 +28,7 @@ export class FilesController {
     return this.filesService.getUploadUrl(user.tenantId, filename, contentType, folder);
   }
 
+  @RequirePermissions('read:files')
   @Get('download-url')
   @ApiOperation({ summary: 'Request a pre-signed URL to download a private file' })
   async getDownloadUrl(

@@ -1,4 +1,5 @@
 import { Version, Controller, Get, Post, Put, Delete, Body, Param, UseGuards, Request, HttpCode, HttpStatus } from '@nestjs/common';
+import { RequirePermissions } from '../../common/decorators/require-permissions.decorator';
 import { AiAdminService } from './ai-admin.service';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiBody } from '@nestjs/swagger';
@@ -13,12 +14,14 @@ export class AiAdminController {
 
   // ─── PROVIDERS ──────────────────────────────────────────────────────────
 
+  @RequirePermissions('ai.manage')
   @Get('providers')
   @ApiOperation({ summary: 'List AI providers' })
   async listProviders(@Request() req: any) {
     return this.aiAdminService.listProviders(req.user.tenantId);
   }
 
+  @RequirePermissions('ai.manage')
   @Post('providers')
   @ApiOperation({ summary: 'Create a new AI provider' })
   @ApiBody({ type: CreateAiProviderDto })
@@ -28,12 +31,14 @@ export class AiAdminController {
 
   // ─── MODELS ─────────────────────────────────────────────────────────────
 
+  @RequirePermissions('ai.manage')
   @Get('models')
   @ApiOperation({ summary: 'List AI models' })
   async listModels(@Request() req: any) {
     return this.aiAdminService.listModels(req.user.tenantId);
   }
 
+  @RequirePermissions('ai.manage')
   @Post('models')
   @ApiOperation({ summary: 'Create a new AI model' })
   @ApiBody({ type: CreateAiModelDto })
@@ -43,12 +48,14 @@ export class AiAdminController {
 
   // ─── PROMPTS ────────────────────────────────────────────────────────────
 
+  @RequirePermissions('ai.manage')
   @Get('prompts')
   @ApiOperation({ summary: 'List all prompt templates' })
   async listPrompts(@Request() req: any) {
     return this.aiAdminService.listPrompts(req.user.tenantId);
   }
 
+  @RequirePermissions('ai.manage')
   @Post('prompts')
   @ApiOperation({ summary: 'Create a new prompt template' })
   @ApiBody({ type: CreateAiPromptDto })
@@ -56,6 +63,7 @@ export class AiAdminController {
     return this.aiAdminService.createPrompt({ tenantId: req.user.tenantId, ...body });
   }
 
+  @RequirePermissions('ai.manage')
   @Post('prompts/:id/versions')
   @ApiOperation({ summary: 'Create a new version for a prompt' })
   @ApiBody({ type: CreatePromptVersionDto })
@@ -63,6 +71,7 @@ export class AiAdminController {
     return this.aiAdminService.createPromptVersion(id, body.content, req.user.id);
   }
 
+  @RequirePermissions('ai.manage')
   @Post('prompts/:promptId/versions/:versionId/activate')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Activate a specific prompt version' })

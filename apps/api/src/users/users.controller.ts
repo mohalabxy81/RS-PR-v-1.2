@@ -16,6 +16,7 @@ import type { CurrentUserPayload } from '../common/decorators/current-user.decor
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @RequirePermissions('create:users')
   @Post()
   @ApiOperation({ summary: 'Create a new user' })
   @ApiBody({ type: CreateUserDto })
@@ -24,6 +25,7 @@ export class UsersController {
     return this.usersService.create(user.tenantId, data);
   }
 
+  @RequirePermissions('read:users')
   @Get()
   @ApiOperation({ summary: 'List all users in tenant' })
   @RequirePermissions(PERMISSIONS.READ_USER)
@@ -31,6 +33,7 @@ export class UsersController {
     return this.usersService.findAll(user.tenantId);
   }
 
+  @RequirePermissions('read:users')
   @Get(':id')
   @ApiOperation({ summary: 'Get user details' })
   @RequirePermissions(PERMISSIONS.READ_USER)
@@ -38,6 +41,7 @@ export class UsersController {
     return this.usersService.findOne(user.tenantId, id);
   }
 
+  @RequirePermissions('update:users')
   @Put(':id')
   @ApiOperation({ summary: 'Update a user' })
   @ApiBody({ type: UpdateUserDto })
@@ -50,6 +54,7 @@ export class UsersController {
     return this.usersService.update(user.tenantId, id, data);
   }
 
+  @RequirePermissions('delete:users')
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a user' })
   @RequirePermissions(PERMISSIONS.DELETE_USER)

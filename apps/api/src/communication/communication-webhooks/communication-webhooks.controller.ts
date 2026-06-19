@@ -1,10 +1,12 @@
 import { Version, Controller, Post, Body, Headers, Param, HttpCode, HttpStatus } from '@nestjs/common';
+import { RequirePermissions } from '../../common/decorators/require-permissions.decorator';
 import { CommunicationWebhooksService } from './communication-webhooks.service';
 
 @Controller('communication/webhooks')
 export class CommunicationWebhooksController {
   constructor(private readonly webhooksService: CommunicationWebhooksService) {}
 
+  @RequirePermissions('communication.manage')
   @Post(':providerAccountId')
   @HttpCode(HttpStatus.OK)
   async handleWebhook(

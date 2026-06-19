@@ -1,4 +1,5 @@
 import { Version, Controller, Get, Post, Put, Body, Param } from '@nestjs/common';
+import { RequirePermissions } from '../../common/decorators/require-permissions.decorator';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 import { PartnerService } from '../services/partner.service';
 import { RegisterPartnerDto, UpdatePartnerDto, CreateProgramDto } from '../dto/partner.dto';
@@ -9,6 +10,7 @@ import { RegisterPartnerDto, UpdatePartnerDto, CreateProgramDto } from '../dto/p
 export class PartnerController {
   constructor(private readonly partnerService: PartnerService) {}
 
+  @RequirePermissions('platform.manage')
   @Post('register')
   @ApiOperation({ summary: 'Register a new partner account' })
   @ApiResponse({ status: 201, description: 'Partner account created (PENDING approval)' })
@@ -18,6 +20,7 @@ export class PartnerController {
     return this.partnerService.registerPartner(userId, data);
   }
 
+  @RequirePermissions('platform.manage')
   @Get('profile/:userId')
   @ApiOperation({ summary: 'Get partner profile by user ID' })
   @ApiResponse({ status: 200, description: 'Partner profile returned' })
@@ -26,6 +29,7 @@ export class PartnerController {
     return this.partnerService.getPartnerProfile(userId);
   }
 
+  @RequirePermissions('platform.manage')
   @Put(':partnerId')
   @ApiOperation({ summary: 'Update partner account details' })
   @ApiResponse({ status: 200, description: 'Partner account updated' })
@@ -37,6 +41,7 @@ export class PartnerController {
     return this.partnerService.updatePartner(partnerId, data);
   }
 
+  @RequirePermissions('platform.manage')
   @Post(':partnerId/programs')
   @ApiOperation({ summary: 'Enroll a partner in a program' })
   @ApiResponse({ status: 201, description: 'Partner enrolled in program' })
@@ -48,6 +53,7 @@ export class PartnerController {
     return this.partnerService.joinProgram(partnerId, data);
   }
 
+  @RequirePermissions('platform.manage')
   @Get(':partnerId/programs')
   @ApiOperation({ summary: 'List partner programs' })
   @ApiResponse({ status: 200, description: 'List of programs' })
