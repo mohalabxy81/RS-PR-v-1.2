@@ -23,6 +23,46 @@ export class EventDispatcherService {
     await this.dispatch('lead.updated', payload);
   }
 
+  @OnEvent('deal.created')
+  async handleDealCreated(payload: any) {
+    await this.dispatch('deal.created', payload);
+  }
+
+  @OnEvent('deal.updated')
+  async handleDealUpdated(payload: any) {
+    await this.dispatch('deal.updated', payload);
+  }
+
+  @OnEvent('property.created')
+  async handlePropertyCreated(payload: any) {
+    await this.dispatch('property.created', payload);
+  }
+
+  @OnEvent('property.updated')
+  async handlePropertyUpdated(payload: any) {
+    await this.dispatch('property.updated', payload);
+  }
+
+  @OnEvent('customer.created')
+  async handleCustomerCreated(payload: any) {
+    await this.dispatch('customer.created', payload);
+  }
+
+  @OnEvent('customer.updated')
+  async handleCustomerUpdated(payload: any) {
+    await this.dispatch('customer.updated', payload);
+  }
+
+  @OnEvent('appointment.created')
+  async handleAppointmentCreated(payload: any) {
+    await this.dispatch('appointment.created', payload);
+  }
+
+  @OnEvent('appointment.updated')
+  async handleAppointmentUpdated(payload: any) {
+    await this.dispatch('appointment.updated', payload);
+  }
+
   async dispatch(eventName: string, data: any) {
     const tenantId = data.tenantId || data.projectId; // projectId is used in WebhookEndpoint
     if (!tenantId) return;

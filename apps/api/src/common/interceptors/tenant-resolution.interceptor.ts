@@ -11,6 +11,7 @@ import { Observable } from 'rxjs';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import type { Cache } from 'cache-manager';
+import { runWithTenant } from '../context/tenant-context';
 
 @Injectable()
 export class TenantResolutionInterceptor implements NestInterceptor {
@@ -73,6 +74,9 @@ export class TenantResolutionInterceptor implements NestInterceptor {
       }
 
       request.tenantId = tenantId;
+      
+      // Run the rest of the request within the tenant context
+      return runWithTenant(tenantId, () => next.handle());
     }
 
     return next.handle();

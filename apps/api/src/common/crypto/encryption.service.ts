@@ -10,6 +10,9 @@ export class EncryptionService {
   constructor() {
     const secretKey = process.env.ENCRYPTION_KEY;
     if (!secretKey) {
+      if (process.env.NODE_ENV === 'production') {
+        throw new Error('ENCRYPTION_KEY is required in production environment. System cannot start.');
+      }
       this.logger.warn('ENCRYPTION_KEY is not set in environment variables! Using a fallback key for development.');
       // Fallback for dev only. In prod, this should throw an error.
       this.key = crypto.scryptSync(process.env.JWT_SECRET || 'fallback_dev_secret', 'salt', 32);

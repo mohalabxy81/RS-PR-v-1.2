@@ -12,16 +12,22 @@ export class MarketplaceService {
   async registerApp(projectId: string, data: any) {
     const clientId = crypto.randomBytes(16).toString('hex');
     const clientSecret = crypto.randomBytes(32).toString('hex');
+    const clientSecretHash = crypto.createHash('sha256').update(clientSecret).digest('hex');
 
-    return this.prisma.platformApp.create({
+    const app = await this.prisma.platformApp.create({
       data: {
         ...data,
         projectId,
         clientId,
-        clientSecret,
+        clientSecret: clientSecretHash,
         status: 'DRAFT',
       },
     });
+
+    return {
+      ...app,
+      clientSecret, // Return plaintext secret only once
+    };
   }
 
   async getApp(appId: string) {
