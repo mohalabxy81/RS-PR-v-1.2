@@ -1,10 +1,11 @@
-import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
+import { Version, Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 import { WebhookService } from '../services/webhook.service';
 import { RegisterWebhookDto, UpdateWebhookDto } from '../dto/webhook.dto';
 
 @ApiTags('platform-webhooks')
 @ApiBearerAuth('access-token')
+@Version('1')
 @Controller({ path: 'platform/webhooks', version: '1' })
 export class WebhookController {
   constructor(private readonly webhookService: WebhookService) {}

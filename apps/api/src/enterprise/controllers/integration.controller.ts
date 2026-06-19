@@ -1,6 +1,7 @@
-import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
+import { Version, Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
 import { IntegrationService } from '../services/integration.service';
 
+@Version('1')
 @Controller('enterprise/integrations')
 export class IntegrationController {
   constructor(private readonly integrationService: IntegrationService) {}

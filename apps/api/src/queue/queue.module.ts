@@ -22,6 +22,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       { name: 'webhooks' },
       { name: 'campaigns' },
       { name: 'automations' },
+      { name: 'api-usage-queue' },
+      { name: 'webhook-queue' },
+      { name: 'email-queue' },
+      { name: 'notification-queue' },
+      { name: 'report-queue' },
+      { name: 'cleanup-queue' },
       // Phase 4: Recommendation Queues
       { name: 'embedding-generation' },
       { name: 'feature-extraction' },

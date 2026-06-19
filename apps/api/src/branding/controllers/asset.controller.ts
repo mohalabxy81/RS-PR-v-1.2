@@ -1,6 +1,7 @@
-import { Controller, Get, Post, Param, Delete, Body } from '@nestjs/common';
+import { Version, Controller, Get, Post, Param, Delete, Body } from '@nestjs/common';
 import { AssetService } from '../services/asset.service';
 
+@Version('1')
 @Controller('branding/assets')
 export class AssetController {
   constructor(private readonly assetService: AssetService) {}

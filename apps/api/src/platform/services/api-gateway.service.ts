@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
-import { randomBytes } from 'crypto';
+import * as crypto from 'crypto';
 import { RegisterOAuthClientDto, CreateApiProductDto, CreateApiPlanDto } from '../dto/api-gateway.dto';
 
 @Injectable()
@@ -10,21 +10,32 @@ export class ApiGatewayService {
   // --- API Keys ---
 
   async generateApiKey(developerId: string, name: string, scopes: string[]) {
-    // Basic API Key generation logic
-    const key = randomBytes(32).toString('hex');
-    return this.prisma.developerApiKey.create({
+    const prefix = `dev_${crypto.randomBytes(4).toString('hex')}`;
+    const rawKey = `${prefix}_${crypto.randomBytes(24).toString('hex')}`;
+    const keyHash = crypto.createHash('sha256').update(rawKey).digest('hex');
+
+    await this.prisma.developerApiKey.create({
       data: {
         developerId,
-        key,
+        prefix,
+        keyHash,
         name,
         scopes,
       },
     });
+
+    // Return the unhashed key only once
+    return {
+      key: rawKey,
+      name,
+      scopes,
+    };
   }
 
   async validateApiKey(key: string) {
+    const keyHash = crypto.createHash('sha256').update(key).digest('hex');
     const apiKey = await this.prisma.developerApiKey.findUnique({
-      where: { key },
+      where: { keyHash },
       include: { developer: true },
     });
     
@@ -38,7 +49,7 @@ export class ApiGatewayService {
 
     // Update last used asynchronously (fire and forget pattern could be used in production)
     await this.prisma.developerApiKey.update({
-      where: { key },
+      where: { id: apiKey.id },
       data: { lastUsedAt: new Date() },
     });
 
@@ -48,18 +59,24 @@ export class ApiGatewayService {
   // --- OAuth Clients ---
 
   async registerOAuthClient(developerId: string, data: RegisterOAuthClientDto) {
-    const clientId = `client_${randomBytes(12).toString('hex')}`;
-    const clientSecret = `secret_${randomBytes(24).toString('hex')}`;
+    const clientId = `client_${crypto.randomBytes(12).toString('hex')}`;
+    const rawClientSecret = `secret_${crypto.randomBytes(24).toString('hex')}`;
+    const clientSecretHash = crypto.createHash('sha256').update(rawClientSecret).digest('hex');
 
-    return this.prisma.developerOAuthClient.create({
+    const client = await this.prisma.developerOAuthClient.create({
       data: {
         name: data.appName,
         redirectUris: data.redirectUris,
         developerId,
         clientId,
-        clientSecret,
+        clientSecretHash,
       },
     });
+
+    return {
+      ...client,
+      clientSecret: rawClientSecret, // Return plain secret only once
+    };
   }
 
   // --- API Products & Plans ---

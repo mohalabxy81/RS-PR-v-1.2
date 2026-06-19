@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Version, Controller, Get, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { DashboardService } from './dashboard.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -6,6 +6,7 @@ import { CurrentUser } from "../common/decorators/current-user.decorator";
 import type { CurrentUserPayload } from '../common/decorators/current-user.decorator';
 
 @ApiTags('dashboard')
+@Version('1')
 @Controller({ path: 'dashboard', version: '1' })
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth('access-token')

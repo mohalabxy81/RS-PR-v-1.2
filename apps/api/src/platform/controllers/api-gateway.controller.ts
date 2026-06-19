@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Req, UnauthorizedException, UseInterceptors } from '@nestjs/common';
+import { Version, Controller, Get, Post, Body, Param, Req, UnauthorizedException, UseInterceptors } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 import { ApiGatewayService } from '../services/api-gateway.service';
 import { ApiUsageInterceptor } from '../interceptors/api-usage.interceptor';
@@ -6,6 +6,7 @@ import { GenerateApiKeyDto, RegisterOAuthClientDto, CreateApiProductDto, CreateA
 
 @ApiTags('platform-gateway')
 @ApiBearerAuth('access-token')
+@Version('1')
 @Controller({ path: 'platform/gateway', version: '1' })
 @UseInterceptors(ApiUsageInterceptor)
 export class ApiGatewayController {

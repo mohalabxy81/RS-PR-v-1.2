@@ -1,12 +1,17 @@
-import { Injectable, NotFoundException, BadRequestException, Logger } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, Logger, Inject } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { randomBytes, createHash } from 'crypto';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import type { Cache } from 'cache-manager';
 
 @Injectable()
 export class ApiKeyService {
   private readonly logger = new Logger(ApiKeyService.name);
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+  ) {}
 
   private hashKey(key: string): string {
     return createHash('sha256').update(key).digest('hex');
@@ -55,28 +60,25 @@ export class ApiKeyService {
 
   async validateApiKey(key: string): Promise<any> {
     const keyHash = this.hashKey(key);
+    const cacheKey = `apikey_valid:${keyHash}`;
 
-    // Note: We should ideally cache this in Redis to save DB queries
-    const apiKeyRecord = await this.prisma.apiKey.findUnique({
-      where: { keyHash },
-    });
+    let apiKeyRecord = await this.cacheManager.get<any>(cacheKey);
 
     if (!apiKeyRecord) {
-      return null;
-    }
+      apiKeyRecord = await this.prisma.apiKey.findUnique({
+        where: { keyHash },
+      });
 
-    if (apiKeyRecord.status !== 'ACTIVE') {
-      return null;
-    }
+      if (!apiKeyRecord) return null;
+      if (apiKeyRecord.status !== 'ACTIVE') return null;
 
-    if (apiKeyRecord.expiresAt && apiKeyRecord.expiresAt < new Date()) {
-      await this.revokeApiKey(apiKeyRecord.id); // Auto revoke
-      return null;
-    }
+      if (apiKeyRecord.expiresAt && new Date(apiKeyRecord.expiresAt) < new Date()) {
+        await this.revokeApiKey(apiKeyRecord.id);
+        return null;
+      }
 
-    // Update lastUsedAt asynchronously or via BullMQ in production, 
-    // but for simplicity here we do it inline or defer it
-    // We defer to the Usage worker to update lastUsedAt to avoid blocking requests.
+      await this.cacheManager.set(cacheKey, apiKeyRecord, 60000); // 1 minute
+    }
 
     return apiKeyRecord;
   }
@@ -98,9 +100,51 @@ export class ApiKeyService {
   }
 
   async revokeApiKey(id: string) {
-    return this.prisma.apiKey.update({
+    const key = await this.prisma.apiKey.update({
       where: { id },
       data: { status: 'REVOKED' },
+    });
+    // Invalidate cache
+    await this.cacheManager.del(`apikey_valid:${key.keyHash}`);
+    return key;
+  }
+
+  async rotateApiKey(tenantId: string, id: string, gracePeriodHours: number = 24) {
+    const oldKey = await this.prisma.apiKey.findUnique({ where: { id, tenantId } });
+    if (!oldKey || oldKey.status !== 'ACTIVE') {
+      throw new NotFoundException('Active API Key not found');
+    }
+
+    // Create new key
+    const newKey = await this.createApiKey(tenantId, oldKey.name, oldKey.scopes);
+
+    // Set expiry on old key
+    const expiresAt = new Date();
+    expiresAt.setHours(expiresAt.getHours() + gracePeriodHours);
+
+    await this.prisma.apiKey.update({
+      where: { id },
+      data: { expiresAt },
+    });
+
+    await this.cacheManager.del(`apikey_valid:${oldKey.keyHash}`);
+
+    return newKey;
+  }
+
+  async getUsageHistory(tenantId: string, apiKeyId: string, days: number = 30) {
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - days);
+
+    return this.prisma.apiUsageLog.groupBy({
+      by: ['method', 'statusCode'],
+      where: {
+        tenantId,
+        apiKeyId,
+        timestamp: { gte: startDate },
+      },
+      _count: { id: true },
+      _sum: { requestSize: true, responseSize: true, costUnit: true },
     });
   }
 }

@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Body, Query, UseGuards, Request, HttpCode, HttpStatus } from '@nestjs/common';
+import { Version, Controller, Post, Get, Body, Query, UseGuards, Request, HttpCode, HttpStatus } from '@nestjs/common';
 import { AiFeedbackService } from './ai-feedback.service';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
@@ -6,6 +6,7 @@ import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 @ApiTags('AI Feedback')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
+@Version('1')
 @Controller('ai/feedback')
 export class AiFeedbackController {
   constructor(private readonly aiFeedbackService: AiFeedbackService) {}

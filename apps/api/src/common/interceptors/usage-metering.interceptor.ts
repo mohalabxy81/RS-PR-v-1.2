@@ -40,19 +40,34 @@ export class UsageMeteringInterceptor implements NestInterceptor {
 
       const tenantId = request.tenantId; // Set by TenantResolutionInterceptor
       const apiKeyId = request.apiKeyId; // Set by ApiKeyGuard
+      const developerId = request.developerId; // Set by Developer AuthGuard
 
-      if (!tenantId) return; // Skip if no tenant (e.g. public non-tenant route)
+      if (!tenantId && !developerId) return; // Skip if no tenant or developer
 
       const latencyMs = Date.now() - startTime;
       const statusCode = error ? error.status || 500 : response.statusCode;
 
-      // Estimate sizes
-      const requestSize = JSON.stringify(request.body || {}).length;
-      const responseSize = JSON.stringify(responseBody || {}).length;
+      // Estimate sizes using content-length if available, otherwise fallback
+      const reqContentLength = request.headers['content-length'];
+      const requestSize = reqContentLength 
+        ? parseInt(reqContentLength, 10) 
+        : (request.body ? Buffer.byteLength(JSON.stringify(request.body)) : 0);
+
+      const resContentLength = response.getHeaders?.()?.['content-length'];
+      const responseSize = resContentLength
+        ? parseInt(resContentLength as string, 10)
+        : (responseBody ? Buffer.byteLength(JSON.stringify(responseBody)) : 0);
+
+      // Calculate cost unit (simple example: 1 per request + extra for large payloads)
+      let costUnit = 1.0;
+      if (requestSize + responseSize > 1024 * 100) { // Over 100KB
+        costUnit += 1.0;
+      }
 
       // Add to queue for asynchronous processing
       await this.usageQueue.add('log-usage', {
         tenantId,
+        developerId,
         apiKeyId,
         endpoint: request.url,
         method: request.method,
@@ -60,7 +75,7 @@ export class UsageMeteringInterceptor implements NestInterceptor {
         requestSize,
         responseSize,
         latencyMs,
-        costUnit: 1.0, // Default cost, can vary by endpoint
+        costUnit,
         ipAddress: request.ip,
         userAgent: request.headers['user-agent'],
         timestamp: new Date().toISOString(),

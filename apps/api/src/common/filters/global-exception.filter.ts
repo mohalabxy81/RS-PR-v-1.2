@@ -19,7 +19,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     const request = ctx.getRequest<Request>();
 
     let status = HttpStatus.INTERNAL_SERVER_ERROR;
-    let message = 'An unexpected error occurred';
+    let message: string | string[] = 'An unexpected error occurred';
     let error = 'Internal Server Error';
 
     if (exception instanceof HttpException) {
@@ -28,10 +28,10 @@ export class GlobalExceptionFilter implements ExceptionFilter {
 
       if (typeof exceptionResponse === 'string') {
         message = exceptionResponse;
-      } else if (typeof exceptionResponse === 'object') {
-        const resp = exceptionResponse as Record<string, unknown>;
-        message = (resp.message as string) || message;
-        error = (resp.error as string) || error;
+      } else if (typeof exceptionResponse === 'object' && exceptionResponse !== null) {
+        const resp = exceptionResponse as Record<string, any>;
+        message = resp.message || message;
+        error = resp.error || error;
       }
     } else if (exception instanceof Prisma.PrismaClientKnownRequestError) {
       // Handle Prisma errors — never expose raw DB errors to client
@@ -59,17 +59,20 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       );
     }
 
-    const requestId = request.headers['x-request-id'] || (request as any).id;
-    const correlationId = request.headers['x-correlation-id'] || requestId;
+    const requestId = (request as any).id || request.headers['x-request-id'] || 'unknown';
+    const correlationId = (request as any).correlationId || request.headers['x-correlation-id'] || requestId;
 
     response.status(status).json({
-      statusCode: status,
-      error,
-      message,
+      success: false,
+      error: {
+        code: status,
+        type: error,
+        message,
+      },
       path: request.url,
-      timestamp: new Date().toISOString(),
       requestId,
       correlationId,
+      timestamp: new Date().toISOString(),
     });
   }
 }

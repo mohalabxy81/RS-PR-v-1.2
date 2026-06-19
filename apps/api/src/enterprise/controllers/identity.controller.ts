@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
+import { Version, Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
 import { SsoService } from '../services/sso.service';
 import { SecurityService } from '../services/security.service';
 
+@Version('1')
 @Controller('enterprise/identity')
 export class IdentityController {
   constructor(

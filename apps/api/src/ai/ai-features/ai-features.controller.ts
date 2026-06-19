@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Param, UseGuards, Request, HttpCode, HttpStatus } from '@nestjs/common';
+import { Version, Controller, Post, Body, Param, UseGuards, Request, HttpCode, HttpStatus } from '@nestjs/common';
 import { AiFeaturesService } from './ai-features.service';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
@@ -6,6 +6,7 @@ import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 @ApiTags('AI Features')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
+@Version('1')
 @Controller('ai')
 export class AiFeaturesController {
   constructor(private readonly aiFeaturesService: AiFeaturesService) {}

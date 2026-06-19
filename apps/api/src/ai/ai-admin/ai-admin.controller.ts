@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards, Request, HttpCode, HttpStatus } from '@nestjs/common';
+import { Version, Controller, Get, Post, Put, Delete, Body, Param, UseGuards, Request, HttpCode, HttpStatus } from '@nestjs/common';
 import { AiAdminService } from './ai-admin.service';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiBody } from '@nestjs/swagger';
@@ -7,6 +7,7 @@ import { CreateAiProviderDto, CreateAiModelDto, CreateAiPromptDto, CreatePromptV
 @ApiTags('AI Admin')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
+@Version('1')
 @Controller('ai/admin')
 export class AiAdminController {
   constructor(private readonly aiAdminService: AiAdminService) {}

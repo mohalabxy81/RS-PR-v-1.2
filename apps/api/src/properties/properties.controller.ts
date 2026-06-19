@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Body, Param, Query, UseGuards } from '@nestjs/common';
+import { Version, Controller, Get, Post, Put, Body, Param, Query, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth, ApiBody, ApiQuery } from '@nestjs/swagger';
 import { PropertiesService } from './properties.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -10,6 +10,7 @@ import { CreatePropertyDto, UpdatePropertyDto, QueryPropertyDto } from './dto/pr
 import type { CurrentUserPayload } from '../common/decorators/current-user.decorator';
 
 @ApiTags('properties')
+@Version('1')
 @Controller({ path: 'properties', version: '1' })
 @UseGuards(JwtAuthGuard, PermissionsGuard)
 @ApiBearerAuth('access-token')

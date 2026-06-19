@@ -1,6 +1,7 @@
-import { Controller, Post, Body, Headers, Param, HttpCode, HttpStatus } from '@nestjs/common';
+import { Version, Controller, Post, Body, Headers, Param, HttpCode, HttpStatus } from '@nestjs/common';
 import { CommunicationWebhooksService } from './communication-webhooks.service';
 
+@Version('1')
 @Controller('communication/webhooks')
 export class CommunicationWebhooksController {
   constructor(private readonly webhooksService: CommunicationWebhooksService) {}

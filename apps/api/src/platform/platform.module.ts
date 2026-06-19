@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { BullModule } from '@nestjs/bullmq';
 import { PrismaModule } from '../prisma/prisma.module';
-import { UsageMeteringInterceptor } from '../common/interceptors/usage-metering.interceptor';
 
 // Controllers
 import { DeveloperController } from './controllers/developer.controller';
@@ -41,10 +40,6 @@ import { WebhookWorker } from './workers/webhook.worker';
     PartnerController,
   ],
   providers: [
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: UsageMeteringInterceptor,
-    },
     EventDispatcherService,
     DeveloperService,
     ApiGatewayService,

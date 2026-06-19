@@ -1,10 +1,11 @@
-import { Controller, Get, Post, Body, Param, Put } from '@nestjs/common';
+import { Version, Controller, Get, Post, Body, Param, Put } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 import { MarketplaceService } from '../services/marketplace.service';
 import { RegisterAppDto, CreateAppVersionDto, InstallAppDto } from '../dto/marketplace.dto';
 
 @ApiTags('platform-marketplace')
 @ApiBearerAuth('access-token')
+@Version('1')
 @Controller({ path: 'platform/marketplace', version: '1' })
 export class MarketplaceController {
   constructor(private readonly marketplaceService: MarketplaceService) {}

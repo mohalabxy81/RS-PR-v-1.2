@@ -1,10 +1,11 @@
-import { Controller, Get, Post, Put, Body, Param } from '@nestjs/common';
+import { Version, Controller, Get, Post, Put, Body, Param } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 import { PartnerService } from '../services/partner.service';
 import { RegisterPartnerDto, UpdatePartnerDto, CreateProgramDto } from '../dto/partner.dto';
 
 @ApiTags('platform-partners')
 @ApiBearerAuth('access-token')
+@Version('1')
 @Controller({ path: 'platform/partners', version: '1' })
 export class PartnerController {
   constructor(private readonly partnerService: PartnerService) {}

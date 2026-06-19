@@ -288,16 +288,12 @@ export class AuthService {
     const expiresAt = new Date();
     expiresAt.setHours(expiresAt.getHours() + RESET_TOKEN_TTL_HOURS);
 
-    // Store reset token in audit log metadata (simplified for Phase 1)
-    // TODO: In production use a dedicated PasswordResetToken table
-    await this.prisma.auditLog.create({
+    // Store reset token in the dedicated table
+    await this.prisma.passwordResetToken.create({
       data: {
-        tenantId: user.tenantId,
         userId: user.id,
-        action: 'password_reset_requested',
-        entity: 'User',
-        entityId: user.id,
-        after: { resetTokenHash, expiresAt: expiresAt.toISOString() },
+        tokenHash: resetTokenHash,
+        expiresAt,
       },
     });
 
@@ -316,34 +312,37 @@ export class AuthService {
       .update(dto.token)
       .digest('hex');
 
-    // Find the most recent valid reset request
-    const auditEntry = await this.prisma.auditLog.findFirst({
+    // Find the valid reset request
+    const resetRequest = await this.prisma.passwordResetToken.findFirst({
       where: {
-        action: 'password_reset_requested',
-        after: { path: ['resetTokenHash'], equals: resetTokenHash },
+        tokenHash: resetTokenHash,
+        usedAt: null,
       },
-      orderBy: { createdAt: 'desc' },
     });
 
-    if (!auditEntry || !auditEntry.after) {
+    if (!resetRequest) {
       throw new BadRequestException('Invalid or expired reset token');
     }
 
-    const tokenData = auditEntry.after as { resetTokenHash: string; expiresAt: string };
-    if (new Date(tokenData.expiresAt) < new Date()) {
+    if (new Date(resetRequest.expiresAt) < new Date()) {
       throw new BadRequestException('Reset token has expired');
     }
 
     const passwordHash = await bcrypt.hash(dto.password, BCRYPT_ROUNDS);
 
     await this.prisma.$transaction([
+      // Mark token as used
+      this.prisma.passwordResetToken.update({
+        where: { id: resetRequest.id },
+        data: { usedAt: new Date() },
+      }),
       this.prisma.user.update({
-        where: { id: auditEntry.userId! },
+        where: { id: resetRequest.userId },
         data: { passwordHash, status: 'ACTIVE' },
       }),
       // Invalidate all sessions after password reset
       this.prisma.refreshToken.updateMany({
-        where: { userId: auditEntry.userId!, revokedAt: null },
+        where: { userId: resetRequest.userId, revokedAt: null },
         data: { revokedAt: new Date() },
       }),
     ]);

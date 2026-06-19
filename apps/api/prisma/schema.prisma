@@ -249,6 +249,7 @@ model User {
   updatedAt       DateTime   @updatedAt
 
   refreshTokens         RefreshToken[]
+  passwordResetTokens   PasswordResetToken[]
   leadsAssigned         Lead[]                 @relation("LeadAssignee")
   leadsCreated          Lead[]                 @relation("LeadCreator")
   customersAssigned     Customer[]             @relation("CustomerAssignee")
@@ -277,6 +278,18 @@ model User {
 
   @@index([tenantId])
   @@index([tenantId, email])
+}
+
+model PasswordResetToken {
+  id        String    @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
 }
 
 // ─────────────────────────────────────────────
@@ -322,6 +335,7 @@ model ApiUsageLog {
 
   @@index([tenantId, timestamp])
   @@index([apiKeyId])
+  @@index([tenantId, apiKeyId, timestamp])
 }
 
 // ─────────────────────────────────────────────
@@ -344,6 +358,7 @@ model RefreshToken {
 
   @@index([userId])
   @@index([tokenHash])
+  @@index([userId, revokedAt])
 }
 
 // ─────────────────────────────────────────────
@@ -825,6 +840,7 @@ model AuditLog {
   @@index([tenantId, entity, entityId])
   @@index([tenantId, userId])
   @@index([tenantId, createdAt])
+  @@index([tenantId, action, createdAt])
 }
 
 // ─────────────────────────────────────────────
@@ -2477,7 +2493,8 @@ model DeveloperApiKey {
   id              String   @id @default(uuid())
   developerId     String
   developer       DeveloperAccount @relation(fields: [developerId], references: [id], onDelete: Cascade)
-  key             String   @unique
+  keyHash         String   @unique
+  prefix          String
   name            String
   scopes          String[]
   expiresAt       DateTime?
@@ -2490,7 +2507,7 @@ model DeveloperOAuthClient {
   developerId     String
   developer       DeveloperAccount @relation(fields: [developerId], references: [id], onDelete: Cascade)
   clientId        String   @unique
-  clientSecret    String
+  clientSecretHash String
   redirectUris    String[]
   name            String
   createdAt       DateTime @default(now())
@@ -2542,6 +2559,7 @@ model WebhookEndpoint {
   secret          String?
   events          String[] // e.g., ["lead.created", "property.updated"]
   status          String   // ACTIVE, DISABLED
+  isActive        Boolean  @default(true)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
@@ -2558,6 +2576,8 @@ model WebhookDelivery {
   payload         Json
   response        Json?
   createdAt       DateTime @default(now())
+
+  @@index([endpointId, status, createdAt])
 }
 
 model EventLog {

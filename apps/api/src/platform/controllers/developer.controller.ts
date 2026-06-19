@@ -1,10 +1,11 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Version, Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 import { DeveloperService } from '../services/developer.service';
 import { RegisterDeveloperDto, CreateOrganizationDto, CreateTeamDto, CreateProjectDto } from '../dto/developer.dto';
 
 @ApiTags('platform-developers')
 @ApiBearerAuth('access-token')
+@Version('1')
 @Controller({ path: 'platform/developers', version: '1' })
 export class DeveloperController {
   constructor(private readonly developerService: DeveloperService) {}
