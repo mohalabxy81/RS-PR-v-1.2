@@ -43,22 +43,22 @@ export class OwnershipGuard implements CanActivate {
 
     switch (ownershipMetadata.resourceType) {
       case 'Lead':
-        resource = await this.prisma.lead.findUnique({ where: { id: resourceId } });
+        resource = await this.prisma.lead.findFirst({ where: { id: resourceId, tenantId: user.tenantId } });
         break;
       case 'Deal':
-        resource = await this.prisma.deal.findUnique({ where: { id: resourceId } });
+        resource = await this.prisma.deal.findFirst({ where: { id: resourceId, tenantId: user.tenantId } });
         break;
       case 'Property':
-        resource = await this.prisma.property.findUnique({ where: { id: resourceId } });
+        resource = await this.prisma.property.findFirst({ where: { id: resourceId, tenantId: user.tenantId } });
         break;
       case 'Customer':
-        resource = await this.prisma.customer.findUnique({ where: { id: resourceId } });
+        resource = await this.prisma.customer.findFirst({ where: { id: resourceId, tenantId: user.tenantId } });
         break;
       case 'Task':
-        resource = await this.prisma.task.findUnique({ where: { id: resourceId } });
+        resource = await this.prisma.task.findFirst({ where: { id: resourceId, tenantId: user.tenantId } });
         break;
       case 'Appointment':
-        resource = await this.prisma.appointment.findUnique({ where: { id: resourceId } });
+        resource = await this.prisma.appointment.findFirst({ where: { id: resourceId, tenantId: user.tenantId } });
         break;
       default:
         throw new ForbiddenException('Unsupported resource type for ownership validation');
@@ -66,11 +66,6 @@ export class OwnershipGuard implements CanActivate {
 
     if (!resource) {
       throw new NotFoundException(`${ownershipMetadata.resourceType} not found`);
-    }
-
-    // 1. Tenant Isolation check (Hard boundary)
-    if (resource.tenantId !== user.tenantId) {
-      throw new ForbiddenException('Cross-tenant access denied');
     }
 
     // 2. Ownership check

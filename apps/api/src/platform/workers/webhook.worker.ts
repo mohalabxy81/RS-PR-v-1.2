@@ -50,6 +50,7 @@ export class WebhookWorker extends WorkerHost {
       await this.prisma.webhookDelivery.create({
         data: {
           endpointId,
+          tenantId: endpoint.tenantId,
           eventId: payload.id || 'evt_' + Date.now(),
           payload: payload,
           statusCode: response.status,
@@ -77,6 +78,7 @@ export class WebhookWorker extends WorkerHost {
       await this.prisma.webhookDelivery.create({
         data: {
           endpointId,
+          tenantId: endpoint.tenantId,
           eventId: payload.id || 'evt_' + Date.now(),
           payload: payload,
           statusCode: 0,

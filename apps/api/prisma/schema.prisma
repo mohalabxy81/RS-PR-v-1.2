@@ -229,20 +229,20 @@ model Branch {
 }
 
 model User {
-  id              String     @id @default(uuid())
-  tenantId        String
-  tenant          Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  branchId        String?
-  branch          Branch?    @relation(fields: [branchId], references: [id], onDelete: SetNull)
-  roleId          String?
-  role            Role?      @relation(fields: [roleId], references: [id])
-  email           String     @unique
-  passwordHash    String
-  firstName       String
-  lastName        String
-  phone           String?
-  avatarUrl       String?
-  status          UserStatus @default(INVITED)
+  id                  String     @id @default(uuid())
+  tenantId            String
+  tenant              Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  branchId            String?
+  branch              Branch?    @relation(fields: [branchId], references: [id], onDelete: SetNull)
+  roleId              String?
+  role                Role?      @relation(fields: [roleId], references: [id])
+  email               String     @unique
+  passwordHash        String
+  firstName           String
+  lastName            String
+  phone               String?
+  avatarUrl           String?
+  status              UserStatus @default(INVITED)
   emailVerifiedAt     DateTime?
   lastLoginAt         DateTime?
   failedLoginAttempts Int        @default(0)
@@ -301,24 +301,24 @@ model PasswordResetToken {
 // ─────────────────────────────────────────────
 
 model ApiKey {
-  id         String    @id @default(uuid())
-  tenantId   String
-  tenant     Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  name       String
-  keyHash    String    @unique
-  prefix     String    // e.g., 'reis_test_abcd'
-  scopes     String[]  // e.g., ['read:leads', 'write:leads']
-  ipWhitelist String[] @default([])
-  referrers   String[] @default([])
-  createdIp   String?
+  id               String    @id @default(uuid())
+  tenantId         String
+  tenant           Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  name             String
+  keyHash          String    @unique
+  prefix           String // e.g., 'reis_test_abcd'
+  scopes           String[] // e.g., ['read:leads', 'write:leads']
+  ipWhitelist      String[]  @default([])
+  referrers        String[]  @default([])
+  createdIp        String?
   createdUserAgent String?
-  status     String    @default("ACTIVE") // ACTIVE, REVOKED, EXPIRED
-  expiresAt  DateTime?
-  lastUsedAt DateTime?
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+  status           String    @default("ACTIVE") // ACTIVE, REVOKED, EXPIRED
+  expiresAt        DateTime?
+  lastUsedAt       DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
 
-  usageLogs  ApiUsageLog[]
+  usageLogs ApiUsageLog[]
 
   @@index([tenantId])
   @@index([keyHash])
@@ -1014,6 +1014,7 @@ model AiKnowledgeSource {
 
 model AiEmbedding {
   id                String                      @id @default(uuid())
+  tenantId          String
   knowledgeSourceId String
   knowledgeSource   AiKnowledgeSource           @relation(fields: [knowledgeSourceId], references: [id], onDelete: Cascade)
   chunkIndex        Int
@@ -1021,6 +1022,7 @@ model AiEmbedding {
   embedding         Unsupported("vector(1536)")
   createdAt         DateTime                    @default(now())
 
+  @@index([tenantId])
   @@index([knowledgeSourceId])
 }
 
@@ -1585,6 +1587,7 @@ model PropertyVector {
   createdAt  DateTime                    @default(now())
   updatedAt  DateTime                    @updatedAt
 
+  @@index([tenantId])
   @@index([propertyId])
 }
 
@@ -1598,6 +1601,7 @@ model CustomerVector {
   createdAt  DateTime                    @default(now())
   updatedAt  DateTime                    @updatedAt
 
+  @@index([tenantId])
   @@index([customerId])
 }
 
@@ -2095,17 +2099,23 @@ model EnterpriseOrganization {
   createdAt DateTime                 @default(now())
   updatedAt DateTime                 @updatedAt
 
-  hierarchies    EnterpriseHierarchy[]
-  regions        EnterpriseRegion[]
-  departments    EnterpriseDepartment[]
-  businessUnits  EnterpriseBusinessUnit[]
-  policies       EnterprisePolicy[]
-  workflows      EnterpriseWorkflow[]
-  integrations   EnterpriseIntegration[]
-  securityEvents EnterpriseSecurityEvent[]
-  ssoProviders   EnterpriseSsoProvider[]
-  administrators EnterpriseAdministrator[]
-  incidents      EnterpriseIncident[]
+  hierarchies                 EnterpriseHierarchy[]
+  regions                     EnterpriseRegion[]
+  departments                 EnterpriseDepartment[]
+  businessUnits               EnterpriseBusinessUnit[]
+  policies                    EnterprisePolicy[]
+  workflows                   EnterpriseWorkflow[]
+  integrations                EnterpriseIntegration[]
+  securityEvents              EnterpriseSecurityEvent[]
+  ssoProviders                EnterpriseSsoProvider[]
+  administrators              EnterpriseAdministrator[]
+  incidents                   EnterpriseIncident[]
+  enterpriseComplianceRecords EnterpriseComplianceRecord[]
+  enterpriseRetentionPolicies EnterpriseRetentionPolicy[]
+  enterpriseAccessReviews     EnterpriseAccessReview[]
+  enterpriseAuditExports      EnterpriseAuditExport[]
+  enterpriseDataExports       EnterpriseDataExport[]
+  enterpriseReports           EnterpriseReport[]
 }
 
 model EnterpriseHierarchy {
@@ -2272,25 +2282,27 @@ model EnterpriseRiskEvent {
 }
 
 model EnterpriseComplianceRecord {
-  id             String   @id @default(uuid())
+  id             String                 @id @default(uuid())
   organizationId String
+  organization   EnterpriseOrganization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   type           String // CONSENT, AUDIT, PRIVACY
   subjectId      String
   evidence       Json
-  createdAt      DateTime @default(now())
+  createdAt      DateTime               @default(now())
 
   @@index([organizationId])
 }
 
 model EnterpriseRetentionPolicy {
-  id             String   @id @default(uuid())
+  id             String                 @id @default(uuid())
   organizationId String
+  organization   EnterpriseOrganization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   entityType     String
   retentionDays  Int
   action         String // ARCHIVE, DELETE
-  isActive       Boolean  @default(true)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  isActive       Boolean                @default(true)
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime               @updatedAt
 
   @@index([organizationId])
 }
@@ -2312,41 +2324,44 @@ model EnterpriseSsoProvider {
 }
 
 model EnterpriseAccessReview {
-  id             String   @id @default(uuid())
+  id             String                 @id @default(uuid())
   organizationId String
+  organization   EnterpriseOrganization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   campaignName   String
   reviewerId     String
   status         String // DRAFT, ACTIVE, COMPLETED
   deadline       DateTime
   results        Json?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime               @updatedAt
 
   @@index([organizationId])
 }
 
 model EnterpriseAuditExport {
-  id             String   @id @default(uuid())
+  id             String                 @id @default(uuid())
   organizationId String
+  organization   EnterpriseOrganization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   format         String // CSV, JSON, PDF
   status         String // PENDING, PROCESSING, COMPLETED, FAILED
   url            String?
   query          Json?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime               @updatedAt
 
   @@index([organizationId])
 }
 
 model EnterpriseDataExport {
-  id             String   @id @default(uuid())
+  id             String                 @id @default(uuid())
   organizationId String
+  organization   EnterpriseOrganization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   entityType     String
   format         String
   status         String
   url            String?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime               @updatedAt
 
   @@index([organizationId])
 }
@@ -2364,14 +2379,15 @@ model EnterpriseAdministrator {
 }
 
 model EnterpriseReport {
-  id             String   @id @default(uuid())
+  id             String                 @id @default(uuid())
   organizationId String
+  organization   EnterpriseOrganization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   name           String
   type           String // EXECUTIVE, OPERATIONAL, COMPLIANCE
   config         Json
   schedule       String? // Cron expression
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime               @updatedAt
 
   @@index([organizationId])
 }
@@ -2396,228 +2412,236 @@ model EnterpriseIncident {
 // ─────────────────────────────────────────────
 
 model DeveloperAccount {
-  id              String   @id @default(uuid())
-  userId          String   @unique
-  status          String   // PENDING, ACTIVE, SUSPENDED
-  companyName     String?
-  website         String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id          String   @id @default(uuid())
+  userId      String   @unique
+  status      String // PENDING, ACTIVE, SUSPENDED
+  companyName String?
+  website     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  organizations   DeveloperOrganization[]
-  projects        DeveloperProject[]
-  apiKeys         DeveloperApiKey[]
-  oauthClients    DeveloperOAuthClient[]
+  organizations DeveloperOrganization[]
+  projects      DeveloperProject[]
+  apiKeys       DeveloperApiKey[]
+  oauthClients  DeveloperOAuthClient[]
 }
 
 model DeveloperOrganization {
-  id              String   @id @default(uuid())
-  ownerId         String
-  owner           DeveloperAccount @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  name            String
-  billingEmail    String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id           String           @id @default(uuid())
+  ownerId      String
+  owner        DeveloperAccount @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  name         String
+  billingEmail String?
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
 
-  teams           DeveloperTeam[]
-  projects        DeveloperProject[]
+  teams    DeveloperTeam[]
+  projects DeveloperProject[]
 }
 
 model DeveloperTeam {
-  id              String   @id @default(uuid())
-  organizationId  String
-  organization    DeveloperOrganization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  name            String
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id             String                @id @default(uuid())
+  organizationId String
+  organization   DeveloperOrganization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name           String
+  createdAt      DateTime              @default(now())
+  updatedAt      DateTime              @updatedAt
 }
 
 model DeveloperProject {
-  id              String   @id @default(uuid())
-  developerId     String
-  developer       DeveloperAccount @relation(fields: [developerId], references: [id], onDelete: Cascade)
-  organizationId  String?
-  organization    DeveloperOrganization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
-  name            String
-  description     String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id             String                 @id @default(uuid())
+  developerId    String
+  developer      DeveloperAccount       @relation(fields: [developerId], references: [id], onDelete: Cascade)
+  organizationId String?
+  organization   DeveloperOrganization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+  name           String
+  description    String?
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime               @updatedAt
 
-  applications    PlatformApp[]
-  webhooks        WebhookEndpoint[]
+  applications PlatformApp[]
+  webhooks     WebhookEndpoint[]
 }
 
 model PlatformApp {
-  id              String   @id @default(uuid())
-  projectId       String
-  project         DeveloperProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  name            String
-  description     String?
-  clientId        String   @unique
-  clientSecret    String
-  redirectUris    String[]
-  scopes          String[]
-  status          String   // DRAFT, IN_REVIEW, PUBLISHED, SUSPENDED
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id           String           @id @default(uuid())
+  projectId    String
+  project      DeveloperProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  name         String
+  description  String?
+  clientId     String           @unique
+  clientSecret String
+  redirectUris String[]
+  scopes       String[]
+  status       String // DRAFT, IN_REVIEW, PUBLISHED, SUSPENDED
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
 
-  versions        PlatformAppVersion[]
-  installations   PlatformAppInstallation[]
-  reviews         PlatformAppReview[]
+  versions      PlatformAppVersion[]
+  installations PlatformAppInstallation[]
+  reviews       PlatformAppReview[]
 }
 
 model PlatformAppVersion {
-  id              String   @id @default(uuid())
-  appId           String
-  app             PlatformApp @relation(fields: [appId], references: [id], onDelete: Cascade)
-  version         String
-  changelog       String?
-  status          String   // PENDING, APPROVED, REJECTED
-  createdAt       DateTime @default(now())
+  id        String      @id @default(uuid())
+  appId     String
+  app       PlatformApp @relation(fields: [appId], references: [id], onDelete: Cascade)
+  version   String
+  changelog String?
+  status    String // PENDING, APPROVED, REJECTED
+  createdAt DateTime    @default(now())
 }
 
 model PlatformAppInstallation {
-  id              String   @id @default(uuid())
-  appId           String
-  app             PlatformApp @relation(fields: [appId], references: [id], onDelete: Cascade)
-  tenantId        String
-  installedBy     String   // userId
-  status          String   // ACTIVE, REVOKED
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id          String      @id @default(uuid())
+  appId       String
+  app         PlatformApp @relation(fields: [appId], references: [id], onDelete: Cascade)
+  tenantId    String
+  installedBy String // userId
+  status      String // ACTIVE, REVOKED
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 }
 
 model PlatformAppReview {
-  id              String   @id @default(uuid())
-  appId           String
-  app             PlatformApp @relation(fields: [appId], references: [id], onDelete: Cascade)
-  reviewerId      String   // userId
-  rating          Int
-  comment         String?
-  createdAt       DateTime @default(now())
+  id         String      @id @default(uuid())
+  appId      String
+  app        PlatformApp @relation(fields: [appId], references: [id], onDelete: Cascade)
+  reviewerId String // userId
+  rating     Int
+  comment    String?
+  createdAt  DateTime    @default(now())
 }
 
 model DeveloperApiKey {
-  id              String   @id @default(uuid())
-  developerId     String
-  developer       DeveloperAccount @relation(fields: [developerId], references: [id], onDelete: Cascade)
-  keyHash         String   @unique
-  prefix          String
-  name            String
-  scopes          String[]
-  expiresAt       DateTime?
-  lastUsedAt      DateTime?
-  createdAt       DateTime @default(now())
+  id          String           @id @default(uuid())
+  developerId String
+  developer   DeveloperAccount @relation(fields: [developerId], references: [id], onDelete: Cascade)
+  keyHash     String           @unique
+  prefix      String
+  name        String
+  scopes      String[]
+  expiresAt   DateTime?
+  lastUsedAt  DateTime?
+  createdAt   DateTime         @default(now())
 }
 
 model DeveloperOAuthClient {
-  id              String   @id @default(uuid())
-  developerId     String
-  developer       DeveloperAccount @relation(fields: [developerId], references: [id], onDelete: Cascade)
-  clientId        String   @unique
+  id               String           @id @default(uuid())
+  developerId      String
+  developer        DeveloperAccount @relation(fields: [developerId], references: [id], onDelete: Cascade)
+  clientId         String           @unique
   clientSecretHash String
-  redirectUris    String[]
-  name            String
-  createdAt       DateTime @default(now())
+  redirectUris     String[]
+  name             String
+  createdAt        DateTime         @default(now())
 }
 
 model ApiProduct {
-  id              String   @id @default(uuid())
-  name            String
-  description     String?
-  status          String   // ACTIVE, DEPRECATED
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  status      String // ACTIVE, DEPRECATED
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  plans           ApiPlan[]
+  plans ApiPlan[]
 }
 
 model ApiPlan {
-  id              String   @id @default(uuid())
-  productId       String
-  product         ApiProduct @relation(fields: [productId], references: [id], onDelete: Cascade)
-  name            String
-  type            String   // FREE, USAGE, SUBSCRIPTION, ENTERPRISE
-  price           Float
-  currency        String   @default("USD")
-  quotaLimit      Int?
-  rateLimit       Int?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id         String     @id @default(uuid())
+  productId  String
+  product    ApiProduct @relation(fields: [productId], references: [id], onDelete: Cascade)
+  name       String
+  type       String // FREE, USAGE, SUBSCRIPTION, ENTERPRISE
+  price      Float
+  currency   String     @default("USD")
+  quotaLimit Int?
+  rateLimit  Int?
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
 
-  subscriptions   ApiSubscription[]
+  subscriptions ApiSubscription[]
 }
 
 model ApiSubscription {
-  id              String   @id @default(uuid())
-  planId          String
-  plan            ApiPlan  @relation(fields: [planId], references: [id], onDelete: Cascade)
-  developerId     String
-  status          String   // ACTIVE, CANCELED, PAST_DUE
+  id               String    @id @default(uuid())
+  planId           String
+  plan             ApiPlan   @relation(fields: [planId], references: [id], onDelete: Cascade)
+  developerId      String
+  status           String // ACTIVE, CANCELED, PAST_DUE
   currentPeriodEnd DateTime?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
 }
 
 model WebhookEndpoint {
-  id              String   @id @default(uuid())
-  projectId       String
-  project         DeveloperProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  url             String
-  secret          String?
-  events          String[] // e.g., ["lead.created", "property.updated"]
-  status          String   // ACTIVE, DISABLED
-  isActive        Boolean  @default(true)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id        String           @id @default(uuid())
+  tenantId  String
+  projectId String
+  project   DeveloperProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  url       String
+  secret    String?
+  events    String[] // e.g., ["lead.created", "property.updated"]
+  status    String // ACTIVE, DISABLED
+  isActive  Boolean          @default(true)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
 
-  deliveries      WebhookDelivery[]
+  deliveries WebhookDelivery[]
+
+  @@index([tenantId])
 }
 
 model WebhookDelivery {
-  id              String   @id @default(uuid())
-  endpointId      String
-  endpoint        WebhookEndpoint @relation(fields: [endpointId], references: [id], onDelete: Cascade)
-  eventId         String
-  status          String   // SUCCESS, FAILED, RETRYING
-  statusCode      Int?
-  payload         Json
-  response        Json?
-  createdAt       DateTime @default(now())
+  id         String          @id @default(uuid())
+  tenantId   String
+  endpointId String
+  endpoint   WebhookEndpoint @relation(fields: [endpointId], references: [id], onDelete: Cascade)
+  eventId    String
+  status     String // SUCCESS, FAILED, RETRYING
+  statusCode Int?
+  payload    Json
+  response   Json?
+  createdAt  DateTime        @default(now())
 
+  @@index([tenantId])
   @@index([endpointId, status, createdAt])
 }
 
 model EventLog {
-  id              String   @id @default(uuid())
-  eventType       String
-  entityId        String
-  payload         Json
-  source          String   // API, INTERNAL, SYSTEM
-  createdAt       DateTime @default(now())
+  id        String   @id @default(uuid())
+  tenantId  String
+  eventType String
+  entityId  String
+  payload   Json
+  source    String // API, INTERNAL, SYSTEM
+  createdAt DateTime @default(now())
+
+  @@index([tenantId])
 }
 
 model PartnerAccount {
-  id              String   @id @default(uuid())
-  userId          String   @unique
-  companyName     String
-  partnerType     String   // TECHNOLOGY, INTEGRATION, AGENCY, RESELLER
-  status          String   // PENDING, ACTIVE, SUSPENDED
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id          String   @id @default(uuid())
+  userId      String   @unique
+  companyName String
+  partnerType String // TECHNOLOGY, INTEGRATION, AGENCY, RESELLER
+  status      String // PENDING, ACTIVE, SUSPENDED
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  programs        PartnerProgram[]
+  programs PartnerProgram[]
 }
 
 model PartnerProgram {
-  id              String   @id @default(uuid())
-  partnerId       String
-  partner         PartnerAccount @relation(fields: [partnerId], references: [id], onDelete: Cascade)
-  name            String
-  commissionRate  Float
-  status          String   // ACTIVE, INACTIVE
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id             String         @id @default(uuid())
+  partnerId      String
+  partner        PartnerAccount @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+  name           String
+  commissionRate Float
+  status         String // ACTIVE, INACTIVE
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
 }
 
 model DomainEvent {

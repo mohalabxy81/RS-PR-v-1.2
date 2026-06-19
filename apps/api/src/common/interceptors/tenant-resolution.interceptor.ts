@@ -5,6 +5,7 @@ import {
   CallHandler,
   BadRequestException,
   NotFoundException,
+  ForbiddenException,
   Inject,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
@@ -30,6 +31,16 @@ export class TenantResolutionInterceptor implements NestInterceptor {
 
     let tenantId = request.headers['x-tenant-id'];
     const domain = request.hostname;
+    const jwtTenantId = request.user?.tenantId;
+
+    if (jwtTenantId && tenantId && jwtTenantId !== tenantId) {
+      throw new ForbiddenException('Tenant identity mismatch between JWT and header');
+    }
+    
+    // JWT tenantId is authoritative if present
+    if (jwtTenantId) {
+      tenantId = jwtTenantId;
+    }
 
     // Optional: resolve by domain if x-tenant-id is not provided
     if (!tenantId && domain && domain !== 'localhost' && !domain.includes('reis.com')) {
@@ -53,32 +64,32 @@ export class TenantResolutionInterceptor implements NestInterceptor {
       }
     }
 
-    if (tenantId) {
-      // Validate tenantId via cache to save DB hits
-      const tenantCacheKey = `tenant_valid:${tenantId}`;
-      let isValid = await this.cacheManager.get<boolean>(tenantCacheKey);
-
-      if (isValid === undefined || isValid === null) {
-        const tenant = await this.prisma.tenant.findUnique({
-          where: { id: tenantId },
-          select: { status: true },
-        });
-        
-        isValid = tenant ? (tenant.status === 'ACTIVE' || tenant.status === 'TRIAL') : false;
-        // Cache validation result for 5 minutes
-        await this.cacheManager.set(tenantCacheKey, isValid, 300000);
-      }
-
-      if (!isValid) {
-        throw new BadRequestException('Tenant account is not active or invalid');
-      }
-
-      request.tenantId = tenantId;
-      
-      // Run the rest of the request within the tenant context
-      return runWithTenant(tenantId, () => next.handle());
+    if (!tenantId) {
+      throw new BadRequestException('Tenant context could not be resolved');
     }
 
-    return next.handle();
+    // Validate tenantId via cache to save DB hits
+    const tenantCacheKey = `tenant_valid:${tenantId}`;
+    let isValid = await this.cacheManager.get<boolean>(tenantCacheKey);
+
+    if (isValid === undefined || isValid === null) {
+      const tenant = await this.prisma.tenant.findUnique({
+        where: { id: tenantId },
+        select: { status: true },
+      });
+      
+      isValid = tenant ? (tenant.status === 'ACTIVE' || tenant.status === 'TRIAL') : false;
+      // Cache validation result for 5 minutes
+      await this.cacheManager.set(tenantCacheKey, isValid, 300000);
+    }
+
+    if (!isValid) {
+      throw new BadRequestException('Tenant account is not active or invalid');
+    }
+
+    request.tenantId = tenantId;
+    
+    // Run the rest of the request within the tenant context
+    return runWithTenant(tenantId, () => next.handle());
   }
 }

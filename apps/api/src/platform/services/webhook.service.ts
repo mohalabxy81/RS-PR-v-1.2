@@ -9,10 +9,11 @@ export class WebhookService {
 
   // --- Webhooks ---
 
-  async registerWebhook(projectId: string, data: RegisterWebhookDto) {
+  async registerWebhook(tenantId: string, projectId: string, data: RegisterWebhookDto) {
     const secret = `whsec_${randomBytes(24).toString('hex')}`;
     return this.prisma.webhookEndpoint.create({
       data: {
+        tenantId,
         projectId,
         url: data.url,
         events: data.events,
@@ -22,13 +23,18 @@ export class WebhookService {
     });
   }
 
-  async getWebhooks(projectId: string) {
+  async getWebhooks(tenantId: string, projectId: string) {
     return this.prisma.webhookEndpoint.findMany({
-      where: { projectId },
+      where: { projectId, tenantId },
     });
   }
 
-  async updateWebhook(webhookId: string, data: UpdateWebhookDto) {
+  async updateWebhook(tenantId: string, webhookId: string, data: UpdateWebhookDto) {
+    const endpoint = await this.prisma.webhookEndpoint.findFirst({
+      where: { id: webhookId, tenantId },
+    });
+    if (!endpoint) throw new NotFoundException('Webhook not found');
+
     return this.prisma.webhookEndpoint.update({
       where: { id: webhookId },
       data: {
@@ -39,7 +45,12 @@ export class WebhookService {
     });
   }
 
-  async deleteWebhook(webhookId: string) {
+  async deleteWebhook(tenantId: string, webhookId: string) {
+    const endpoint = await this.prisma.webhookEndpoint.findFirst({
+      where: { id: webhookId, tenantId },
+    });
+    if (!endpoint) throw new NotFoundException('Webhook not found');
+
     return this.prisma.webhookEndpoint.delete({
       where: { id: webhookId },
     });
@@ -47,9 +58,9 @@ export class WebhookService {
 
   // --- Delivery Logs ---
 
-  async getDeliveries(webhookId: string) {
+  async getDeliveries(tenantId: string, webhookId: string) {
     return this.prisma.webhookDelivery.findMany({
-      where: { endpointId: webhookId },
+      where: { endpointId: webhookId, tenantId },
       orderBy: { createdAt: 'desc' },
       take: 100, // Limit to recent logs
     });
@@ -57,14 +68,15 @@ export class WebhookService {
 
   // --- Events ---
 
-  async logEvent(data: any) {
+  async logEvent(tenantId: string, data: any) {
     return this.prisma.eventLog.create({
-      data,
+      data: { ...data, tenantId },
     });
   }
 
-  async getEventLogs() {
+  async getEventLogs(tenantId: string) {
     return this.prisma.eventLog.findMany({
+      where: { tenantId },
       orderBy: { createdAt: 'desc' },
       take: 100,
     });

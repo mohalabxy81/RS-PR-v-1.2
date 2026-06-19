@@ -8,14 +8,19 @@ export class GovernanceService {
 
   // --- Policies ---
 
-  async getPolicies(organizationId: string) {
+  async getPolicies(tenantId: string, organizationId: string) {
     return this.prisma.enterprisePolicy.findMany({
-      where: { organizationId },
+      where: { organizationId, organization: { tenantId } },
       include: { governanceRules: true },
     });
   }
 
-  async createPolicy(organizationId: string, data: CreatePolicyDto) {
+  async createPolicy(tenantId: string, organizationId: string, data: CreatePolicyDto) {
+    const org = await this.prisma.enterpriseOrganization.findFirst({
+      where: { id: organizationId, tenantId },
+    });
+    if (!org) throw new NotFoundException('Organization not found');
+
     return this.prisma.enterprisePolicy.create({
       data: {
         ...data,
@@ -24,14 +29,24 @@ export class GovernanceService {
     });
   }
 
-  async updatePolicy(policyId: string, data: UpdatePolicyDto) {
+  async updatePolicy(tenantId: string, policyId: string, data: UpdatePolicyDto) {
+    const policy = await this.prisma.enterprisePolicy.findFirst({
+      where: { id: policyId, organization: { tenantId } },
+    });
+    if (!policy) throw new NotFoundException('Policy not found');
+
     return this.prisma.enterprisePolicy.update({
       where: { id: policyId },
       data,
     });
   }
 
-  async deletePolicy(policyId: string) {
+  async deletePolicy(tenantId: string, policyId: string) {
+    const policy = await this.prisma.enterprisePolicy.findFirst({
+      where: { id: policyId, organization: { tenantId } },
+    });
+    if (!policy) throw new NotFoundException('Policy not found');
+
     return this.prisma.enterprisePolicy.delete({
       where: { id: policyId },
     });
@@ -39,7 +54,12 @@ export class GovernanceService {
 
   // --- Governance Rules ---
 
-  async addRuleToPolicy(policyId: string, data: CreateGovernanceRuleDto) {
+  async addRuleToPolicy(tenantId: string, policyId: string, data: CreateGovernanceRuleDto) {
+    const policy = await this.prisma.enterprisePolicy.findFirst({
+      where: { id: policyId, organization: { tenantId } },
+    });
+    if (!policy) throw new NotFoundException('Policy not found');
+
     return this.prisma.enterpriseGovernanceRule.create({
       data: {
         ...data,
@@ -48,14 +68,24 @@ export class GovernanceService {
     });
   }
 
-  async updateRule(ruleId: string, data: UpdateGovernanceRuleDto) {
+  async updateRule(tenantId: string, ruleId: string, data: UpdateGovernanceRuleDto) {
+    const rule = await this.prisma.enterpriseGovernanceRule.findFirst({
+      where: { id: ruleId, policy: { organization: { tenantId } } },
+    });
+    if (!rule) throw new NotFoundException('Rule not found');
+
     return this.prisma.enterpriseGovernanceRule.update({
       where: { id: ruleId },
       data,
     });
   }
 
-  async removeRule(ruleId: string) {
+  async removeRule(tenantId: string, ruleId: string) {
+    const rule = await this.prisma.enterpriseGovernanceRule.findFirst({
+      where: { id: ruleId, policy: { organization: { tenantId } } },
+    });
+    if (!rule) throw new NotFoundException('Rule not found');
+
     return this.prisma.enterpriseGovernanceRule.delete({
       where: { id: ruleId },
     });

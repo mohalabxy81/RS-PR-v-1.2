@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ApiKeyService } from './api-key.service';
 import { PrismaService } from '../../prisma/prisma.service';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 
 describe('ApiKeyService', () => {
   let service: ApiKeyService;
@@ -11,15 +12,23 @@ describe('ApiKeyService', () => {
       apiKey: {
         create: jest.fn(),
         findUnique: jest.fn(),
+        findFirst: jest.fn(),
         findMany: jest.fn(),
         update: jest.fn(),
       },
+    };
+
+    const mockCacheManager = {
+      get: jest.fn(),
+      set: jest.fn(),
+      del: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ApiKeyService,
         { provide: PrismaService, useValue: mockPrisma },
+        { provide: CACHE_MANAGER, useValue: mockCacheManager },
       ],
     }).compile();
 
@@ -89,9 +98,12 @@ describe('ApiKeyService', () => {
     it('should return null for expired key', async () => {
       const pastDate = new Date(Date.now() - 1000 * 60 * 60 * 24);
       (prismaService.apiKey.findUnique as jest.Mock).mockResolvedValue({
-        id: 'key-1', status: 'ACTIVE', expiresAt: pastDate,
+        id: 'key-1', status: 'ACTIVE', expiresAt: pastDate, tenantId: 'tenant-1'
       });
-      (prismaService.apiKey.update as jest.Mock).mockResolvedValue({});
+      (prismaService.apiKey.findFirst as jest.Mock).mockResolvedValue({
+        id: 'key-1', status: 'ACTIVE', tenantId: 'tenant-1'
+      });
+      (prismaService.apiKey.update as jest.Mock).mockResolvedValue({ keyHash: '123' });
       
       const result = await service.validateApiKey('some-key');
       expect(result).toBeNull();
@@ -109,9 +121,10 @@ describe('ApiKeyService', () => {
 
   describe('revokeApiKey', () => {
     it('should set status to REVOKED', async () => {
+      (prismaService.apiKey.findFirst as jest.Mock).mockResolvedValue({ id: 'key-1', status: 'ACTIVE', tenantId: 'tenant-1' });
       (prismaService.apiKey.update as jest.Mock).mockResolvedValue({ id: 'key-1', status: 'REVOKED' });
       
-      const result = await service.revokeApiKey('key-1');
+      const result = await service.revokeApiKey('tenant-1', 'key-1');
       
       expect(prismaService.apiKey.update).toHaveBeenCalledWith({
         where: { id: 'key-1' },

@@ -8,13 +8,18 @@ export class ReportingService {
 
   // --- Reports ---
 
-  async getReports(organizationId: string) {
+  async getReports(tenantId: string, organizationId: string) {
     return this.prisma.enterpriseReport.findMany({
-      where: { organizationId },
+      where: { organizationId, organization: { tenantId } },
     });
   }
 
-  async createReport(organizationId: string, data: CreateReportDto) {
+  async createReport(tenantId: string, organizationId: string, data: CreateReportDto) {
+    const org = await this.prisma.enterpriseOrganization.findFirst({
+      where: { id: organizationId, tenantId },
+    });
+    if (!org) throw new NotFoundException('Organization not found');
+
     return this.prisma.enterpriseReport.create({
       data: {
         ...data,
@@ -23,14 +28,24 @@ export class ReportingService {
     });
   }
 
-  async updateReport(reportId: string, data: UpdateReportDto) {
+  async updateReport(tenantId: string, reportId: string, data: UpdateReportDto) {
+    const report = await this.prisma.enterpriseReport.findFirst({
+      where: { id: reportId, organization: { tenantId } },
+    });
+    if (!report) throw new NotFoundException('Report not found');
+
     return this.prisma.enterpriseReport.update({
       where: { id: reportId },
       data,
     });
   }
 
-  async deleteReport(reportId: string) {
+  async deleteReport(tenantId: string, reportId: string) {
+    const report = await this.prisma.enterpriseReport.findFirst({
+      where: { id: reportId, organization: { tenantId } },
+    });
+    if (!report) throw new NotFoundException('Report not found');
+
     return this.prisma.enterpriseReport.delete({
       where: { id: reportId },
     });
@@ -38,14 +53,19 @@ export class ReportingService {
 
   // --- Data Exports ---
 
-  async getDataExports(organizationId: string) {
+  async getDataExports(tenantId: string, organizationId: string) {
     return this.prisma.enterpriseDataExport.findMany({
-      where: { organizationId },
+      where: { organizationId, organization: { tenantId } },
       orderBy: { createdAt: 'desc' },
     });
   }
 
-  async requestDataExport(organizationId: string, data: any) {
+  async requestDataExport(tenantId: string, organizationId: string, data: any) {
+    const org = await this.prisma.enterpriseOrganization.findFirst({
+      where: { id: organizationId, tenantId },
+    });
+    if (!org) throw new NotFoundException('Organization not found');
+
     return this.prisma.enterpriseDataExport.create({
       data: {
         ...data,
@@ -57,14 +77,19 @@ export class ReportingService {
 
   // --- Audit Exports ---
 
-  async getAuditExports(organizationId: string) {
+  async getAuditExports(tenantId: string, organizationId: string) {
     return this.prisma.enterpriseAuditExport.findMany({
-      where: { organizationId },
+      where: { organizationId, organization: { tenantId } },
       orderBy: { createdAt: 'desc' },
     });
   }
 
-  async requestAuditExport(organizationId: string, data: any) {
+  async requestAuditExport(tenantId: string, organizationId: string, data: any) {
+    const org = await this.prisma.enterpriseOrganization.findFirst({
+      where: { id: organizationId, tenantId },
+    });
+    if (!org) throw new NotFoundException('Organization not found');
+
     return this.prisma.enterpriseAuditExport.create({
       data: {
         ...data,

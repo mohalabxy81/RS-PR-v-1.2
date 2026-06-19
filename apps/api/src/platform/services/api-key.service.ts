@@ -87,7 +87,7 @@ export class ApiKeyService {
       if (apiKeyRecord.status !== 'ACTIVE') return null;
 
       if (apiKeyRecord.expiresAt && new Date(apiKeyRecord.expiresAt) < new Date()) {
-        await this.revokeApiKey(apiKeyRecord.id);
+        await this.revokeApiKey(apiKeyRecord.tenantId, apiKeyRecord.id);
         return null;
       }
 
@@ -136,7 +136,10 @@ export class ApiKeyService {
     });
   }
 
-  async revokeApiKey(id: string) {
+  async revokeApiKey(tenantId: string, id: string) {
+    const existing = await this.prisma.apiKey.findFirst({ where: { id, tenantId } });
+    if (!existing) throw new NotFoundException('API Key not found');
+
     const key = await this.prisma.apiKey.update({
       where: { id },
       data: { status: 'REVOKED' },

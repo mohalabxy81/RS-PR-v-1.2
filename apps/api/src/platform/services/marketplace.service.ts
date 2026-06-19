@@ -30,10 +30,21 @@ export class MarketplaceService {
     };
   }
 
-  async getApp(appId: string) {
-    const app = await this.prisma.platformApp.findUnique({
-      where: { id: appId },
-      include: { versions: true, reviews: true, installations: true },
+  async getApp(appId: string, developerId?: string) {
+    const where: any = { id: appId };
+    if (developerId) {
+      where.project = { developerId };
+    } else {
+      where.status = 'PUBLISHED';
+    }
+
+    const app = await this.prisma.platformApp.findFirst({
+      where,
+      include: { 
+        versions: true, 
+        reviews: true, 
+        installations: !!developerId 
+      },
     });
     if (!app) throw new NotFoundException('App not found');
     return app;

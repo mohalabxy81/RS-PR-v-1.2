@@ -8,14 +8,19 @@ export class ComplianceService {
 
   // --- Compliance Records ---
 
-  async getComplianceRecords(organizationId: string) {
+  async getComplianceRecords(tenantId: string, organizationId: string) {
     return this.prisma.enterpriseComplianceRecord.findMany({
-      where: { organizationId },
+      where: { organizationId, organization: { tenantId } },
       orderBy: { createdAt: 'desc' },
     });
   }
 
-  async createComplianceRecord(organizationId: string, data: CreateComplianceRecordDto) {
+  async createComplianceRecord(tenantId: string, organizationId: string, data: CreateComplianceRecordDto) {
+    const org = await this.prisma.enterpriseOrganization.findFirst({
+      where: { id: organizationId, tenantId },
+    });
+    if (!org) throw new NotFoundException('Organization not found');
+
     return this.prisma.enterpriseComplianceRecord.create({
       data: {
         ...data,
@@ -26,13 +31,18 @@ export class ComplianceService {
 
   // --- Retention Policies ---
 
-  async getRetentionPolicies(organizationId: string) {
+  async getRetentionPolicies(tenantId: string, organizationId: string) {
     return this.prisma.enterpriseRetentionPolicy.findMany({
-      where: { organizationId },
+      where: { organizationId, organization: { tenantId } },
     });
   }
 
-  async createRetentionPolicy(organizationId: string, data: CreateRetentionPolicyDto) {
+  async createRetentionPolicy(tenantId: string, organizationId: string, data: CreateRetentionPolicyDto) {
+    const org = await this.prisma.enterpriseOrganization.findFirst({
+      where: { id: organizationId, tenantId },
+    });
+    if (!org) throw new NotFoundException('Organization not found');
+
     return this.prisma.enterpriseRetentionPolicy.create({
       data: {
         ...data,
@@ -41,14 +51,24 @@ export class ComplianceService {
     });
   }
 
-  async updateRetentionPolicy(policyId: string, data: UpdateRetentionPolicyDto) {
+  async updateRetentionPolicy(tenantId: string, policyId: string, data: UpdateRetentionPolicyDto) {
+    const policy = await this.prisma.enterpriseRetentionPolicy.findFirst({
+      where: { id: policyId, organization: { tenantId } },
+    });
+    if (!policy) throw new NotFoundException('Retention Policy not found');
+
     return this.prisma.enterpriseRetentionPolicy.update({
       where: { id: policyId },
       data,
     });
   }
 
-  async deleteRetentionPolicy(policyId: string) {
+  async deleteRetentionPolicy(tenantId: string, policyId: string) {
+    const policy = await this.prisma.enterpriseRetentionPolicy.findFirst({
+      where: { id: policyId, organization: { tenantId } },
+    });
+    if (!policy) throw new NotFoundException('Retention Policy not found');
+
     return this.prisma.enterpriseRetentionPolicy.delete({
       where: { id: policyId },
     });

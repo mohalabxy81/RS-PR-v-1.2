@@ -62,7 +62,11 @@ export class FilesService {
   /**
    * Generates a pre-signed URL to read a private file.
    */
-  async getDownloadUrl(key: string, expiresInSeconds: number = 3600) {
+  async getDownloadUrl(tenantId: string, key: string, expiresInSeconds: number = 3600) {
+    if (!key.startsWith(`tenants/${tenantId}/`)) {
+      throw new NotFoundException('File not found or access denied');
+    }
+
     const command = new GetObjectCommand({
       Bucket: this.bucketName,
       Key: key,
@@ -93,10 +97,14 @@ export class FilesService {
     });
 
     await this.s3Client.send(command);
-    return { key, url: await this.getDownloadUrl(key) };
+    return { key, url: await this.getDownloadUrl(tenantId, key) };
   }
 
-  async deleteFile(key: string) {
+  async deleteFile(tenantId: string, key: string) {
+    if (!key.startsWith(`tenants/${tenantId}/`)) {
+      throw new NotFoundException('File not found or access denied');
+    }
+
     const command = new DeleteObjectCommand({
       Bucket: this.bucketName,
       Key: key,
