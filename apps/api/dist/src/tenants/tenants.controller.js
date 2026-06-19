@@ -21,6 +21,7 @@ const permissions_guard_1 = require("../roles/guards/permissions.guard");
 const require_permissions_decorator_1 = require("../common/decorators/require-permissions.decorator");
 const permissions_constants_1 = require("../roles/permissions.constants");
 const current_user_decorator_1 = require("../common/decorators/current-user.decorator");
+const tenant_dto_1 = require("./dto/tenant.dto");
 let TenantsController = class TenantsController {
     tenantsService;
     constructor(tenantsService) {
@@ -55,11 +56,12 @@ __decorate([
 __decorate([
     (0, common_1.Put)('me'),
     (0, swagger_1.ApiOperation)({ summary: 'Update current tenant settings' }),
+    (0, swagger_1.ApiBody)({ type: tenant_dto_1.UpdateTenantSettingsDto }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.MANAGE_SETTINGS),
     __param(0, (0, current_user_decorator_1.CurrentUser)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:paramtypes", [Object, tenant_dto_1.UpdateTenantSettingsDto]),
     __metadata("design:returntype", Promise)
 ], TenantsController.prototype, "updateMyTenant", null);
 __decorate([

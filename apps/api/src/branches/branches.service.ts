@@ -1,11 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { CreateBranchDto, UpdateBranchDto } from './dto/branch.dto';
 
 @Injectable()
 export class BranchesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(tenantId: string, data: { name: string; address?: string; phone?: string }) {
+  async create(tenantId: string, data: CreateBranchDto) {
     return this.prisma.branch.create({
       data: { ...data, tenantId },
     });
@@ -32,7 +33,7 @@ export class BranchesService {
     return branch;
   }
 
-  async update(tenantId: string, id: string, data: any) {
+  async update(tenantId: string, id: string, data: UpdateBranchDto) {
     const branch = await this.prisma.branch.findFirst({ where: { id, tenantId } });
     if (!branch) throw new NotFoundException('Branch not found');
 

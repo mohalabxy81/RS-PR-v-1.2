@@ -1,14 +1,16 @@
 import { PrismaService } from '../prisma/prisma.service';
+import { UpdateTenantDto } from './dto/tenant.dto';
+import { TenantStatus } from '@prisma/client';
 export declare class TenantsService {
     private readonly prisma;
     constructor(prisma: PrismaService);
     findAll(): Promise<{
-        id: string;
+        status: import("@prisma/client").$Enums.TenantStatus;
         name: string;
         slug: string;
-        domain: string | null;
         logoUrl: string | null;
-        status: import("@prisma/client").$Enums.TenantStatus;
+        id: string;
+        domain: string | null;
         subscriptionPlan: import("@prisma/client").$Enums.SubscriptionPlan;
         subscriptionStatus: string;
         trialEndsAt: Date | null;
@@ -23,38 +25,38 @@ export declare class TenantsService {
             leads: number;
         };
     } & {
-        id: string;
+        status: import("@prisma/client").$Enums.TenantStatus;
         name: string;
         slug: string;
-        domain: string | null;
         logoUrl: string | null;
-        status: import("@prisma/client").$Enums.TenantStatus;
+        id: string;
+        domain: string | null;
         subscriptionPlan: import("@prisma/client").$Enums.SubscriptionPlan;
         subscriptionStatus: string;
         trialEndsAt: Date | null;
         createdAt: Date;
         updatedAt: Date;
     }>;
-    update(id: string, data: any): Promise<{
-        id: string;
+    update(id: string, data: UpdateTenantDto): Promise<{
+        status: import("@prisma/client").$Enums.TenantStatus;
         name: string;
         slug: string;
-        domain: string | null;
         logoUrl: string | null;
-        status: import("@prisma/client").$Enums.TenantStatus;
+        id: string;
+        domain: string | null;
         subscriptionPlan: import("@prisma/client").$Enums.SubscriptionPlan;
         subscriptionStatus: string;
         trialEndsAt: Date | null;
         createdAt: Date;
         updatedAt: Date;
     }>;
-    updateStatus(id: string, status: any): Promise<{
-        id: string;
+    updateStatus(id: string, status: TenantStatus): Promise<{
+        status: import("@prisma/client").$Enums.TenantStatus;
         name: string;
         slug: string;
-        domain: string | null;
         logoUrl: string | null;
-        status: import("@prisma/client").$Enums.TenantStatus;
+        id: string;
+        domain: string | null;
         subscriptionPlan: import("@prisma/client").$Enums.SubscriptionPlan;
         subscriptionStatus: string;
         trialEndsAt: Date | null;

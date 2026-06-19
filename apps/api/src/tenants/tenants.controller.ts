@@ -1,11 +1,12 @@
 import { Controller, Get, Param, UseGuards, Put, Body } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 import { TenantsService } from './tenants.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from '../roles/guards/permissions.guard';
 import { RequirePermissions } from '../common/decorators/require-permissions.decorator';
 import { PERMISSIONS } from '../roles/permissions.constants';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
+import { UpdateTenantSettingsDto } from './dto/tenant.dto';
 import type { CurrentUserPayload } from '../common/decorators/current-user.decorator';
 
 @ApiTags('tenants')
@@ -23,8 +24,9 @@ export class TenantsController {
 
   @Put('me')
   @ApiOperation({ summary: 'Update current tenant settings' })
+  @ApiBody({ type: UpdateTenantSettingsDto })
   @RequirePermissions(PERMISSIONS.MANAGE_SETTINGS)
-  async updateMyTenant(@CurrentUser() user: CurrentUserPayload, @Body() data: any) {
+  async updateMyTenant(@CurrentUser() user: CurrentUserPayload, @Body() data: UpdateTenantSettingsDto) {
     // Only allow safe updates by standard users
     const safeData = {
       name: data.name,

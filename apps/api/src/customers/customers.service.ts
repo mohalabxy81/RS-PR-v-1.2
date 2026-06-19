@@ -1,17 +1,18 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { CreateCustomerDto, UpdateCustomerDto, QueryCustomerDto } from './dto/customer.dto';
 
 @Injectable()
 export class CustomersService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(tenantId: string, data: any) {
+  async create(tenantId: string, data: CreateCustomerDto) {
     return this.prisma.customer.create({
       data: { ...data, tenantId },
     });
   }
 
-  async findAll(tenantId: string, query: any) {
+  async findAll(tenantId: string, query: QueryCustomerDto) {
     const { page = 1, limit = 20, assigneeId } = query;
     const skip = (page - 1) * limit;
 
@@ -56,7 +57,7 @@ export class CustomersService {
     return customer;
   }
 
-  async update(tenantId: string, id: string, data: any) {
+  async update(tenantId: string, id: string, data: UpdateCustomerDto) {
     const customer = await this.prisma.customer.findFirst({ where: { id, tenantId } });
     if (!customer) throw new NotFoundException('Customer not found');
 

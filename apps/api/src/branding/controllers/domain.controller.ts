@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { DomainService } from '../services/domain.service';
 
-@Controller('v1/branding/domains')
+@Controller('branding/domains')
 export class DomainController {
   constructor(private readonly domainService: DomainService) {}
 

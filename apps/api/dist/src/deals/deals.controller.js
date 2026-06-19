@@ -64,7 +64,7 @@ __decorate([
     __param(0, (0, current_user_decorator_1.CurrentUser)()),
     __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:paramtypes", [Object, deal_dto_1.QueryDealDto]),
     __metadata("design:returntype", Promise)
 ], DealsController.prototype, "findAll", null);
 __decorate([

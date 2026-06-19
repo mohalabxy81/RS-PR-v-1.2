@@ -1,17 +1,18 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { CreatePropertyDto, UpdatePropertyDto, QueryPropertyDto } from './dto/property.dto';
 
 @Injectable()
 export class PropertiesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(tenantId: string, data: any) {
+  async create(tenantId: string, data: CreatePropertyDto) {
     return this.prisma.property.create({
       data: { ...data, tenantId },
     });
   }
 
-  async findAll(tenantId: string, query: any) {
+  async findAll(tenantId: string, query: QueryPropertyDto) {
     const { page = 1, limit = 20, status, propertyType, listingType, agentId } = query;
     const skip = (page - 1) * limit;
 
@@ -52,7 +53,7 @@ export class PropertiesService {
     return property;
   }
 
-  async update(tenantId: string, id: string, data: any) {
+  async update(tenantId: string, id: string, data: UpdatePropertyDto) {
     const property = await this.prisma.property.findFirst({ where: { id, tenantId } });
     if (!property) throw new NotFoundException('Property not found');
 

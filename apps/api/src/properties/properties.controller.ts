@@ -1,11 +1,12 @@
 import { Controller, Get, Post, Put, Body, Param, Query, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiBody, ApiQuery } from '@nestjs/swagger';
 import { PropertiesService } from './properties.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from '../roles/guards/permissions.guard';
 import { RequirePermissions } from '../common/decorators/require-permissions.decorator';
 import { PERMISSIONS } from '../roles/permissions.constants';
 import { CurrentUser } from "../common/decorators/current-user.decorator";
+import { CreatePropertyDto, UpdatePropertyDto, QueryPropertyDto } from './dto/property.dto';
 import type { CurrentUserPayload } from '../common/decorators/current-user.decorator';
 
 @ApiTags('properties')
@@ -17,15 +18,16 @@ export class PropertiesController {
 
   @Post()
   @ApiOperation({ summary: 'Create a new property' })
+  @ApiBody({ type: CreatePropertyDto })
   @RequirePermissions(PERMISSIONS.CREATE_PROPERTY)
-  async create(@CurrentUser() user: CurrentUserPayload, @Body() data: any) {
+  async create(@CurrentUser() user: CurrentUserPayload, @Body() data: CreatePropertyDto) {
     return this.propertiesService.create(user.tenantId, data);
   }
 
   @Get()
   @ApiOperation({ summary: 'List properties with filters' })
   @RequirePermissions(PERMISSIONS.READ_PROPERTY)
-  async findAll(@CurrentUser() user: CurrentUserPayload, @Query() query: any) {
+  async findAll(@CurrentUser() user: CurrentUserPayload, @Query() query: QueryPropertyDto) {
     return this.propertiesService.findAll(user.tenantId, query);
   }
 
@@ -38,11 +40,12 @@ export class PropertiesController {
 
   @Put(':id')
   @ApiOperation({ summary: 'Update property details' })
+  @ApiBody({ type: UpdatePropertyDto })
   @RequirePermissions(PERMISSIONS.UPDATE_PROPERTY)
   async update(
     @CurrentUser() user: CurrentUserPayload,
     @Param('id') id: string,
-    @Body() data: any,
+    @Body() data: UpdatePropertyDto,
   ) {
     return this.propertiesService.update(user.tenantId, id, data);
   }

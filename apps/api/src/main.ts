@@ -4,11 +4,12 @@ import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
 import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
+import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
-    logger: ['error', 'warn', 'log'],
-  });
+  const app = await NestFactory.create(AppModule, { bufferLogs: true });
+  app.useLogger(app.get(Logger));
+  app.useGlobalInterceptors(new LoggerErrorInterceptor());
 
   // ─────────────────────────────────────────────
   // Security Headers (MUST - per secure coding guidelines)
@@ -97,6 +98,12 @@ async function bootstrap() {
       .addTag('notifications', 'Notification Center')
       .addTag('audit-logs', 'Audit Log')
       .addTag('files', 'File Management')
+      .addTag('platform-developers', 'Developer Portal - Accounts, Orgs & Projects')
+      .addTag('platform-gateway', 'API Gateway - Keys, OAuth Clients & Plans')
+      .addTag('platform-marketplace', 'App Marketplace - Publish & Install Apps')
+      .addTag('platform-webhooks', 'Webhooks & Event Subscriptions')
+      .addTag('platform-partners', 'Partner Ecosystem & Programs')
+      .addApiKey({ type: 'apiKey', in: 'header', name: 'x-api-key' }, 'api-key')
       .build();
 
     const document = SwaggerModule.createDocument(app, config);
@@ -107,9 +114,10 @@ async function bootstrap() {
 
   const port = process.env.PORT || 3001;
   await app.listen(port);
-  console.log(`🚀 REIS API running on: http://localhost:${port}/api/v1`);
+  const logger = app.get(Logger);
+  logger.log(`🚀 REIS API running on: http://localhost:${port}/api/v1`);
   if (process.env.NODE_ENV !== 'production') {
-    console.log(`📚 Swagger docs: http://localhost:${port}/api/docs`);
+    logger.log(`📚 Swagger docs: http://localhost:${port}/api/docs`);
   }
 }
 

@@ -1,18 +1,19 @@
 import { PropertiesService } from './properties.service';
+import { CreatePropertyDto, UpdatePropertyDto, QueryPropertyDto } from './dto/property.dto';
 import type { CurrentUserPayload } from '../common/decorators/current-user.decorator';
 export declare class PropertiesController {
     private readonly propertiesService;
     constructor(propertiesService: PropertiesService);
-    create(user: CurrentUserPayload, data: any): Promise<{
-        id: string;
+    create(user: CurrentUserPayload, data: CreatePropertyDto): Promise<{
+        description: string | null;
         status: import("@prisma/client").$Enums.PropertyStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
-        description: string | null;
+        title: string;
         branchId: string | null;
         address: string;
-        title: string;
         propertyType: import("@prisma/client").$Enums.PropertyType;
         listingType: import("@prisma/client").$Enums.ListingType;
         price: number;
@@ -27,7 +28,7 @@ export declare class PropertiesController {
         longitude: number | null;
         agentId: string | null;
     }>;
-    findAll(user: CurrentUserPayload, query: any): Promise<{
+    findAll(user: CurrentUserPayload, query: QueryPropertyDto): Promise<{
         data: ({
             agent: {
                 id: string;
@@ -44,15 +45,15 @@ export declare class PropertiesController {
                 order: number;
             }[];
         } & {
-            id: string;
+            description: string | null;
             status: import("@prisma/client").$Enums.PropertyStatus;
+            id: string;
             createdAt: Date;
             updatedAt: Date;
             tenantId: string;
-            description: string | null;
+            title: string;
             branchId: string | null;
             address: string;
-            title: string;
             propertyType: import("@prisma/client").$Enums.PropertyType;
             listingType: import("@prisma/client").$Enums.ListingType;
             price: number;
@@ -90,8 +91,8 @@ export declare class PropertiesController {
         }[];
         documents: {
             url: string;
-            id: string;
             name: string;
+            id: string;
             createdAt: Date;
             propertyId: string;
             s3Key: string | null;
@@ -100,15 +101,15 @@ export declare class PropertiesController {
             docType: string;
         }[];
     } & {
-        id: string;
+        description: string | null;
         status: import("@prisma/client").$Enums.PropertyStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
-        description: string | null;
+        title: string;
         branchId: string | null;
         address: string;
-        title: string;
         propertyType: import("@prisma/client").$Enums.PropertyType;
         listingType: import("@prisma/client").$Enums.ListingType;
         price: number;
@@ -123,16 +124,16 @@ export declare class PropertiesController {
         longitude: number | null;
         agentId: string | null;
     }>;
-    update(user: CurrentUserPayload, id: string, data: any): Promise<{
-        id: string;
+    update(user: CurrentUserPayload, id: string, data: UpdatePropertyDto): Promise<{
+        description: string | null;
         status: import("@prisma/client").$Enums.PropertyStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
-        description: string | null;
+        title: string;
         branchId: string | null;
         address: string;
-        title: string;
         propertyType: import("@prisma/client").$Enums.PropertyType;
         listingType: import("@prisma/client").$Enums.ListingType;
         price: number;
@@ -148,15 +149,15 @@ export declare class PropertiesController {
         agentId: string | null;
     }>;
     assign(user: CurrentUserPayload, id: string, agentId: string): Promise<{
-        id: string;
+        description: string | null;
         status: import("@prisma/client").$Enums.PropertyStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
-        description: string | null;
+        title: string;
         branchId: string | null;
         address: string;
-        title: string;
         propertyType: import("@prisma/client").$Enums.PropertyType;
         listingType: import("@prisma/client").$Enums.ListingType;
         price: number;

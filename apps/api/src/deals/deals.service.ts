@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { ActivitiesService } from '../activities/activities.service';
-import { CreateDealDto, UpdateDealDto, AddDealNoteDto } from './dto/deal.dto';
+import { CreateDealDto, UpdateDealDto, AddDealNoteDto, QueryDealDto } from './dto/deal.dto';
 import { DealStage } from '@prisma/client';
 
 @Injectable()
@@ -28,7 +28,7 @@ export class DealsService {
     return deal;
   }
 
-  async findAll(tenantId: string, query: any) {
+  async findAll(tenantId: string, query: QueryDealDto) {
     const { stage, assigneeId, search } = query;
 
     const where: any = { tenantId };

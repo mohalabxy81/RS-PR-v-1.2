@@ -1,17 +1,18 @@
 import { PrismaService } from '../prisma/prisma.service';
+import { CreateAppointmentDto, UpdateAppointmentDto } from './dto/appointment.dto';
 export declare class AppointmentsService {
     private readonly prisma;
     constructor(prisma: PrismaService);
-    create(tenantId: string, organizerId: string, data: any): Promise<{
-        id: string;
+    create(tenantId: string, organizerId: string, data: CreateAppointmentDto): Promise<{
+        description: string | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
-        description: string | null;
+        type: import("@prisma/client").$Enums.AppointmentType;
         title: string;
         propertyId: string | null;
-        type: import("@prisma/client").$Enums.AppointmentType;
         leadId: string | null;
         customerId: string | null;
         organizerId: string;
@@ -42,15 +43,15 @@ export declare class AppointmentsService {
             lastName: string;
         };
     } & {
-        id: string;
+        description: string | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
-        description: string | null;
+        type: import("@prisma/client").$Enums.AppointmentType;
         title: string;
         propertyId: string | null;
-        type: import("@prisma/client").$Enums.AppointmentType;
         leadId: string | null;
         customerId: string | null;
         organizerId: string;
@@ -85,15 +86,15 @@ export declare class AppointmentsService {
             lastName: string;
         };
     } & {
-        id: string;
+        description: string | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
-        description: string | null;
+        type: import("@prisma/client").$Enums.AppointmentType;
         title: string;
         propertyId: string | null;
-        type: import("@prisma/client").$Enums.AppointmentType;
         leadId: string | null;
         customerId: string | null;
         organizerId: string;
@@ -103,16 +104,16 @@ export declare class AppointmentsService {
         location: string | null;
         reminderAt: Date | null;
     }>;
-    update(tenantId: string, id: string, data: any): Promise<{
-        id: string;
+    update(tenantId: string, id: string, data: UpdateAppointmentDto): Promise<{
+        description: string | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
-        description: string | null;
+        type: import("@prisma/client").$Enums.AppointmentType;
         title: string;
         propertyId: string | null;
-        type: import("@prisma/client").$Enums.AppointmentType;
         leadId: string | null;
         customerId: string | null;
         organizerId: string;
@@ -123,15 +124,15 @@ export declare class AppointmentsService {
         reminderAt: Date | null;
     }>;
     remove(tenantId: string, id: string): Promise<{
-        id: string;
+        description: string | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
-        description: string | null;
+        type: import("@prisma/client").$Enums.AppointmentType;
         title: string;
         propertyId: string | null;
-        type: import("@prisma/client").$Enums.AppointmentType;
         leadId: string | null;
         customerId: string | null;
         organizerId: string;

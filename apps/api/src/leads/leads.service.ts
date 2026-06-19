@@ -2,12 +2,14 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { ActivitiesService } from '../activities/activities.service';
 import { CreateLeadDto, UpdateLeadDto, QueryLeadDto } from './dto/lead.dto';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class LeadsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly activities: ActivitiesService,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   async create(tenantId: string, createdById: string, dto: CreateLeadDto) {
@@ -29,6 +31,12 @@ export class LeadsService {
       entityId: lead.id,
       action: 'created',
       description: `Lead ${lead.firstName} ${lead.lastName} was created`,
+    });
+
+    this.eventEmitter.emit('lead.created', {
+      tenantId,
+      leadId: lead.id,
+      payload: lead,
     });
 
     return lead;
@@ -121,6 +129,12 @@ export class LeadsService {
         description: `Lead ${lead.firstName} ${lead.lastName} was updated`,
       });
     }
+
+    this.eventEmitter.emit('lead.updated', {
+      tenantId,
+      leadId: lead.id,
+      payload: updated,
+    });
 
     return updated;
   }

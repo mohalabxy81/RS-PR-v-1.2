@@ -2,7 +2,7 @@ import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common'
 import { SsoService } from '../services/sso.service';
 import { SecurityService } from '../services/security.service';
 
-@Controller('v1/enterprise/identity')
+@Controller('enterprise/identity')
 export class IdentityController {
   constructor(
     private readonly ssoService: SsoService,

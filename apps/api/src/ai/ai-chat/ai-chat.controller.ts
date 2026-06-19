@@ -9,7 +9,7 @@ import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 @ApiTags('AI Chat')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
-@Controller('api/v1/ai/chat')
+@Controller('ai/chat')
 export class AiChatController {
   constructor(private readonly aiChatService: AiChatService) {}
 

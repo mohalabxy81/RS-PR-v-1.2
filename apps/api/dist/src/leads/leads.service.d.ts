@@ -1,20 +1,22 @@
 import { PrismaService } from '../prisma/prisma.service';
 import { ActivitiesService } from '../activities/activities.service';
 import { CreateLeadDto, UpdateLeadDto, QueryLeadDto } from './dto/lead.dto';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 export declare class LeadsService {
     private readonly prisma;
     private readonly activities;
-    constructor(prisma: PrismaService, activities: ActivitiesService);
+    private readonly eventEmitter;
+    constructor(prisma: PrismaService, activities: ActivitiesService, eventEmitter: EventEmitter2);
     create(tenantId: string, createdById: string, dto: CreateLeadDto): Promise<{
-        id: string;
         status: import("@prisma/client").$Enums.LeadStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         email: string | null;
         tenantId: string;
-        branchId: string | null;
         firstName: string;
         lastName: string;
+        branchId: string | null;
         phone: string | null;
         propertyType: import("@prisma/client").$Enums.PropertyType | null;
         source: import("@prisma/client").$Enums.LeadSource;
@@ -37,15 +39,15 @@ export declare class LeadsService {
                 tag: string;
             }[];
         } & {
-            id: string;
             status: import("@prisma/client").$Enums.LeadStatus;
+            id: string;
             createdAt: Date;
             updatedAt: Date;
             email: string | null;
             tenantId: string;
-            branchId: string | null;
             firstName: string;
             lastName: string;
+            branchId: string | null;
             phone: string | null;
             propertyType: import("@prisma/client").$Enums.PropertyType | null;
             source: import("@prisma/client").$Enums.LeadSource;
@@ -72,10 +74,10 @@ export declare class LeadsService {
             stage: import("@prisma/client").$Enums.DealStage;
         }[];
         appointments: {
-            id: string;
             status: import("@prisma/client").$Enums.AppointmentStatus;
-            title: string;
+            id: string;
             type: import("@prisma/client").$Enums.AppointmentType;
+            title: string;
             startTime: Date;
         }[];
         leadNotes: ({
@@ -106,15 +108,15 @@ export declare class LeadsService {
             tag: string;
         }[];
     } & {
-        id: string;
         status: import("@prisma/client").$Enums.LeadStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         email: string | null;
         tenantId: string;
-        branchId: string | null;
         firstName: string;
         lastName: string;
+        branchId: string | null;
         phone: string | null;
         propertyType: import("@prisma/client").$Enums.PropertyType | null;
         source: import("@prisma/client").$Enums.LeadSource;
@@ -127,15 +129,15 @@ export declare class LeadsService {
         createdById: string | null;
     }>;
     update(tenantId: string, id: string, dto: UpdateLeadDto, updatedById?: string): Promise<{
-        id: string;
         status: import("@prisma/client").$Enums.LeadStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         email: string | null;
         tenantId: string;
-        branchId: string | null;
         firstName: string;
         lastName: string;
+        branchId: string | null;
         phone: string | null;
         propertyType: import("@prisma/client").$Enums.PropertyType | null;
         source: import("@prisma/client").$Enums.LeadSource;
@@ -148,15 +150,15 @@ export declare class LeadsService {
         createdById: string | null;
     }>;
     archive(tenantId: string, id: string): Promise<{
-        id: string;
         status: import("@prisma/client").$Enums.LeadStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         email: string | null;
         tenantId: string;
-        branchId: string | null;
         firstName: string;
         lastName: string;
+        branchId: string | null;
         phone: string | null;
         propertyType: import("@prisma/client").$Enums.PropertyType | null;
         source: import("@prisma/client").$Enums.LeadSource;
@@ -183,15 +185,15 @@ export declare class LeadsService {
         authorId: string;
     }>;
     assign(tenantId: string, id: string, assigneeId: string | null, assignedById?: string): Promise<{
-        id: string;
         status: import("@prisma/client").$Enums.LeadStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         email: string | null;
         tenantId: string;
-        branchId: string | null;
         firstName: string;
         lastName: string;
+        branchId: string | null;
         phone: string | null;
         propertyType: import("@prisma/client").$Enums.PropertyType | null;
         source: import("@prisma/client").$Enums.LeadSource;
@@ -210,12 +212,12 @@ export declare class LeadsService {
             lastName: string;
         } | null;
     } & {
+        description: string | null;
         id: string;
         createdAt: Date;
         userId: string | null;
         tenantId: string;
         action: string;
-        description: string | null;
         entityId: string;
         entityType: string;
         metadata: import("@prisma/client/runtime/client").JsonValue | null;

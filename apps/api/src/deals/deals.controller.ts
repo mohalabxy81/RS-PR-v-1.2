@@ -7,7 +7,7 @@ import { RequirePermissions } from '../common/decorators/require-permissions.dec
 import { PERMISSIONS } from '../roles/permissions.constants';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import type { CurrentUserPayload } from '../common/decorators/current-user.decorator';
-import { CreateDealDto, UpdateDealDto, UpdateDealStageDto, AddDealNoteDto } from './dto/deal.dto';
+import { CreateDealDto, UpdateDealDto, UpdateDealStageDto, AddDealNoteDto, QueryDealDto } from './dto/deal.dto';
 
 @ApiTags('deals')
 @Controller({ path: 'deals', version: '1' })
@@ -26,7 +26,7 @@ export class DealsController {
   @Get()
   @ApiOperation({ summary: 'List all deals (useful for Kanban board)' })
   @RequirePermissions(PERMISSIONS.READ_DEAL)
-  async findAll(@CurrentUser() user: CurrentUserPayload, @Query() query: any) {
+  async findAll(@CurrentUser() user: CurrentUserPayload, @Query() query: QueryDealDto) {
     return this.dealsService.findAll(user.tenantId, query);
   }
 

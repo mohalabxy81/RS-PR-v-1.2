@@ -1,12 +1,13 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards, Request, HttpCode, HttpStatus } from '@nestjs/common';
 import { AiAdminService } from './ai-admin.service';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
-import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiBody } from '@nestjs/swagger';
+import { CreateAiProviderDto, CreateAiModelDto, CreateAiPromptDto, CreatePromptVersionDto } from './dto/ai-admin.dto';
 
 @ApiTags('AI Admin')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
-@Controller('api/v1/ai/admin')
+@Controller('ai/admin')
 export class AiAdminController {
   constructor(private readonly aiAdminService: AiAdminService) {}
 
@@ -20,7 +21,8 @@ export class AiAdminController {
 
   @Post('providers')
   @ApiOperation({ summary: 'Create a new AI provider' })
-  async createProvider(@Body() body: any, @Request() req: any) {
+  @ApiBody({ type: CreateAiProviderDto })
+  async createProvider(@Body() body: CreateAiProviderDto, @Request() req: any) {
     return this.aiAdminService.createProvider(req.user.tenantId, body);
   }
 
@@ -34,7 +36,8 @@ export class AiAdminController {
 
   @Post('models')
   @ApiOperation({ summary: 'Create a new AI model' })
-  async createModel(@Body() body: any, @Request() req: any) {
+  @ApiBody({ type: CreateAiModelDto })
+  async createModel(@Body() body: CreateAiModelDto, @Request() req: any) {
     return this.aiAdminService.createModel(req.user.tenantId, body);
   }
 
@@ -48,13 +51,15 @@ export class AiAdminController {
 
   @Post('prompts')
   @ApiOperation({ summary: 'Create a new prompt template' })
-  async createPrompt(@Body() body: any, @Request() req: any) {
+  @ApiBody({ type: CreateAiPromptDto })
+  async createPrompt(@Body() body: CreateAiPromptDto, @Request() req: any) {
     return this.aiAdminService.createPrompt({ tenantId: req.user.tenantId, ...body });
   }
 
   @Post('prompts/:id/versions')
   @ApiOperation({ summary: 'Create a new version for a prompt' })
-  async createPromptVersion(@Param('id') id: string, @Body() body: { content: string }, @Request() req: any) {
+  @ApiBody({ type: CreatePromptVersionDto })
+  async createPromptVersion(@Param('id') id: string, @Body() body: CreatePromptVersionDto, @Request() req: any) {
     return this.aiAdminService.createPromptVersion(id, body.content, req.user.id);
   }
 

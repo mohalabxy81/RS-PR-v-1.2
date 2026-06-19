@@ -1,8 +1,9 @@
 import { PrismaService } from '../prisma/prisma.service';
+import { CreateCustomerDto, UpdateCustomerDto, QueryCustomerDto } from './dto/customer.dto';
 export declare class CustomersService {
     private readonly prisma;
     constructor(prisma: PrismaService);
-    create(tenantId: string, data: any): Promise<{
+    create(tenantId: string, data: CreateCustomerDto): Promise<{
         id: string;
         createdAt: Date;
         updatedAt: Date;
@@ -16,7 +17,7 @@ export declare class CustomersService {
         assigneeId: string | null;
         nationality: string | null;
     }>;
-    findAll(tenantId: string, query: any): Promise<{
+    findAll(tenantId: string, query: QueryCustomerDto): Promise<{
         data: ({
             _count: {
                 deals: number;
@@ -75,8 +76,8 @@ export declare class CustomersService {
         } | null;
         customerDocs: {
             url: string;
-            id: string;
             name: string;
+            id: string;
             createdAt: Date;
             s3Key: string | null;
             mimeType: string | null;
@@ -98,7 +99,7 @@ export declare class CustomersService {
         assigneeId: string | null;
         nationality: string | null;
     }>;
-    update(tenantId: string, id: string, data: any): Promise<{
+    update(tenantId: string, id: string, data: UpdateCustomerDto): Promise<{
         id: string;
         createdAt: Date;
         updatedAt: Date;

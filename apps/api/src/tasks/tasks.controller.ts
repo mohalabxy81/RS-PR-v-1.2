@@ -1,11 +1,12 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, Query, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 import { TasksService } from './tasks.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from '../roles/guards/permissions.guard';
 import { RequirePermissions } from '../common/decorators/require-permissions.decorator';
 import { PERMISSIONS } from '../roles/permissions.constants';
 import { CurrentUser } from "../common/decorators/current-user.decorator";
+import { CreateTaskDto, UpdateTaskDto, AddTaskCommentDto } from './dto/task.dto';
 import type { CurrentUserPayload } from '../common/decorators/current-user.decorator';
 
 @ApiTags('tasks')
@@ -17,8 +18,9 @@ export class TasksController {
 
   @Post()
   @ApiOperation({ summary: 'Create a new task' })
+  @ApiBody({ type: CreateTaskDto })
   @RequirePermissions(PERMISSIONS.CREATE_TASK)
-  async create(@CurrentUser() user: CurrentUserPayload, @Body() data: any) {
+  async create(@CurrentUser() user: CurrentUserPayload, @Body() data: CreateTaskDto) {
     return this.tasksService.create(user.tenantId, user.userId, data);
   }
 
@@ -38,24 +40,26 @@ export class TasksController {
 
   @Put(':id')
   @ApiOperation({ summary: 'Update a task' })
+  @ApiBody({ type: UpdateTaskDto })
   @RequirePermissions(PERMISSIONS.UPDATE_TASK)
   async update(
     @CurrentUser() user: CurrentUserPayload,
     @Param('id') id: string,
-    @Body() data: any,
+    @Body() data: UpdateTaskDto,
   ) {
     return this.tasksService.update(user.tenantId, id, data);
   }
 
   @Post(':id/comments')
   @ApiOperation({ summary: 'Add a comment to a task' })
+  @ApiBody({ type: AddTaskCommentDto })
   @RequirePermissions(PERMISSIONS.UPDATE_TASK)
   async addComment(
     @CurrentUser() user: CurrentUserPayload,
     @Param('id') id: string,
-    @Body('content') content: string,
+    @Body() body: AddTaskCommentDto,
   ) {
-    return this.tasksService.addComment(user.tenantId, id, user.userId, content);
+    return this.tasksService.addComment(user.tenantId, id, user.userId, body.content);
   }
 
   @Delete(':id')

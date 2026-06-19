@@ -5,15 +5,15 @@ export declare class LeadsController {
     private readonly leadsService;
     constructor(leadsService: LeadsService);
     create(user: CurrentUserPayload, dto: CreateLeadDto): Promise<{
-        id: string;
         status: import("@prisma/client").$Enums.LeadStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         email: string | null;
         tenantId: string;
-        branchId: string | null;
         firstName: string;
         lastName: string;
+        branchId: string | null;
         phone: string | null;
         propertyType: import("@prisma/client").$Enums.PropertyType | null;
         source: import("@prisma/client").$Enums.LeadSource;
@@ -36,15 +36,15 @@ export declare class LeadsController {
                 tag: string;
             }[];
         } & {
-            id: string;
             status: import("@prisma/client").$Enums.LeadStatus;
+            id: string;
             createdAt: Date;
             updatedAt: Date;
             email: string | null;
             tenantId: string;
-            branchId: string | null;
             firstName: string;
             lastName: string;
+            branchId: string | null;
             phone: string | null;
             propertyType: import("@prisma/client").$Enums.PropertyType | null;
             source: import("@prisma/client").$Enums.LeadSource;
@@ -71,10 +71,10 @@ export declare class LeadsController {
             stage: import("@prisma/client").$Enums.DealStage;
         }[];
         appointments: {
-            id: string;
             status: import("@prisma/client").$Enums.AppointmentStatus;
-            title: string;
+            id: string;
             type: import("@prisma/client").$Enums.AppointmentType;
+            title: string;
             startTime: Date;
         }[];
         leadNotes: ({
@@ -105,15 +105,15 @@ export declare class LeadsController {
             tag: string;
         }[];
     } & {
-        id: string;
         status: import("@prisma/client").$Enums.LeadStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         email: string | null;
         tenantId: string;
-        branchId: string | null;
         firstName: string;
         lastName: string;
+        branchId: string | null;
         phone: string | null;
         propertyType: import("@prisma/client").$Enums.PropertyType | null;
         source: import("@prisma/client").$Enums.LeadSource;
@@ -126,15 +126,15 @@ export declare class LeadsController {
         createdById: string | null;
     }>;
     update(user: CurrentUserPayload, id: string, dto: UpdateLeadDto): Promise<{
-        id: string;
         status: import("@prisma/client").$Enums.LeadStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         email: string | null;
         tenantId: string;
-        branchId: string | null;
         firstName: string;
         lastName: string;
+        branchId: string | null;
         phone: string | null;
         propertyType: import("@prisma/client").$Enums.PropertyType | null;
         source: import("@prisma/client").$Enums.LeadSource;
@@ -147,15 +147,15 @@ export declare class LeadsController {
         createdById: string | null;
     }>;
     archive(user: CurrentUserPayload, id: string): Promise<{
-        id: string;
         status: import("@prisma/client").$Enums.LeadStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         email: string | null;
         tenantId: string;
-        branchId: string | null;
         firstName: string;
         lastName: string;
+        branchId: string | null;
         phone: string | null;
         propertyType: import("@prisma/client").$Enums.PropertyType | null;
         source: import("@prisma/client").$Enums.LeadSource;
@@ -182,15 +182,15 @@ export declare class LeadsController {
         authorId: string;
     }>;
     assign(user: CurrentUserPayload, id: string, dto: AssignLeadDto): Promise<{
-        id: string;
         status: import("@prisma/client").$Enums.LeadStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         email: string | null;
         tenantId: string;
-        branchId: string | null;
         firstName: string;
         lastName: string;
+        branchId: string | null;
         phone: string | null;
         propertyType: import("@prisma/client").$Enums.PropertyType | null;
         source: import("@prisma/client").$Enums.LeadSource;
@@ -209,12 +209,12 @@ export declare class LeadsController {
             lastName: string;
         } | null;
     } & {
+        description: string | null;
         id: string;
         createdAt: Date;
         userId: string | null;
         tenantId: string;
         action: string;
-        description: string | null;
         entityId: string;
         entityType: string;
         metadata: import("@prisma/client/runtime/client").JsonValue | null;

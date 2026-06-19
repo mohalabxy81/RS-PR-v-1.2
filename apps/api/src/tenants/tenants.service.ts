@@ -4,6 +4,8 @@ import {
   ConflictException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { UpdateTenantDto } from './dto/tenant.dto';
+import { TenantStatus } from '@prisma/client';
 
 @Injectable()
 export class TenantsService {
@@ -29,7 +31,7 @@ export class TenantsService {
     return tenant;
   }
 
-  async update(id: string, data: any) {
+  async update(id: string, data: UpdateTenantDto) {
     // Check if slug is taken by another tenant
     if (data.slug) {
       const existing = await this.prisma.tenant.findUnique({ where: { slug: data.slug } });
@@ -48,7 +50,7 @@ export class TenantsService {
     }
   }
 
-  async updateStatus(id: string, status: any) {
+  async updateStatus(id: string, status: TenantStatus) {
      return this.update(id, { status });
   }
 }

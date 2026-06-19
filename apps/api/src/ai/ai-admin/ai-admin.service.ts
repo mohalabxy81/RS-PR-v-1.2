@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { AiPromptsService } from '../ai-prompts/ai-prompts.service';
+import { CreateAiProviderDto, CreateAiModelDto, CreateAiPromptDto } from './dto/ai-admin.dto';
 
 @Injectable()
 export class AiAdminService {
@@ -13,7 +14,7 @@ export class AiAdminService {
     });
   }
 
-  async createProvider(tenantId: string, data: any) {
+  async createProvider(tenantId: string, data: CreateAiProviderDto) {
     return this.prisma.aiProvider.create({
       data: { ...data, tenantId },
     });
@@ -29,7 +30,7 @@ export class AiAdminService {
     });
   }
 
-  async createModel(tenantId: string, data: any) {
+  async createModel(tenantId: string, data: CreateAiModelDto) {
     return this.prisma.aiModel.create({
       data,
     });
@@ -47,7 +48,7 @@ export class AiAdminService {
     });
   }
 
-  async createPrompt(data: any) {
+  async createPrompt(data: CreateAiPromptDto & { tenantId: string }) {
     return this.aiPrompts.createPrompt(data);
   }
 

@@ -4,10 +4,10 @@ export declare class RolesController {
     private readonly rolesService;
     constructor(rolesService: RolesService);
     getAllPermissions(): Promise<{
+        description: string | null;
         id: string;
         createdAt: Date;
         action: string;
-        description: string | null;
     }[]>;
     getRoles(user: CurrentUserPayload): Promise<({
         _count: {
@@ -15,10 +15,10 @@ export declare class RolesController {
         };
         rolePermissions: ({
             permission: {
+                description: string | null;
                 id: string;
                 createdAt: Date;
                 action: string;
-                description: string | null;
             };
         } & {
             id: string;
@@ -27,8 +27,8 @@ export declare class RolesController {
             permissionId: string;
         })[];
     } & {
-        id: string;
         name: string;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
@@ -37,10 +37,10 @@ export declare class RolesController {
     getRoleById(user: CurrentUserPayload, id: string): Promise<{
         rolePermissions: ({
             permission: {
+                description: string | null;
                 id: string;
                 createdAt: Date;
                 action: string;
-                description: string | null;
             };
         } & {
             id: string;
@@ -49,8 +49,8 @@ export declare class RolesController {
             permissionId: string;
         })[];
     } & {
-        id: string;
         name: string;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
@@ -59,10 +59,10 @@ export declare class RolesController {
     createRole(user: CurrentUserPayload, name: string, permissionIds: string[]): Promise<({
         rolePermissions: ({
             permission: {
+                description: string | null;
                 id: string;
                 createdAt: Date;
                 action: string;
-                description: string | null;
             };
         } & {
             id: string;
@@ -71,8 +71,8 @@ export declare class RolesController {
             permissionId: string;
         })[];
     } & {
-        id: string;
         name: string;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
@@ -81,10 +81,10 @@ export declare class RolesController {
     updateRolePermissions(user: CurrentUserPayload, id: string, permissionIds: string[]): Promise<{
         rolePermissions: ({
             permission: {
+                description: string | null;
                 id: string;
                 createdAt: Date;
                 action: string;
-                description: string | null;
             };
         } & {
             id: string;
@@ -93,8 +93,8 @@ export declare class RolesController {
             permissionId: string;
         })[];
     } & {
-        id: string;
         name: string;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;

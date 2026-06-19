@@ -21,6 +21,7 @@ const permissions_guard_1 = require("../roles/guards/permissions.guard");
 const require_permissions_decorator_1 = require("../common/decorators/require-permissions.decorator");
 const permissions_constants_1 = require("../roles/permissions.constants");
 const current_user_decorator_1 = require("../common/decorators/current-user.decorator");
+const task_dto_1 = require("./dto/task.dto");
 let TasksController = class TasksController {
     tasksService;
     constructor(tasksService) {
@@ -38,8 +39,8 @@ let TasksController = class TasksController {
     async update(user, id, data) {
         return this.tasksService.update(user.tenantId, id, data);
     }
-    async addComment(user, id, content) {
-        return this.tasksService.addComment(user.tenantId, id, user.userId, content);
+    async addComment(user, id, body) {
+        return this.tasksService.addComment(user.tenantId, id, user.userId, body.content);
     }
     async remove(user, id) {
         return this.tasksService.remove(user.tenantId, id);
@@ -49,11 +50,12 @@ exports.TasksController = TasksController;
 __decorate([
     (0, common_1.Post)(),
     (0, swagger_1.ApiOperation)({ summary: 'Create a new task' }),
+    (0, swagger_1.ApiBody)({ type: task_dto_1.CreateTaskDto }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.CREATE_TASK),
     __param(0, (0, current_user_decorator_1.CurrentUser)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:paramtypes", [Object, task_dto_1.CreateTaskDto]),
     __metadata("design:returntype", Promise)
 ], TasksController.prototype, "create", null);
 __decorate([
@@ -79,23 +81,25 @@ __decorate([
 __decorate([
     (0, common_1.Put)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Update a task' }),
+    (0, swagger_1.ApiBody)({ type: task_dto_1.UpdateTaskDto }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.UPDATE_TASK),
     __param(0, (0, current_user_decorator_1.CurrentUser)()),
     __param(1, (0, common_1.Param)('id')),
     __param(2, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String, Object]),
+    __metadata("design:paramtypes", [Object, String, task_dto_1.UpdateTaskDto]),
     __metadata("design:returntype", Promise)
 ], TasksController.prototype, "update", null);
 __decorate([
     (0, common_1.Post)(':id/comments'),
     (0, swagger_1.ApiOperation)({ summary: 'Add a comment to a task' }),
+    (0, swagger_1.ApiBody)({ type: task_dto_1.AddTaskCommentDto }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.UPDATE_TASK),
     __param(0, (0, current_user_decorator_1.CurrentUser)()),
     __param(1, (0, common_1.Param)('id')),
-    __param(2, (0, common_1.Body)('content')),
+    __param(2, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String, String]),
+    __metadata("design:paramtypes", [Object, String, task_dto_1.AddTaskCommentDto]),
     __metadata("design:returntype", Promise)
 ], TasksController.prototype, "addComment", null);
 __decorate([

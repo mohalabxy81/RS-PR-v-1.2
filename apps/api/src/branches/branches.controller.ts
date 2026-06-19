@@ -1,11 +1,12 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 import { BranchesService } from './branches.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from '../roles/guards/permissions.guard';
 import { RequirePermissions } from '../common/decorators/require-permissions.decorator';
 import { PERMISSIONS } from '../roles/permissions.constants';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
+import { CreateBranchDto, UpdateBranchDto } from './dto/branch.dto';
 import type { CurrentUserPayload } from '../common/decorators/current-user.decorator';
 
 @ApiTags('branches')
@@ -17,8 +18,9 @@ export class BranchesController {
 
   @Post()
   @ApiOperation({ summary: 'Create a new branch' })
+  @ApiBody({ type: CreateBranchDto })
   @RequirePermissions(PERMISSIONS.CREATE_BRANCH)
-  async create(@CurrentUser() user: CurrentUserPayload, @Body() data: any) {
+  async create(@CurrentUser() user: CurrentUserPayload, @Body() data: CreateBranchDto) {
     return this.branchesService.create(user.tenantId, data);
   }
 
@@ -38,11 +40,12 @@ export class BranchesController {
 
   @Put(':id')
   @ApiOperation({ summary: 'Update a branch' })
+  @ApiBody({ type: UpdateBranchDto })
   @RequirePermissions(PERMISSIONS.UPDATE_BRANCH)
   async update(
     @CurrentUser() user: CurrentUserPayload,
     @Param('id') id: string,
-    @Body() data: any,
+    @Body() data: UpdateBranchDto,
   ) {
     return this.branchesService.update(user.tenantId, id, data);
   }

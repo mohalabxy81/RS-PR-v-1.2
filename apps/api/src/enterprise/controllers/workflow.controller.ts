@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
 import { WorkflowEngineService } from '../services/workflow-engine.service';
 
-@Controller('v1/enterprise/workflows')
+@Controller('enterprise/workflows')
 export class WorkflowController {
   constructor(private readonly workflowService: WorkflowEngineService) {}
 

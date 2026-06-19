@@ -1,6 +1,6 @@
 import { DealsService } from './deals.service';
 import type { CurrentUserPayload } from '../common/decorators/current-user.decorator';
-import { CreateDealDto, UpdateDealDto, UpdateDealStageDto, AddDealNoteDto } from './dto/deal.dto';
+import { CreateDealDto, UpdateDealDto, UpdateDealStageDto, AddDealNoteDto, QueryDealDto } from './dto/deal.dto';
 export declare class DealsController {
     private readonly dealsService;
     constructor(dealsService: DealsService);
@@ -20,7 +20,7 @@ export declare class DealsController {
         stage: import("@prisma/client").$Enums.DealStage;
         forecastCloseDate: Date | null;
     }>;
-    findAll(user: CurrentUserPayload, query: any): Promise<({
+    findAll(user: CurrentUserPayload, query: QueryDealDto): Promise<({
         property: {
             id: string;
             title: string;
@@ -72,10 +72,10 @@ export declare class DealsController {
             lastName: string;
         } | null;
         appointments: {
-            id: string;
             status: import("@prisma/client").$Enums.AppointmentStatus;
-            title: string;
+            id: string;
             type: import("@prisma/client").$Enums.AppointmentType;
+            title: string;
             startTime: Date;
         }[];
         dealNotes: ({

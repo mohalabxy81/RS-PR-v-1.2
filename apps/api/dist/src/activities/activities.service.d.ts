@@ -22,12 +22,12 @@ export declare class ActivitiesService {
                 lastName: string;
             } | null;
         } & {
+            description: string | null;
             id: string;
             createdAt: Date;
             userId: string | null;
             tenantId: string;
             action: string;
-            description: string | null;
             entityId: string;
             entityType: string;
             metadata: Prisma.JsonValue | null;

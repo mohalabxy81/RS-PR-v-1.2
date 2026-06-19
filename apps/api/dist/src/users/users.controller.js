@@ -21,6 +21,7 @@ const permissions_guard_1 = require("../roles/guards/permissions.guard");
 const require_permissions_decorator_1 = require("../common/decorators/require-permissions.decorator");
 const permissions_constants_1 = require("../roles/permissions.constants");
 const current_user_decorator_1 = require("../common/decorators/current-user.decorator");
+const user_dto_1 = require("./dto/user.dto");
 let UsersController = class UsersController {
     usersService;
     constructor(usersService) {
@@ -46,11 +47,12 @@ exports.UsersController = UsersController;
 __decorate([
     (0, common_1.Post)(),
     (0, swagger_1.ApiOperation)({ summary: 'Create a new user' }),
+    (0, swagger_1.ApiBody)({ type: user_dto_1.CreateUserDto }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.CREATE_USER),
     __param(0, (0, current_user_decorator_1.CurrentUser)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:paramtypes", [Object, user_dto_1.CreateUserDto]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "create", null);
 __decorate([
@@ -75,12 +77,13 @@ __decorate([
 __decorate([
     (0, common_1.Put)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Update a user' }),
+    (0, swagger_1.ApiBody)({ type: user_dto_1.UpdateUserDto }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.UPDATE_USER),
     __param(0, (0, current_user_decorator_1.CurrentUser)()),
     __param(1, (0, common_1.Param)('id')),
     __param(2, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String, Object]),
+    __metadata("design:paramtypes", [Object, String, user_dto_1.UpdateUserDto]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "update", null);
 __decorate([

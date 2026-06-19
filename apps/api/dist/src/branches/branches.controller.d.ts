@@ -1,11 +1,12 @@
 import { BranchesService } from './branches.service';
+import { CreateBranchDto, UpdateBranchDto } from './dto/branch.dto';
 import type { CurrentUserPayload } from '../common/decorators/current-user.decorator';
 export declare class BranchesController {
     private readonly branchesService;
     constructor(branchesService: BranchesService);
-    create(user: CurrentUserPayload, data: any): Promise<{
-        id: string;
+    create(user: CurrentUserPayload, data: CreateBranchDto): Promise<{
         name: string;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
@@ -20,8 +21,8 @@ export declare class BranchesController {
             leads: number;
         };
     } & {
-        id: string;
         name: string;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
@@ -37,8 +38,8 @@ export declare class BranchesController {
             lastName: string;
         }[];
     } & {
-        id: string;
         name: string;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
@@ -46,9 +47,9 @@ export declare class BranchesController {
         address: string | null;
         isActive: boolean;
     }>;
-    update(user: CurrentUserPayload, id: string, data: any): Promise<{
-        id: string;
+    update(user: CurrentUserPayload, id: string, data: UpdateBranchDto): Promise<{
         name: string;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
@@ -57,8 +58,8 @@ export declare class BranchesController {
         isActive: boolean;
     }>;
     remove(user: CurrentUserPayload, id: string): Promise<{
-        id: string;
         name: string;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;

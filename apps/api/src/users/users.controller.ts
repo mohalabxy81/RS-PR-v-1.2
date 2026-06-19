@@ -1,11 +1,12 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from '../roles/guards/permissions.guard';
 import { RequirePermissions } from '../common/decorators/require-permissions.decorator';
 import { PERMISSIONS } from '../roles/permissions.constants';
 import { CurrentUser } from "../common/decorators/current-user.decorator";
+import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
 import type { CurrentUserPayload } from '../common/decorators/current-user.decorator';
 
 @ApiTags('users')
@@ -17,8 +18,9 @@ export class UsersController {
 
   @Post()
   @ApiOperation({ summary: 'Create a new user' })
+  @ApiBody({ type: CreateUserDto })
   @RequirePermissions(PERMISSIONS.CREATE_USER)
-  async create(@CurrentUser() user: CurrentUserPayload, @Body() data: any) {
+  async create(@CurrentUser() user: CurrentUserPayload, @Body() data: CreateUserDto) {
     return this.usersService.create(user.tenantId, data);
   }
 
@@ -38,11 +40,12 @@ export class UsersController {
 
   @Put(':id')
   @ApiOperation({ summary: 'Update a user' })
+  @ApiBody({ type: UpdateUserDto })
   @RequirePermissions(PERMISSIONS.UPDATE_USER)
   async update(
     @CurrentUser() user: CurrentUserPayload,
     @Param('id') id: string,
-    @Body() data: any,
+    @Body() data: UpdateUserDto,
   ) {
     return this.usersService.update(user.tenantId, id, data);
   }

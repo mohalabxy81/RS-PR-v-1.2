@@ -9,8 +9,8 @@ export declare class NotificationsService {
         link: string | null;
         userId: string;
         tenantId: string;
-        title: string;
         type: import("@prisma/client").$Enums.NotificationType;
+        title: string;
         isRead: boolean;
         readAt: Date | null;
     }[]>;
@@ -21,8 +21,8 @@ export declare class NotificationsService {
         link: string | null;
         userId: string;
         tenantId: string;
-        title: string;
         type: import("@prisma/client").$Enums.NotificationType;
+        title: string;
         isRead: boolean;
         readAt: Date | null;
     }>;
@@ -41,8 +41,8 @@ export declare class NotificationsService {
         link: string | null;
         userId: string;
         tenantId: string;
-        title: string;
         type: import("@prisma/client").$Enums.NotificationType;
+        title: string;
         isRead: boolean;
         readAt: Date | null;
     }>;

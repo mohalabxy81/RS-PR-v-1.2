@@ -1,14 +1,11 @@
 import { PrismaService } from '../prisma/prisma.service';
+import { CreateBranchDto, UpdateBranchDto } from './dto/branch.dto';
 export declare class BranchesService {
     private readonly prisma;
     constructor(prisma: PrismaService);
-    create(tenantId: string, data: {
+    create(tenantId: string, data: CreateBranchDto): Promise<{
         name: string;
-        address?: string;
-        phone?: string;
-    }): Promise<{
         id: string;
-        name: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
@@ -23,8 +20,8 @@ export declare class BranchesService {
             leads: number;
         };
     } & {
-        id: string;
         name: string;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
@@ -40,8 +37,8 @@ export declare class BranchesService {
             lastName: string;
         }[];
     } & {
-        id: string;
         name: string;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
@@ -49,9 +46,9 @@ export declare class BranchesService {
         address: string | null;
         isActive: boolean;
     }>;
-    update(tenantId: string, id: string, data: any): Promise<{
-        id: string;
+    update(tenantId: string, id: string, data: UpdateBranchDto): Promise<{
         name: string;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
@@ -60,8 +57,8 @@ export declare class BranchesService {
         isActive: boolean;
     }>;
     remove(tenantId: string, id: string): Promise<{
-        id: string;
         name: string;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;

@@ -1,11 +1,12 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, Query, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 import { AppointmentsService } from './appointments.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from '../roles/guards/permissions.guard';
 import { RequirePermissions } from '../common/decorators/require-permissions.decorator';
 import { PERMISSIONS } from '../roles/permissions.constants';
 import { CurrentUser } from "../common/decorators/current-user.decorator";
+import { CreateAppointmentDto, UpdateAppointmentDto } from './dto/appointment.dto';
 import type { CurrentUserPayload } from '../common/decorators/current-user.decorator';
 
 @ApiTags('appointments')
@@ -17,8 +18,9 @@ export class AppointmentsController {
 
   @Post()
   @ApiOperation({ summary: 'Create a new appointment' })
+  @ApiBody({ type: CreateAppointmentDto })
   @RequirePermissions(PERMISSIONS.CREATE_APPOINTMENT)
-  async create(@CurrentUser() user: CurrentUserPayload, @Body() data: any) {
+  async create(@CurrentUser() user: CurrentUserPayload, @Body() data: CreateAppointmentDto) {
     return this.appointmentsService.create(user.tenantId, user.userId, data);
   }
 
@@ -38,11 +40,12 @@ export class AppointmentsController {
 
   @Put(':id')
   @ApiOperation({ summary: 'Update an appointment' })
+  @ApiBody({ type: UpdateAppointmentDto })
   @RequirePermissions(PERMISSIONS.UPDATE_APPOINTMENT)
   async update(
     @CurrentUser() user: CurrentUserPayload,
     @Param('id') id: string,
-    @Body() data: any,
+    @Body() data: UpdateAppointmentDto,
   ) {
     return this.appointmentsService.update(user.tenantId, id, data);
   }

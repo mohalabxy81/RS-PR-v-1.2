@@ -21,6 +21,7 @@ const permissions_guard_1 = require("../roles/guards/permissions.guard");
 const require_permissions_decorator_1 = require("../common/decorators/require-permissions.decorator");
 const permissions_constants_1 = require("../roles/permissions.constants");
 const current_user_decorator_1 = require("../common/decorators/current-user.decorator");
+const appointment_dto_1 = require("./dto/appointment.dto");
 let AppointmentsController = class AppointmentsController {
     appointmentsService;
     constructor(appointmentsService) {
@@ -46,11 +47,12 @@ exports.AppointmentsController = AppointmentsController;
 __decorate([
     (0, common_1.Post)(),
     (0, swagger_1.ApiOperation)({ summary: 'Create a new appointment' }),
+    (0, swagger_1.ApiBody)({ type: appointment_dto_1.CreateAppointmentDto }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.CREATE_APPOINTMENT),
     __param(0, (0, current_user_decorator_1.CurrentUser)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:paramtypes", [Object, appointment_dto_1.CreateAppointmentDto]),
     __metadata("design:returntype", Promise)
 ], AppointmentsController.prototype, "create", null);
 __decorate([
@@ -76,12 +78,13 @@ __decorate([
 __decorate([
     (0, common_1.Put)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Update an appointment' }),
+    (0, swagger_1.ApiBody)({ type: appointment_dto_1.UpdateAppointmentDto }),
     (0, require_permissions_decorator_1.RequirePermissions)(permissions_constants_1.PERMISSIONS.UPDATE_APPOINTMENT),
     __param(0, (0, current_user_decorator_1.CurrentUser)()),
     __param(1, (0, common_1.Param)('id')),
     __param(2, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String, Object]),
+    __metadata("design:paramtypes", [Object, String, appointment_dto_1.UpdateAppointmentDto]),
     __metadata("design:returntype", Promise)
 ], AppointmentsController.prototype, "update", null);
 __decorate([

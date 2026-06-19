@@ -9,10 +9,11 @@ const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
 const helmet_1 = __importDefault(require("helmet"));
 const global_exception_filter_1 = require("./common/filters/global-exception.filter");
+const nestjs_pino_1 = require("nestjs-pino");
 async function bootstrap() {
-    const app = await core_1.NestFactory.create(app_module_1.AppModule, {
-        logger: ['error', 'warn', 'log'],
-    });
+    const app = await core_1.NestFactory.create(app_module_1.AppModule, { bufferLogs: true });
+    app.useLogger(app.get(nestjs_pino_1.Logger));
+    app.useGlobalInterceptors(new nestjs_pino_1.LoggerErrorInterceptor());
     app.use((0, helmet_1.default)({
         contentSecurityPolicy: {
             directives: {
@@ -74,6 +75,12 @@ async function bootstrap() {
             .addTag('notifications', 'Notification Center')
             .addTag('audit-logs', 'Audit Log')
             .addTag('files', 'File Management')
+            .addTag('platform-developers', 'Developer Portal - Accounts, Orgs & Projects')
+            .addTag('platform-gateway', 'API Gateway - Keys, OAuth Clients & Plans')
+            .addTag('platform-marketplace', 'App Marketplace - Publish & Install Apps')
+            .addTag('platform-webhooks', 'Webhooks & Event Subscriptions')
+            .addTag('platform-partners', 'Partner Ecosystem & Programs')
+            .addApiKey({ type: 'apiKey', in: 'header', name: 'x-api-key' }, 'api-key')
             .build();
         const document = swagger_1.SwaggerModule.createDocument(app, config);
         swagger_1.SwaggerModule.setup('api/docs', app, document, {
@@ -82,9 +89,10 @@ async function bootstrap() {
     }
     const port = process.env.PORT || 3001;
     await app.listen(port);
-    console.log(`🚀 REIS API running on: http://localhost:${port}/api/v1`);
+    const logger = app.get(nestjs_pino_1.Logger);
+    logger.log(`🚀 REIS API running on: http://localhost:${port}/api/v1`);
     if (process.env.NODE_ENV !== 'production') {
-        console.log(`📚 Swagger docs: http://localhost:${port}/api/docs`);
+        logger.log(`📚 Swagger docs: http://localhost:${port}/api/docs`);
     }
 }
 bootstrap();

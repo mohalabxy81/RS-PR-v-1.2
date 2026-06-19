@@ -34,12 +34,12 @@ export declare class DashboardController {
             lastName: string;
         } | null;
     } & {
+        description: string | null;
         id: string;
         createdAt: Date;
         userId: string | null;
         tenantId: string;
         action: string;
-        description: string | null;
         entityId: string;
         entityType: string;
         metadata: import("@prisma/client/runtime/client").JsonValue | null;

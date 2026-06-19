@@ -13,12 +13,15 @@ exports.LeadsService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
 const activities_service_1 = require("../activities/activities.service");
+const event_emitter_1 = require("@nestjs/event-emitter");
 let LeadsService = class LeadsService {
     prisma;
     activities;
-    constructor(prisma, activities) {
+    eventEmitter;
+    constructor(prisma, activities, eventEmitter) {
         this.prisma = prisma;
         this.activities = activities;
+        this.eventEmitter = eventEmitter;
     }
     async create(tenantId, createdById, dto) {
         const { tags, ...data } = dto;
@@ -37,6 +40,11 @@ let LeadsService = class LeadsService {
             entityId: lead.id,
             action: 'created',
             description: `Lead ${lead.firstName} ${lead.lastName} was created`,
+        });
+        this.eventEmitter.emit('lead.created', {
+            tenantId,
+            leadId: lead.id,
+            payload: lead,
         });
         return lead;
     }
@@ -125,6 +133,11 @@ let LeadsService = class LeadsService {
                 description: `Lead ${lead.firstName} ${lead.lastName} was updated`,
             });
         }
+        this.eventEmitter.emit('lead.updated', {
+            tenantId,
+            leadId: lead.id,
+            payload: updated,
+        });
         return updated;
     }
     async archive(tenantId, id) {
@@ -188,6 +201,7 @@ exports.LeadsService = LeadsService;
 exports.LeadsService = LeadsService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,
-        activities_service_1.ActivitiesService])
+        activities_service_1.ActivitiesService,
+        event_emitter_1.EventEmitter2])
 ], LeadsService);
 //# sourceMappingURL=leads.service.js.map

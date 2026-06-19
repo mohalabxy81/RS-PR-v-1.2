@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
 import { ComplianceService } from '../services/compliance.service';
 
-@Controller('v1/enterprise/compliance')
+@Controller('enterprise/compliance')
 export class ComplianceController {
   constructor(private readonly complianceService: ComplianceService) {}
 

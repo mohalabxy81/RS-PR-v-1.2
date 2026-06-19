@@ -8,10 +8,10 @@ export declare class RolesService implements OnModuleInit {
     seedPermissions(): Promise<void>;
     seedTenantRolePermissions(tenantId: string): Promise<void>;
     getAllPermissions(): Promise<{
+        description: string | null;
         id: string;
         createdAt: Date;
         action: string;
-        description: string | null;
     }[]>;
     getRolesForTenant(tenantId: string): Promise<({
         _count: {
@@ -19,10 +19,10 @@ export declare class RolesService implements OnModuleInit {
         };
         rolePermissions: ({
             permission: {
+                description: string | null;
                 id: string;
                 createdAt: Date;
                 action: string;
-                description: string | null;
             };
         } & {
             id: string;
@@ -31,8 +31,8 @@ export declare class RolesService implements OnModuleInit {
             permissionId: string;
         })[];
     } & {
-        id: string;
         name: string;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
@@ -41,10 +41,10 @@ export declare class RolesService implements OnModuleInit {
     getRoleById(id: string, tenantId: string): Promise<({
         rolePermissions: ({
             permission: {
+                description: string | null;
                 id: string;
                 createdAt: Date;
                 action: string;
-                description: string | null;
             };
         } & {
             id: string;
@@ -53,8 +53,8 @@ export declare class RolesService implements OnModuleInit {
             permissionId: string;
         })[];
     } & {
-        id: string;
         name: string;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
@@ -63,10 +63,10 @@ export declare class RolesService implements OnModuleInit {
     createRole(tenantId: string, name: string, permissionIds: string[]): Promise<({
         rolePermissions: ({
             permission: {
+                description: string | null;
                 id: string;
                 createdAt: Date;
                 action: string;
-                description: string | null;
             };
         } & {
             id: string;
@@ -75,8 +75,8 @@ export declare class RolesService implements OnModuleInit {
             permissionId: string;
         })[];
     } & {
-        id: string;
         name: string;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
@@ -85,10 +85,10 @@ export declare class RolesService implements OnModuleInit {
     updateRolePermissions(roleId: string, tenantId: string, permissionIds: string[]): Promise<({
         rolePermissions: ({
             permission: {
+                description: string | null;
                 id: string;
                 createdAt: Date;
                 action: string;
-                description: string | null;
             };
         } & {
             id: string;
@@ -97,16 +97,16 @@ export declare class RolesService implements OnModuleInit {
             permissionId: string;
         })[];
     } & {
-        id: string;
         name: string;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
         isSystem: boolean;
     }) | null>;
     deleteRole(roleId: string, tenantId: string): Promise<{
-        id: string;
         name: string;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;

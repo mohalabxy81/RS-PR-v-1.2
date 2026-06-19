@@ -1,15 +1,17 @@
 import { PrismaService } from '../prisma/prisma.service';
+import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
 export declare class UsersService {
     private readonly prisma;
     constructor(prisma: PrismaService);
-    create(tenantId: string, data: any): Promise<{
-        id: string;
+    create(tenantId: string, data: CreateUserDto): Promise<{
         status: import("@prisma/client").$Enums.UserStatus;
+        id: string;
         email: string;
         firstName: string;
         lastName: string;
     }>;
     findAll(tenantId: string): Promise<{
+        status: import("@prisma/client").$Enums.UserStatus;
         branch: {
             name: string;
         } | null;
@@ -17,45 +19,44 @@ export declare class UsersService {
             name: string;
         } | null;
         id: string;
-        status: import("@prisma/client").$Enums.UserStatus;
         email: string;
         firstName: string;
         lastName: string;
     }[]>;
     findOne(tenantId: string, id: string): Promise<{
+        status: import("@prisma/client").$Enums.UserStatus;
         branch: {
-            id: string;
             name: string;
+            id: string;
         } | null;
         role: {
-            id: string;
             name: string;
+            id: string;
         } | null;
         id: string;
-        status: import("@prisma/client").$Enums.UserStatus;
         email: string;
         firstName: string;
         lastName: string;
     }>;
-    update(tenantId: string, id: string, data: any): Promise<{
-        id: string;
+    update(tenantId: string, id: string, data: UpdateUserDto): Promise<{
         status: import("@prisma/client").$Enums.UserStatus;
+        id: string;
         email: string;
         firstName: string;
         lastName: string;
     }>;
     remove(tenantId: string, id: string): Promise<{
-        id: string;
         status: import("@prisma/client").$Enums.UserStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         email: string;
         tenantId: string;
         roleId: string | null;
-        branchId: string | null;
-        passwordHash: string;
         firstName: string;
         lastName: string;
+        branchId: string | null;
+        passwordHash: string;
         phone: string | null;
         avatarUrl: string | null;
         emailVerifiedAt: Date | null;

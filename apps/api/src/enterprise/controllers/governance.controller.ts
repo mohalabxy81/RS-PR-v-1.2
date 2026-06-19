@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
 import { GovernanceService } from '../services/governance.service';
 
-@Controller('v1/enterprise/governance')
+@Controller('enterprise/governance')
 export class GovernanceController {
   constructor(private readonly governanceService: GovernanceService) {}
 

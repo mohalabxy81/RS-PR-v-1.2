@@ -1,9 +1,10 @@
 import { CustomersService } from './customers.service';
+import { CreateCustomerDto, UpdateCustomerDto, QueryCustomerDto, AddCustomerNoteDto } from './dto/customer.dto';
 import type { CurrentUserPayload } from '../common/decorators/current-user.decorator';
 export declare class CustomersController {
     private readonly customersService;
     constructor(customersService: CustomersService);
-    create(user: CurrentUserPayload, data: any): Promise<{
+    create(user: CurrentUserPayload, data: CreateCustomerDto): Promise<{
         id: string;
         createdAt: Date;
         updatedAt: Date;
@@ -17,7 +18,7 @@ export declare class CustomersController {
         assigneeId: string | null;
         nationality: string | null;
     }>;
-    findAll(user: CurrentUserPayload, query: any): Promise<{
+    findAll(user: CurrentUserPayload, query: QueryCustomerDto): Promise<{
         data: ({
             _count: {
                 deals: number;
@@ -76,8 +77,8 @@ export declare class CustomersController {
         } | null;
         customerDocs: {
             url: string;
-            id: string;
             name: string;
+            id: string;
             createdAt: Date;
             s3Key: string | null;
             mimeType: string | null;
@@ -99,7 +100,7 @@ export declare class CustomersController {
         assigneeId: string | null;
         nationality: string | null;
     }>;
-    update(user: CurrentUserPayload, id: string, data: any): Promise<{
+    update(user: CurrentUserPayload, id: string, data: UpdateCustomerDto): Promise<{
         id: string;
         createdAt: Date;
         updatedAt: Date;
@@ -113,7 +114,7 @@ export declare class CustomersController {
         assigneeId: string | null;
         nationality: string | null;
     }>;
-    addNote(user: CurrentUserPayload, id: string, content: string): Promise<{
+    addNote(user: CurrentUserPayload, id: string, body: AddCustomerNoteDto): Promise<{
         id: string;
         createdAt: Date;
         updatedAt: Date;

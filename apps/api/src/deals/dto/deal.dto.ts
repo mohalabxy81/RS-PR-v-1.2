@@ -10,6 +10,7 @@ import {
   MinLength,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import { DealStage } from '@prisma/client';
 
 export class CreateDealDto {
@@ -122,4 +123,36 @@ export class AddDealNoteDto {
   @IsString()
   @MinLength(1)
   content: string;
+}
+
+export class QueryDealDto {
+  @ApiPropertyOptional({ example: 1 })
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(1)
+  page?: number = 1;
+
+  @ApiPropertyOptional({ example: 20 })
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(1)
+  limit?: number = 20;
+
+  @ApiPropertyOptional({ enum: DealStage })
+  @IsOptional()
+  @IsEnum(DealStage)
+  stage?: DealStage;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsUUID()
+  assigneeId?: string;
+
+  @ApiPropertyOptional({ example: 'Downtown' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
+  search?: string;
 }

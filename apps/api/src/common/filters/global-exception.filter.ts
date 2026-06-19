@@ -59,12 +59,17 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       );
     }
 
+    const requestId = request.headers['x-request-id'] || (request as any).id;
+    const correlationId = request.headers['x-correlation-id'] || requestId;
+
     response.status(status).json({
       statusCode: status,
       error,
       message,
       path: request.url,
       timestamp: new Date().toISOString(),
+      requestId,
+      correlationId,
     });
   }
 }

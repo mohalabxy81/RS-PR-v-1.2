@@ -1,15 +1,16 @@
 import { TasksService } from './tasks.service';
+import { CreateTaskDto, UpdateTaskDto, AddTaskCommentDto } from './dto/task.dto';
 import type { CurrentUserPayload } from '../common/decorators/current-user.decorator';
 export declare class TasksController {
     private readonly tasksService;
     constructor(tasksService: TasksService);
-    create(user: CurrentUserPayload, data: any): Promise<{
-        id: string;
+    create(user: CurrentUserPayload, data: CreateTaskDto): Promise<{
+        description: string | null;
         status: import("@prisma/client").$Enums.TaskStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
-        description: string | null;
         title: string;
         entityId: string | null;
         entityType: string | null;
@@ -17,9 +18,9 @@ export declare class TasksController {
         createdById: string | null;
         priority: import("@prisma/client").$Enums.TaskPriority;
         dueDate: Date | null;
-        completedAt: Date | null;
         isRecurring: boolean;
         recurrenceRule: string | null;
+        completedAt: Date | null;
     }>;
     findAll(user: CurrentUserPayload, query: any): Promise<({
         _count: {
@@ -37,12 +38,12 @@ export declare class TasksController {
             lastName: string;
         } | null;
     } & {
-        id: string;
+        description: string | null;
         status: import("@prisma/client").$Enums.TaskStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
-        description: string | null;
         title: string;
         entityId: string | null;
         entityType: string | null;
@@ -50,9 +51,9 @@ export declare class TasksController {
         createdById: string | null;
         priority: import("@prisma/client").$Enums.TaskPriority;
         dueDate: Date | null;
-        completedAt: Date | null;
         isRecurring: boolean;
         recurrenceRule: string | null;
+        completedAt: Date | null;
     })[]>;
     findOne(user: CurrentUserPayload, id: string): Promise<{
         taskComments: ({
@@ -81,8 +82,8 @@ export declare class TasksController {
         } | null;
         taskAttachments: {
             url: string;
-            id: string;
             name: string;
+            id: string;
             createdAt: Date;
             s3Key: string | null;
             mimeType: string | null;
@@ -90,12 +91,12 @@ export declare class TasksController {
             taskId: string;
         }[];
     } & {
-        id: string;
+        description: string | null;
         status: import("@prisma/client").$Enums.TaskStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
-        description: string | null;
         title: string;
         entityId: string | null;
         entityType: string | null;
@@ -103,17 +104,17 @@ export declare class TasksController {
         createdById: string | null;
         priority: import("@prisma/client").$Enums.TaskPriority;
         dueDate: Date | null;
-        completedAt: Date | null;
         isRecurring: boolean;
         recurrenceRule: string | null;
+        completedAt: Date | null;
     }>;
-    update(user: CurrentUserPayload, id: string, data: any): Promise<{
-        id: string;
+    update(user: CurrentUserPayload, id: string, data: UpdateTaskDto): Promise<{
+        description: string | null;
         status: import("@prisma/client").$Enums.TaskStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
-        description: string | null;
         title: string;
         entityId: string | null;
         entityType: string | null;
@@ -121,11 +122,11 @@ export declare class TasksController {
         createdById: string | null;
         priority: import("@prisma/client").$Enums.TaskPriority;
         dueDate: Date | null;
-        completedAt: Date | null;
         isRecurring: boolean;
         recurrenceRule: string | null;
+        completedAt: Date | null;
     }>;
-    addComment(user: CurrentUserPayload, id: string, content: string): Promise<{
+    addComment(user: CurrentUserPayload, id: string, body: AddTaskCommentDto): Promise<{
         id: string;
         createdAt: Date;
         updatedAt: Date;
@@ -134,12 +135,12 @@ export declare class TasksController {
         taskId: string;
     }>;
     remove(user: CurrentUserPayload, id: string): Promise<{
-        id: string;
+        description: string | null;
         status: import("@prisma/client").$Enums.TaskStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         tenantId: string;
-        description: string | null;
         title: string;
         entityId: string | null;
         entityType: string | null;
@@ -147,8 +148,8 @@ export declare class TasksController {
         createdById: string | null;
         priority: import("@prisma/client").$Enums.TaskPriority;
         dueDate: Date | null;
-        completedAt: Date | null;
         isRecurring: boolean;
         recurrenceRule: string | null;
+        completedAt: Date | null;
     }>;
 }
