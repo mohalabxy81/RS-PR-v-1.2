@@ -30,24 +30,26 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
             }
 
             const tenantId = getTenantId();
+            const op = operation as string;
+            const anyArgs = args as any;
             
             if (tenantId) {
-              if (operation === 'findUnique' || operation === 'findFirst' || operation === 'findMany' || operation === 'count') {
-                args.where = { ...args.where, tenantId };
-              } else if (operation === 'update' || operation === 'updateMany' || operation === 'delete' || operation === 'deleteMany') {
-                args.where = { ...args.where, tenantId };
-              } else if (operation === 'create') {
-                args.data = { ...args.data, tenantId };
-              } else if (operation === 'createMany') {
-                if (Array.isArray(args.data)) {
-                  args.data = args.data.map(d => ({ ...d, tenantId }));
+              if (op === 'findUnique' || op === 'findFirst' || op === 'findMany' || op === 'count') {
+                anyArgs.where = { ...anyArgs.where, tenantId };
+              } else if (op === 'update' || op === 'updateMany' || op === 'delete' || op === 'deleteMany') {
+                anyArgs.where = { ...anyArgs.where, tenantId };
+              } else if (op === 'create') {
+                anyArgs.data = { ...anyArgs.data, tenantId };
+              } else if (op === 'createMany') {
+                if (Array.isArray(anyArgs.data)) {
+                  anyArgs.data = anyArgs.data.map((d: any) => ({ ...d, tenantId }));
                 } else {
-                  args.data = { ...args.data, tenantId };
+                  anyArgs.data = { ...anyArgs.data, tenantId };
                 }
               }
             }
 
-            return query(args);
+            return query(anyArgs);
           },
         },
       },

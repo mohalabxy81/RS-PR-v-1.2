@@ -45,17 +45,19 @@ export class PermissionsGuard implements CanActivate {
       const request = context.switchToHttp().getRequest();
       const user: CurrentUserPayload = request.user;
 
-      if (!user?.roleId) {
-        throw new ForbiddenException('No role assigned');
+      if (!user?.role) {
+        return false;
       }
 
-      // Fetch user permissions from DB — never trust client-side data
-      const rolePermissions = await this.prisma.rolePermission.findMany({
-        where: { roleId: user.roleId },
-        include: { permission: true },
+      // We'll need to look up permissions by role name, since we only have user.role (name) now.
+      const roleRecord = await this.prisma.role.findFirst({
+        where: { name: user.role, tenantId: user.tenantId },
+        include: { rolePermissions: { include: { permission: true } } },
       });
 
-      const userPermissions = new Set(rolePermissions.map((rp) => rp.permission.action));
+      if (!roleRecord) return false;
+
+      const userPermissions = new Set(roleRecord.rolePermissions.map((rp: any) => rp.permission.action));
 
       // User must possess ALL required permissions to access this route
       const hasAll = requiredPermissions.every((p) => userPermissions.has(p));

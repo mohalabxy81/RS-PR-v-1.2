@@ -39,7 +39,7 @@ export class FilesController {
       // Basic security check: user can only request URLs for their own tenant's folder
       throw new Error('Unauthorized file access');
     }
-    const url = await this.filesService.getDownloadUrl(key);
+    const url = await this.filesService.getDownloadUrl(user.tenantId, key);
     return { url };
   }
 }

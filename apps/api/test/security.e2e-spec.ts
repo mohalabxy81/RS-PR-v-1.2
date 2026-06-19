@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
+import * as requestModule from 'supertest';
+const request = requestModule as any;
 import { AppModule } from './../src/app.module';
 
 describe('Security Configuration (e2e)', () => {

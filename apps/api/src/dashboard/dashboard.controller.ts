@@ -17,7 +17,7 @@ export class DashboardController {
   @Get('metrics')
   @ApiOperation({ summary: 'Get role-based dashboard metrics' })
   async getMetrics(@CurrentUser() user: CurrentUserPayload) {
-    return this.dashboardService.getMetrics(user.tenantId, user.userId, user.roleName);
+    return this.dashboardService.getMetrics(user.tenantId, user.userId, user.role);
   }
 
   @RequirePermissions('read:dashboard')
