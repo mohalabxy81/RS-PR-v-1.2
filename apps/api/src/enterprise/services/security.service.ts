@@ -1,3 +1,4 @@
+import { CreateSecurityEventDto, CreateRiskEventDto, CreateIncidentDto, CreateAdministratorDto, CreateAccessReviewDto } from '../dto/enterprise.dto';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 
@@ -7,7 +8,7 @@ export class SecurityService {
 
   // --- Security Events ---
 
-  async logSecurityEvent(organizationId: string, data: any) {
+  async logSecurityEvent(organizationId: string, data: CreateSecurityEventDto) {
     return this.prisma.enterpriseSecurityEvent.create({
       data: {
         ...data,
@@ -25,7 +26,7 @@ export class SecurityService {
 
   // --- Risk Events ---
 
-  async logRiskEvent(organizationId: string, data: any) {
+  async logRiskEvent(organizationId: string, data: CreateRiskEventDto) {
     return this.prisma.enterpriseRiskEvent.create({
       data: {
         ...data,
@@ -43,7 +44,7 @@ export class SecurityService {
 
   // --- Incidents ---
 
-  async createIncident(organizationId: string, data: any) {
+  async createIncident(organizationId: string, data: CreateIncidentDto) {
     return this.prisma.enterpriseIncident.create({
       data: {
         ...data,
@@ -71,7 +72,7 @@ export class SecurityService {
 
   // --- Administrators ---
 
-  async addAdministrator(organizationId: string, data: any) {
+  async addAdministrator(organizationId: string, data: CreateAdministratorDto) {
     return this.prisma.enterpriseAdministrator.create({
       data: {
         ...data,
@@ -88,7 +89,7 @@ export class SecurityService {
 
   // --- Access Reviews ---
 
-  async createAccessReview(organizationId: string, data: any) {
+  async createAccessReview(organizationId: string, data: CreateAccessReviewDto) {
     return this.prisma.enterpriseAccessReview.create({
       data: {
         ...data,

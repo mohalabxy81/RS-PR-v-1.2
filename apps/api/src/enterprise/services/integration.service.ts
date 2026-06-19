@@ -1,3 +1,4 @@
+import { CreateIntegrationDto, UpdateIntegrationDto, CreateConnectorDto } from '../dto/enterprise.dto';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 
@@ -14,7 +15,7 @@ export class IntegrationService {
     });
   }
 
-  async createIntegration(organizationId: string, data: any) {
+  async createIntegration(organizationId: string, data: CreateIntegrationDto) {
     return this.prisma.enterpriseIntegration.create({
       data: {
         ...data,
@@ -23,7 +24,7 @@ export class IntegrationService {
     });
   }
 
-  async updateIntegration(integrationId: string, data: any) {
+  async updateIntegration(integrationId: string, data: UpdateIntegrationDto) {
     return this.prisma.enterpriseIntegration.update({
       where: { id: integrationId },
       data,
@@ -38,7 +39,7 @@ export class IntegrationService {
 
   // --- Connectors ---
 
-  async addConnector(integrationId: string, data: any) {
+  async addConnector(integrationId: string, data: CreateConnectorDto) {
     return this.prisma.enterpriseConnector.create({
       data: {
         ...data,

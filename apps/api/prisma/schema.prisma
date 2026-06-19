@@ -304,6 +304,10 @@ model ApiKey {
   keyHash    String    @unique
   prefix     String    // e.g., 'reis_test_abcd'
   scopes     String[]  // e.g., ['read:leads', 'write:leads']
+  ipWhitelist String[] @default([])
+  referrers   String[] @default([])
+  createdIp   String?
+  createdUserAgent String?
   status     String    @default("ACTIVE") // ACTIVE, REVOKED, EXPIRED
   expiresAt  DateTime?
   lastUsedAt DateTime?
@@ -2610,4 +2614,18 @@ model PartnerProgram {
   status          String   // ACTIVE, INACTIVE
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+}
+
+model DomainEvent {
+  id            String   @id @default(uuid())
+  aggregateId   String?
+  aggregateType String?
+  eventType     String
+  payload       Json
+  metadata      Json?
+  createdAt     DateTime @default(now())
+
+  @@index([aggregateId, aggregateType])
+  @@index([eventType])
+  @@index([createdAt])
 }

@@ -1,3 +1,4 @@
+import { CreateOrganizationDto, UpdateOrganizationDto, CreateRegionDto, CreateDepartmentDto, CreateBusinessUnitDto, CreateHierarchyDto } from '../dto/enterprise.dto';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 
@@ -5,7 +6,7 @@ import { PrismaService } from '../../prisma/prisma.service';
 export class OrganizationService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createOrganization(tenantId: string, data: any) {
+  async createOrganization(tenantId: string, data: CreateOrganizationDto) {
     return this.prisma.enterpriseOrganization.create({
       data: {
         ...data,
@@ -31,7 +32,7 @@ export class OrganizationService {
     return org;
   }
 
-  async updateOrganization(tenantId: string, data: any) {
+  async updateOrganization(tenantId: string, data: UpdateOrganizationDto) {
     return this.prisma.enterpriseOrganization.update({
       where: { tenantId },
       data,
@@ -40,7 +41,7 @@ export class OrganizationService {
 
   // --- Hierarchies ---
 
-  async createHierarchy(organizationId: string, data: any) {
+  async createHierarchy(organizationId: string, data: CreateHierarchyDto) {
     return this.prisma.enterpriseHierarchy.create({
       data: {
         ...data,
@@ -51,7 +52,7 @@ export class OrganizationService {
 
   // --- Regions ---
 
-  async createRegion(organizationId: string, data: any) {
+  async createRegion(organizationId: string, data: CreateRegionDto) {
     return this.prisma.enterpriseRegion.create({
       data: {
         ...data,
@@ -68,7 +69,7 @@ export class OrganizationService {
 
   // --- Departments ---
 
-  async createDepartment(organizationId: string, data: any) {
+  async createDepartment(organizationId: string, data: CreateDepartmentDto) {
     return this.prisma.enterpriseDepartment.create({
       data: {
         ...data,
@@ -85,7 +86,7 @@ export class OrganizationService {
 
   // --- Business Units ---
 
-  async createBusinessUnit(organizationId: string, data: any) {
+  async createBusinessUnit(organizationId: string, data: CreateBusinessUnitDto) {
     return this.prisma.enterpriseBusinessUnit.create({
       data: {
         ...data,

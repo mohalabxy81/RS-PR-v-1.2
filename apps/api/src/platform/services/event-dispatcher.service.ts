@@ -23,7 +23,7 @@ export class EventDispatcherService {
     await this.dispatch('lead.updated', payload);
   }
 
-  private async dispatch(eventName: string, data: any) {
+  async dispatch(eventName: string, data: any) {
     const tenantId = data.tenantId || data.projectId; // projectId is used in WebhookEndpoint
     if (!tenantId) return;
 
@@ -55,14 +55,17 @@ export class EventDispatcherService {
       });
     }
 
-    // Also log the event locally
-    await this.prisma.eventLog.create({
+    // Event Sourcing: Append event to DomainEvent store
+    const domainEvent = await this.prisma.domainEvent.create({
       data: {
         eventType: eventName,
-        entityId: data.leadId || data.payload?.id || tenantId,
-        source: 'INTERNAL',
-        payload: data.payload,
+        aggregateId: data.leadId || data.payload?.id || tenantId,
+        aggregateType: data.aggregateType || 'System',
+        payload: data.payload || data || {},
       },
     });
+
+    // Also keep legacy event log for backward compatibility if needed, or replace it entirely.
+    // Here we replace it entirely based on the new Event Sourcing & CQRS Foundation design.
   }
 }

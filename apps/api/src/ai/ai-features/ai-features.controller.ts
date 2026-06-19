@@ -6,7 +6,6 @@ import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 @ApiTags('AI Features')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
-@Version('1')
 @Controller('ai')
 export class AiFeaturesController {
   constructor(private readonly aiFeaturesService: AiFeaturesService) {}

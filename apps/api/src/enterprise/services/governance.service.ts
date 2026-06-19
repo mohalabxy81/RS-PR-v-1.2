@@ -1,3 +1,4 @@
+import { CreatePolicyDto, UpdatePolicyDto, CreateGovernanceRuleDto, UpdateGovernanceRuleDto } from '../dto/enterprise.dto';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 
@@ -14,7 +15,7 @@ export class GovernanceService {
     });
   }
 
-  async createPolicy(organizationId: string, data: any) {
+  async createPolicy(organizationId: string, data: CreatePolicyDto) {
     return this.prisma.enterprisePolicy.create({
       data: {
         ...data,
@@ -23,7 +24,7 @@ export class GovernanceService {
     });
   }
 
-  async updatePolicy(policyId: string, data: any) {
+  async updatePolicy(policyId: string, data: UpdatePolicyDto) {
     return this.prisma.enterprisePolicy.update({
       where: { id: policyId },
       data,
@@ -38,7 +39,7 @@ export class GovernanceService {
 
   // --- Governance Rules ---
 
-  async addRuleToPolicy(policyId: string, data: any) {
+  async addRuleToPolicy(policyId: string, data: CreateGovernanceRuleDto) {
     return this.prisma.enterpriseGovernanceRule.create({
       data: {
         ...data,
@@ -47,7 +48,7 @@ export class GovernanceService {
     });
   }
 
-  async updateRule(ruleId: string, data: any) {
+  async updateRule(ruleId: string, data: UpdateGovernanceRuleDto) {
     return this.prisma.enterpriseGovernanceRule.update({
       where: { id: ruleId },
       data,

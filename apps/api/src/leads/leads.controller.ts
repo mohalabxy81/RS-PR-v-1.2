@@ -10,7 +10,6 @@ import type { CurrentUserPayload } from '../common/decorators/current-user.decor
 import { CreateLeadDto, UpdateLeadDto, AssignLeadDto, AddLeadNoteDto, QueryLeadDto } from './dto/lead.dto';
 
 @ApiTags('leads')
-@Version('1')
 @Controller({ path: 'leads', version: '1' })
 @UseGuards(JwtAuthGuard, PermissionsGuard)
 @ApiBearerAuth('access-token')

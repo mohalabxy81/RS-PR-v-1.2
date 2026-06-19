@@ -1,7 +1,9 @@
+import { CreateComplianceRecordDto, CreateRetentionPolicyDto, UpdateRetentionPolicyDto } from '../dto/enterprise.dto';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Version, Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
 import { ComplianceService } from '../services/compliance.service';
 
-@Version('1')
+@ApiTags('Enterprise / Compliance')
 @Controller('enterprise/compliance')
 export class ComplianceController {
   constructor(private readonly complianceService: ComplianceService) {}
@@ -16,7 +18,7 @@ export class ComplianceController {
   @Post(':organizationId/records')
   async createComplianceRecord(
     @Param('organizationId') organizationId: string,
-    @Body() data: any
+    @Body() data: CreateComplianceRecordDto
   ) {
     return this.complianceService.createComplianceRecord(organizationId, data);
   }
@@ -31,7 +33,7 @@ export class ComplianceController {
   @Post(':organizationId/retention-policies')
   async createRetentionPolicy(
     @Param('organizationId') organizationId: string,
-    @Body() data: any
+    @Body() data: CreateRetentionPolicyDto
   ) {
     return this.complianceService.createRetentionPolicy(organizationId, data);
   }
@@ -39,7 +41,7 @@ export class ComplianceController {
   @Put('retention-policies/:policyId')
   async updateRetentionPolicy(
     @Param('policyId') policyId: string,
-    @Body() data: any
+    @Body() data: UpdateRetentionPolicyDto
   ) {
     return this.complianceService.updateRetentionPolicy(policyId, data);
   }

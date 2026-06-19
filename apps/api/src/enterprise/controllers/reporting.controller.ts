@@ -1,7 +1,9 @@
+import { CreateReportDto, UpdateReportDto } from '../dto/enterprise.dto';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Version, Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
 import { ReportingService } from '../services/reporting.service';
 
-@Version('1')
+@ApiTags('Enterprise / Reporting')
 @Controller('enterprise/reporting')
 export class ReportingController {
   constructor(private readonly reportingService: ReportingService) {}
@@ -16,7 +18,7 @@ export class ReportingController {
   @Post(':organizationId/reports')
   async createReport(
     @Param('organizationId') organizationId: string,
-    @Body() data: any
+    @Body() data: CreateReportDto
   ) {
     return this.reportingService.createReport(organizationId, data);
   }
@@ -24,7 +26,7 @@ export class ReportingController {
   @Put('reports/:reportId')
   async updateReport(
     @Param('reportId') reportId: string,
-    @Body() data: any
+    @Body() data: UpdateReportDto
   ) {
     return this.reportingService.updateReport(reportId, data);
   }

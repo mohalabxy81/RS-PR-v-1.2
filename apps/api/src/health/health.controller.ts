@@ -4,7 +4,6 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Public } from '../common/decorators/public.decorator';
 import { Transport } from '@nestjs/microservices';
 
-@Version('1')
 @Controller('health')
 export class HealthController {
   constructor(

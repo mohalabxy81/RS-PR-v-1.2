@@ -10,7 +10,6 @@ import { CreatePropertyDto, UpdatePropertyDto, QueryPropertyDto } from './dto/pr
 import type { CurrentUserPayload } from '../common/decorators/current-user.decorator';
 
 @ApiTags('properties')
-@Version('1')
 @Controller({ path: 'properties', version: '1' })
 @UseGuards(JwtAuthGuard, PermissionsGuard)
 @ApiBearerAuth('access-token')

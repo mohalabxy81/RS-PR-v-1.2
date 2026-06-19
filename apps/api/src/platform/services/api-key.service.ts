@@ -21,7 +21,16 @@ export class ApiKeyService {
     return 'reis_' + randomBytes(4).toString('hex') + '_';
   }
 
-  async createApiKey(tenantId: string, name: string, scopes: string[] = [], expiresInDays?: number) {
+  async createApiKey(
+    tenantId: string, 
+    name: string, 
+    scopes: string[] = [], 
+    expiresInDays?: number,
+    ipWhitelist: string[] = [],
+    referrers: string[] = [],
+    createdIp?: string,
+    createdUserAgent?: string
+  ) {
     const rawKey = randomBytes(32).toString('base64url');
     const prefix = this.generatePrefix();
     const fullKey = prefix + rawKey;
@@ -40,6 +49,10 @@ export class ApiKeyService {
         keyHash,
         prefix,
         scopes,
+        ipWhitelist,
+        referrers,
+        createdIp,
+        createdUserAgent,
         expiresAt,
         status: 'ACTIVE',
       },
@@ -47,18 +60,19 @@ export class ApiKeyService {
 
     this.logger.log(`Created new API Key ${apiKeyRecord.id} for tenant ${tenantId}`);
 
-    // Return the full plaintext key only once upon creation
     return {
       id: apiKeyRecord.id,
       name: apiKeyRecord.name,
       scopes: apiKeyRecord.scopes,
       prefix: apiKeyRecord.prefix,
       expiresAt: apiKeyRecord.expiresAt,
+      ipWhitelist: apiKeyRecord.ipWhitelist,
+      referrers: apiKeyRecord.referrers,
       key: fullKey,
     };
   }
 
-  async validateApiKey(key: string): Promise<any> {
+  async validateApiKey(key: string, requestIp?: string, requestReferer?: string): Promise<any> {
     const keyHash = this.hashKey(key);
     const cacheKey = `apikey_valid:${keyHash}`;
 
@@ -80,7 +94,28 @@ export class ApiKeyService {
       await this.cacheManager.set(cacheKey, apiKeyRecord, 60000); // 1 minute
     }
 
+    // Validate IP whitelist if specified
+    if (apiKeyRecord.ipWhitelist && apiKeyRecord.ipWhitelist.length > 0) {
+      if (!requestIp || !apiKeyRecord.ipWhitelist.includes(requestIp)) {
+        this.logger.warn(`API key ${apiKeyRecord.id} rejected due to IP mismatch: ${requestIp}`);
+        return null;
+      }
+    }
+
+    // Validate Referrer if specified
+    if (apiKeyRecord.referrers && apiKeyRecord.referrers.length > 0) {
+      if (!requestReferer || !apiKeyRecord.referrers.some((ref: string) => requestReferer.includes(ref))) {
+        this.logger.warn(`API key ${apiKeyRecord.id} rejected due to Referer mismatch: ${requestReferer}`);
+        return null;
+      }
+    }
+
     return apiKeyRecord;
+  }
+
+  hasScope(apiKeyRecord: any, requiredScope: string): boolean {
+    if (!apiKeyRecord || !apiKeyRecord.scopes) return false;
+    return apiKeyRecord.scopes.includes(requiredScope) || apiKeyRecord.scopes.includes('*');
   }
 
   async listApiKeys(tenantId: string) {
@@ -91,6 +126,8 @@ export class ApiKeyService {
         name: true,
         prefix: true,
         scopes: true,
+        ipWhitelist: true,
+        referrers: true,
         status: true,
         expiresAt: true,
         lastUsedAt: true,
@@ -115,8 +152,15 @@ export class ApiKeyService {
       throw new NotFoundException('Active API Key not found');
     }
 
-    // Create new key
-    const newKey = await this.createApiKey(tenantId, oldKey.name, oldKey.scopes);
+    // Create new key inheriting settings
+    const newKey = await this.createApiKey(
+      tenantId, 
+      oldKey.name, 
+      oldKey.scopes, 
+      undefined, 
+      oldKey.ipWhitelist,
+      oldKey.referrers
+    );
 
     // Set expiry on old key
     const expiresAt = new Date();
@@ -136,8 +180,8 @@ export class ApiKeyService {
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - days);
 
-    return this.prisma.apiUsageLog.groupBy({
-      by: ['method', 'statusCode'],
+    const usageByEndpoint = await this.prisma.apiUsageLog.groupBy({
+      by: ['endpoint', 'method', 'statusCode'],
       where: {
         tenantId,
         apiKeyId,
@@ -146,5 +190,7 @@ export class ApiKeyService {
       _count: { id: true },
       _sum: { requestSize: true, responseSize: true, costUnit: true },
     });
+
+    return usageByEndpoint;
   }
 }

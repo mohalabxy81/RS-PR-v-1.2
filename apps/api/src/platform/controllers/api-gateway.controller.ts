@@ -6,7 +6,6 @@ import { GenerateApiKeyDto, RegisterOAuthClientDto, CreateApiProductDto, CreateA
 
 @ApiTags('platform-gateway')
 @ApiBearerAuth('access-token')
-@Version('1')
 @Controller({ path: 'platform/gateway', version: '1' })
 @UseInterceptors(ApiUsageInterceptor)
 export class ApiGatewayController {

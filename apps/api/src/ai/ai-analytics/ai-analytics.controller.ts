@@ -6,7 +6,6 @@ import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 @ApiTags('AI Analytics')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
-@Version('1')
 @Controller('ai/analytics')
 export class AiAnalyticsController {
   constructor(private readonly aiAnalyticsService: AiAnalyticsService) {}

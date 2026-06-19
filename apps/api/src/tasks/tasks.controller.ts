@@ -10,7 +10,6 @@ import { CreateTaskDto, UpdateTaskDto, AddTaskCommentDto } from './dto/task.dto'
 import type { CurrentUserPayload } from '../common/decorators/current-user.decorator';
 
 @ApiTags('tasks')
-@Version('1')
 @Controller({ path: 'tasks', version: '1' })
 @UseGuards(JwtAuthGuard, PermissionsGuard)
 @ApiBearerAuth('access-token')

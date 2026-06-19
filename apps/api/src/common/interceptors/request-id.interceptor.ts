@@ -11,11 +11,17 @@ export class RequestIdInterceptor implements NestInterceptor {
     }
 
     const request = context.switchToHttp().getRequest<Request>();
+    const response = context.switchToHttp().getResponse();
+    
     const reqId = request.headers['x-request-id'] || `req_${uuidv4()}`;
     const corrId = request.headers['x-correlation-id'] || reqId;
 
     request.headers['x-request-id'] = reqId;
     request.headers['x-correlation-id'] = corrId;
+    
+    // Set response headers
+    response.setHeader('X-Request-Id', reqId);
+    response.setHeader('X-Correlation-Id', corrId);
     
     // Also attach to request object directly for easy access
     (request as any).id = reqId;

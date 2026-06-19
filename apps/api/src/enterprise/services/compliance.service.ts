@@ -1,3 +1,4 @@
+import { CreateComplianceRecordDto, CreateRetentionPolicyDto, UpdateRetentionPolicyDto } from '../dto/enterprise.dto';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 
@@ -14,7 +15,7 @@ export class ComplianceService {
     });
   }
 
-  async createComplianceRecord(organizationId: string, data: any) {
+  async createComplianceRecord(organizationId: string, data: CreateComplianceRecordDto) {
     return this.prisma.enterpriseComplianceRecord.create({
       data: {
         ...data,
@@ -31,7 +32,7 @@ export class ComplianceService {
     });
   }
 
-  async createRetentionPolicy(organizationId: string, data: any) {
+  async createRetentionPolicy(organizationId: string, data: CreateRetentionPolicyDto) {
     return this.prisma.enterpriseRetentionPolicy.create({
       data: {
         ...data,
@@ -40,7 +41,7 @@ export class ComplianceService {
     });
   }
 
-  async updateRetentionPolicy(policyId: string, data: any) {
+  async updateRetentionPolicy(policyId: string, data: UpdateRetentionPolicyDto) {
     return this.prisma.enterpriseRetentionPolicy.update({
       where: { id: policyId },
       data,

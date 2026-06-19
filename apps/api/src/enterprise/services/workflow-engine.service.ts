@@ -1,3 +1,4 @@
+import { CreateWorkflowDto, UpdateWorkflowDto } from '../dto/enterprise.dto';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 
@@ -13,7 +14,7 @@ export class WorkflowEngineService {
     });
   }
 
-  async createWorkflow(organizationId: string, data: any) {
+  async createWorkflow(organizationId: string, data: CreateWorkflowDto) {
     return this.prisma.enterpriseWorkflow.create({
       data: {
         ...data,
@@ -22,7 +23,7 @@ export class WorkflowEngineService {
     });
   }
 
-  async updateWorkflow(workflowId: string, data: any) {
+  async updateWorkflow(workflowId: string, data: UpdateWorkflowDto) {
     return this.prisma.enterpriseWorkflow.update({
       where: { id: workflowId },
       data,

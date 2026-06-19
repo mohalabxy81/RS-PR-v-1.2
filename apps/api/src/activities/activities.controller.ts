@@ -6,7 +6,6 @@ import { CurrentUser } from "../common/decorators/current-user.decorator";
 import type { CurrentUserPayload } from '../common/decorators/current-user.decorator';
 
 @ApiTags('activities')
-@Version('1')
 @Controller({ path: 'activities', version: '1' })
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth('access-token')

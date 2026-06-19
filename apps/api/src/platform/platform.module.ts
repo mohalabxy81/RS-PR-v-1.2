@@ -29,7 +29,16 @@ import { WebhookWorker } from './workers/webhook.worker';
     PrismaModule,
     BullModule.registerQueue(
       { name: 'api-usage-queue' },
-      { name: 'webhook-queue' }
+      { 
+        name: 'webhook-queue',
+        defaultJobOptions: {
+          attempts: 5,
+          backoff: {
+            type: 'exponential',
+            delay: 1000,
+          },
+        },
+      }
     ),
   ],
   controllers: [

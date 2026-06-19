@@ -1,7 +1,9 @@
+import { CreatePolicyDto, UpdatePolicyDto, CreateGovernanceRuleDto, UpdateGovernanceRuleDto } from '../dto/enterprise.dto';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Version, Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
 import { GovernanceService } from '../services/governance.service';
 
-@Version('1')
+@ApiTags('Enterprise / Governance')
 @Controller('enterprise/governance')
 export class GovernanceController {
   constructor(private readonly governanceService: GovernanceService) {}
@@ -16,7 +18,7 @@ export class GovernanceController {
   @Post(':organizationId/policies')
   async createPolicy(
     @Param('organizationId') organizationId: string,
-    @Body() data: any
+    @Body() data: CreatePolicyDto
   ) {
     return this.governanceService.createPolicy(organizationId, data);
   }
@@ -24,7 +26,7 @@ export class GovernanceController {
   @Put('policies/:policyId')
   async updatePolicy(
     @Param('policyId') policyId: string,
-    @Body() data: any
+    @Body() data: UpdatePolicyDto
   ) {
     return this.governanceService.updatePolicy(policyId, data);
   }
@@ -39,7 +41,7 @@ export class GovernanceController {
   @Post('policies/:policyId/rules')
   async addRuleToPolicy(
     @Param('policyId') policyId: string,
-    @Body() data: any
+    @Body() data: CreateGovernanceRuleDto
   ) {
     return this.governanceService.addRuleToPolicy(policyId, data);
   }
@@ -47,7 +49,7 @@ export class GovernanceController {
   @Put('rules/:ruleId')
   async updateRule(
     @Param('ruleId') ruleId: string,
-    @Body() data: any
+    @Body() data: UpdateGovernanceRuleDto
   ) {
     return this.governanceService.updateRule(ruleId, data);
   }

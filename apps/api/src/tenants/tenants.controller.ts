@@ -10,7 +10,6 @@ import { UpdateTenantSettingsDto } from './dto/tenant.dto';
 import type { CurrentUserPayload } from '../common/decorators/current-user.decorator';
 
 @ApiTags('tenants')
-@Version('1')
 @Controller({ path: 'tenants', version: '1' })
 @UseGuards(JwtAuthGuard, PermissionsGuard)
 @ApiBearerAuth('access-token')

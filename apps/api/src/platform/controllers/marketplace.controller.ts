@@ -5,7 +5,6 @@ import { RegisterAppDto, CreateAppVersionDto, InstallAppDto } from '../dto/marke
 
 @ApiTags('platform-marketplace')
 @ApiBearerAuth('access-token')
-@Version('1')
 @Controller({ path: 'platform/marketplace', version: '1' })
 export class MarketplaceController {
   constructor(private readonly marketplaceService: MarketplaceService) {}

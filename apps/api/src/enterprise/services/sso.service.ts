@@ -1,3 +1,4 @@
+import { CreateSsoProviderDto, UpdateSsoProviderDto } from '../dto/enterprise.dto';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 
@@ -11,7 +12,7 @@ export class SsoService {
     });
   }
 
-  async configureProvider(organizationId: string, data: any) {
+  async configureProvider(organizationId: string, data: CreateSsoProviderDto) {
     return this.prisma.enterpriseSsoProvider.create({
       data: {
         ...data,
@@ -20,7 +21,7 @@ export class SsoService {
     });
   }
 
-  async updateProvider(providerId: string, data: any) {
+  async updateProvider(providerId: string, data: UpdateSsoProviderDto) {
     return this.prisma.enterpriseSsoProvider.update({
       where: { id: providerId },
       data,

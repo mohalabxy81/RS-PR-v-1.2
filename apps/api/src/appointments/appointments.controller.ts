@@ -10,7 +10,6 @@ import { CreateAppointmentDto, UpdateAppointmentDto } from './dto/appointment.dt
 import type { CurrentUserPayload } from '../common/decorators/current-user.decorator';
 
 @ApiTags('appointments')
-@Version('1')
 @Controller({ path: 'appointments', version: '1' })
 @UseGuards(JwtAuthGuard, PermissionsGuard)
 @ApiBearerAuth('access-token')

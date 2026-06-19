@@ -7,7 +7,6 @@ import { CreateAiProviderDto, CreateAiModelDto, CreateAiPromptDto, CreatePromptV
 @ApiTags('AI Admin')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
-@Version('1')
 @Controller('ai/admin')
 export class AiAdminController {
   constructor(private readonly aiAdminService: AiAdminService) {}

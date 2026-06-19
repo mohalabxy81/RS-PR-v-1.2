@@ -10,7 +10,6 @@ import { CreateCustomerDto, UpdateCustomerDto, QueryCustomerDto, AddCustomerNote
 import type { CurrentUserPayload } from '../common/decorators/current-user.decorator';
 
 @ApiTags('customers')
-@Version('1')
 @Controller({ path: 'customers', version: '1' })
 @UseGuards(JwtAuthGuard, PermissionsGuard)
 @ApiBearerAuth('access-token')

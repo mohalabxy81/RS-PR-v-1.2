@@ -1,7 +1,9 @@
+import { CreateWorkflowDto, UpdateWorkflowDto } from '../dto/enterprise.dto';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Version, Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
 import { WorkflowEngineService } from '../services/workflow-engine.service';
 
-@Version('1')
+@ApiTags('Enterprise / Workflow')
 @Controller('enterprise/workflows')
 export class WorkflowController {
   constructor(private readonly workflowService: WorkflowEngineService) {}
@@ -16,7 +18,7 @@ export class WorkflowController {
   @Post('organization/:orgId')
   async createWorkflow(
     @Param('orgId') orgId: string,
-    @Body() data: any
+    @Body() data: CreateWorkflowDto
   ) {
     return this.workflowService.createWorkflow(orgId, data);
   }
@@ -24,7 +26,7 @@ export class WorkflowController {
   @Put(':workflowId')
   async updateWorkflow(
     @Param('workflowId') workflowId: string,
-    @Body() data: any
+    @Body() data: UpdateWorkflowDto
   ) {
     return this.workflowService.updateWorkflow(workflowId, data);
   }

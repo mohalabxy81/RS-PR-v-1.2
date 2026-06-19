@@ -5,7 +5,6 @@ import { RegisterDeveloperDto, CreateOrganizationDto, CreateTeamDto, CreateProje
 
 @ApiTags('platform-developers')
 @ApiBearerAuth('access-token')
-@Version('1')
 @Controller({ path: 'platform/developers', version: '1' })
 export class DeveloperController {
   constructor(private readonly developerService: DeveloperService) {}

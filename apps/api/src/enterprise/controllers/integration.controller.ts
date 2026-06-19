@@ -1,7 +1,9 @@
+import { CreateIntegrationDto, UpdateIntegrationDto, CreateConnectorDto } from '../dto/enterprise.dto';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Version, Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
 import { IntegrationService } from '../services/integration.service';
 
-@Version('1')
+@ApiTags('Enterprise / Integration')
 @Controller('enterprise/integrations')
 export class IntegrationController {
   constructor(private readonly integrationService: IntegrationService) {}
@@ -14,7 +16,7 @@ export class IntegrationController {
   @Post(':organizationId')
   async createIntegration(
     @Param('organizationId') organizationId: string,
-    @Body() data: any
+    @Body() data: CreateIntegrationDto
   ) {
     return this.integrationService.createIntegration(organizationId, data);
   }
@@ -22,7 +24,7 @@ export class IntegrationController {
   @Put(':integrationId')
   async updateIntegration(
     @Param('integrationId') integrationId: string,
-    @Body() data: any
+    @Body() data: UpdateIntegrationDto
   ) {
     return this.integrationService.updateIntegration(integrationId, data);
   }
@@ -37,7 +39,7 @@ export class IntegrationController {
   @Post(':integrationId/connectors')
   async addConnector(
     @Param('integrationId') integrationId: string,
-    @Body() data: any
+    @Body() data: CreateConnectorDto
   ) {
     return this.integrationService.addConnector(integrationId, data);
   }

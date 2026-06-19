@@ -10,7 +10,6 @@ import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
 import type { CurrentUserPayload } from '../common/decorators/current-user.decorator';
 
 @ApiTags('users')
-@Version('1')
 @Controller({ path: 'users', version: '1' })
 @UseGuards(JwtAuthGuard, PermissionsGuard)
 @ApiBearerAuth('access-token')

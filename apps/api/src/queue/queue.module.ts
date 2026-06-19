@@ -23,7 +23,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       { name: 'campaigns' },
       { name: 'automations' },
       { name: 'api-usage-queue' },
-      { name: 'webhook-queue' },
+      { 
+        name: 'webhook-queue',
+        defaultJobOptions: {
+          attempts: 5,
+          backoff: { type: 'exponential', delay: 1000 },
+        },
+      },
       { name: 'email-queue' },
       { name: 'notification-queue' },
       { name: 'report-queue' },

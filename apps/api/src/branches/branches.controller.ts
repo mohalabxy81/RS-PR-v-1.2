@@ -10,7 +10,6 @@ import { CreateBranchDto, UpdateBranchDto } from './dto/branch.dto';
 import type { CurrentUserPayload } from '../common/decorators/current-user.decorator';
 
 @ApiTags('branches')
-@Version('1')
 @Controller({ path: 'branches', version: '1' })
 @UseGuards(JwtAuthGuard, PermissionsGuard)
 @ApiBearerAuth('access-token')

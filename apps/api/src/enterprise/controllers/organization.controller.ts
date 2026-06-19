@@ -1,7 +1,9 @@
+import { CreateOrganizationDto, UpdateOrganizationDto, CreateRegionDto, CreateDepartmentDto, CreateBusinessUnitDto, CreateHierarchyDto } from '../dto/enterprise.dto';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Version, Controller, Get, Post, Put, Body, Param } from '@nestjs/common';
 import { OrganizationService } from '../services/organization.service';
 
-@Version('1')
+@ApiTags('Enterprise / Organization')
 @Controller('enterprise/organizations')
 export class OrganizationController {
   constructor(private readonly organizationService: OrganizationService) {}
@@ -14,7 +16,7 @@ export class OrganizationController {
   @Post(':tenantId')
   async createOrganization(
     @Param('tenantId') tenantId: string,
-    @Body() data: any
+    @Body() data: CreateOrganizationDto
   ) {
     return this.organizationService.createOrganization(tenantId, data);
   }
@@ -22,7 +24,7 @@ export class OrganizationController {
   @Put(':tenantId')
   async updateOrganization(
     @Param('tenantId') tenantId: string,
-    @Body() data: any
+    @Body() data: UpdateOrganizationDto
   ) {
     return this.organizationService.updateOrganization(tenantId, data);
   }
@@ -32,7 +34,7 @@ export class OrganizationController {
   @Post(':organizationId/regions')
   async createRegion(
     @Param('organizationId') organizationId: string,
-    @Body() data: any
+    @Body() data: CreateRegionDto
   ) {
     return this.organizationService.createRegion(organizationId, data);
   }
@@ -47,7 +49,7 @@ export class OrganizationController {
   @Post(':organizationId/departments')
   async createDepartment(
     @Param('organizationId') organizationId: string,
-    @Body() data: any
+    @Body() data: CreateDepartmentDto
   ) {
     return this.organizationService.createDepartment(organizationId, data);
   }
@@ -62,7 +64,7 @@ export class OrganizationController {
   @Post(':organizationId/business-units')
   async createBusinessUnit(
     @Param('organizationId') organizationId: string,
-    @Body() data: any
+    @Body() data: CreateBusinessUnitDto
   ) {
     return this.organizationService.createBusinessUnit(organizationId, data);
   }
@@ -77,7 +79,7 @@ export class OrganizationController {
   @Post(':organizationId/hierarchies')
   async createHierarchy(
     @Param('organizationId') organizationId: string,
-    @Body() data: any
+    @Body() data: CreateHierarchyDto
   ) {
     return this.organizationService.createHierarchy(organizationId, data);
   }

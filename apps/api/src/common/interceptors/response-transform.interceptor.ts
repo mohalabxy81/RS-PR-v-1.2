@@ -22,6 +22,9 @@ export class ResponseTransformInterceptor<T> implements NestInterceptor<T, Respo
     const request = context.switchToHttp().getRequest<Request>();
     const requestId = (request as any).id || request.headers['x-request-id'] || 'unknown';
     const correlationId = (request as any).correlationId || request.headers['x-correlation-id'] || requestId;
+    // Extract version from route path, default to '1'
+    const match = request.url.match(/\/v(\d+)\//);
+    const apiVersion = match ? match[1] : '1';
 
     return next.handle().pipe(
       map(data => {
@@ -29,6 +32,7 @@ export class ResponseTransformInterceptor<T> implements NestInterceptor<T, Respo
         if (data && typeof data === 'object' && ('data' in data || 'meta' in data)) {
           return {
             success: true,
+            apiVersion,
             data: data.data !== undefined ? data.data : data,
             meta: data.meta,
             requestId,
@@ -39,6 +43,7 @@ export class ResponseTransformInterceptor<T> implements NestInterceptor<T, Respo
 
         return {
           success: true,
+          apiVersion,
           data,
           requestId,
           correlationId,

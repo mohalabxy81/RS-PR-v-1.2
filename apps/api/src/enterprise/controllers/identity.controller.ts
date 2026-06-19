@@ -1,8 +1,10 @@
+import { CreateAdministratorDto, CreateAccessReviewDto, CreateSsoProviderDto, UpdateSsoProviderDto } from '../dto/enterprise.dto';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Version, Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
 import { SsoService } from '../services/sso.service';
 import { SecurityService } from '../services/security.service';
 
-@Version('1')
+@ApiTags('Enterprise / Identity')
 @Controller('enterprise/identity')
 export class IdentityController {
   constructor(
@@ -20,7 +22,7 @@ export class IdentityController {
   @Post(':organizationId/sso-providers')
   async configureSsoProvider(
     @Param('organizationId') organizationId: string,
-    @Body() data: any
+    @Body() data: CreateSsoProviderDto
   ) {
     return this.ssoService.configureProvider(organizationId, data);
   }
@@ -28,7 +30,7 @@ export class IdentityController {
   @Put('sso-providers/:providerId')
   async updateSsoProvider(
     @Param('providerId') providerId: string,
-    @Body() data: any
+    @Body() data: UpdateSsoProviderDto
   ) {
     return this.ssoService.updateProvider(providerId, data);
   }
@@ -48,7 +50,7 @@ export class IdentityController {
   @Post(':organizationId/administrators')
   async addAdministrator(
     @Param('organizationId') organizationId: string,
-    @Body() data: any
+    @Body() data: CreateAdministratorDto
   ) {
     return this.securityService.addAdministrator(organizationId, data);
   }
@@ -63,7 +65,7 @@ export class IdentityController {
   @Post(':organizationId/access-reviews')
   async createAccessReview(
     @Param('organizationId') organizationId: string,
-    @Body() data: any
+    @Body() data: CreateAccessReviewDto
   ) {
     return this.securityService.createAccessReview(organizationId, data);
   }

@@ -1,7 +1,6 @@
 import { Version, Controller, Get, Post, Body, Param, UseGuards, Put } from '@nestjs/common';
 import { BrandService } from '../services/brand.service';
 
-@Version('1')
 @Controller('branding/brands')
 export class BrandController {
   constructor(private readonly brandService: BrandService) {}

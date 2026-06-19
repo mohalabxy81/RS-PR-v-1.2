@@ -10,7 +10,6 @@ import type { CurrentUserPayload } from '../common/decorators/current-user.decor
 import { CreateDealDto, UpdateDealDto, UpdateDealStageDto, AddDealNoteDto, QueryDealDto } from './dto/deal.dto';
 
 @ApiTags('deals')
-@Version('1')
 @Controller({ path: 'deals', version: '1' })
 @UseGuards(JwtAuthGuard, PermissionsGuard)
 @ApiBearerAuth('access-token')

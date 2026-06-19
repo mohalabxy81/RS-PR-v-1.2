@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ApiKeyService } from '../platform/services/api-key.service';
-import { PrismaService } from '../prisma/prisma.service';
+import { ApiKeyService } from './api-key.service';
+import { PrismaService } from '../../prisma/prisma.service';
 
 describe('ApiKeyService', () => {
   let service: ApiKeyService;

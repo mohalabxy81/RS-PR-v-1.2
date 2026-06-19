@@ -5,7 +5,6 @@ import { RegisterPartnerDto, UpdatePartnerDto, CreateProgramDto } from '../dto/p
 
 @ApiTags('platform-partners')
 @ApiBearerAuth('access-token')
-@Version('1')
 @Controller({ path: 'platform/partners', version: '1' })
 export class PartnerController {
   constructor(private readonly partnerService: PartnerService) {}

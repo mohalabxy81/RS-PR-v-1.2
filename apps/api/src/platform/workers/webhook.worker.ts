@@ -1,5 +1,5 @@
 import { Processor, WorkerHost } from '@nestjs/bullmq';
-import { Job } from 'bullmq';
+import { Job, UnrecoverableError } from 'bullmq';
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { createHmac } from 'crypto';
@@ -25,7 +25,7 @@ export class WebhookWorker extends WorkerHost {
       return;
     }
 
-    const maxRetries = 3;
+    const maxRetries = 5;
     const attempt = job.attemptsMade;
 
     const signature = this.generateSignature(payload, endpoint.secret || '');
@@ -39,6 +39,8 @@ export class WebhookWorker extends WorkerHost {
           'Content-Type': 'application/json',
           'x-reis-signature': signature,
           'x-reis-event': eventType,
+          'X-Hub-Signature': `sha256=${signature}`,
+          'X-Hub-Signature-256': `sha256=${signature}`,
         },
         body: JSON.stringify(payload),
       });
@@ -59,7 +61,11 @@ export class WebhookWorker extends WorkerHost {
       if (!response.ok) {
         if (attempt >= maxRetries) {
           this.logger.error(`Webhook delivery failed permanently to ${endpoint.url}`);
+          throw new UnrecoverableError(`Non-200 response: ${response.status}`);
         } else {
+          // Delay next attempt using exponential backoff (e.g. 2^attempt * 1000ms)
+          // BullMQ will auto-retry if job fails, but to ensure backoff we can use moveToDelayed or let BullMQ handle it
+          // We will throw error and let BullMQ handle backoff if queue is configured
           throw new Error(`Non-200 response: ${response.status}`);
         }
       }
@@ -81,6 +87,7 @@ export class WebhookWorker extends WorkerHost {
 
       if (attempt >= maxRetries) {
         this.logger.error(`Webhook delivery failed permanently after ${attempt + 1} attempts.`);
+        throw new UnrecoverableError(error.message);
       } else {
         throw error;
       }
