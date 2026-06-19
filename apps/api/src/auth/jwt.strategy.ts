@@ -39,7 +39,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   async validate(payload: {
     sub: string;
     tenantId: string;
-    roleId?: string;
+    role: string;
+    permissions: string[];
     sessionId?: string;
     iat: number;
     exp: number;
@@ -65,7 +66,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     return {
       userId: payload.sub,
       tenantId: payload.tenantId,
-      roleId: payload.roleId,
+      role: payload.role,
+      permissions: payload.permissions,
       sessionId: payload.sessionId,
     };
   }

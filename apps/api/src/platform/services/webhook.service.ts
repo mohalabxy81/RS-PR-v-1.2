@@ -81,9 +81,16 @@ export class WebhookService {
 
     const newSecret = `whsec_${randomBytes(24).toString('hex')}`;
     
+    const gracePeriodEndsAt = new Date();
+    gracePeriodEndsAt.setHours(gracePeriodEndsAt.getHours() + 24);
+
     await this.prisma.webhookEndpoint.update({
       where: { id: webhookId },
-      data: { secret: newSecret },
+      data: { 
+        secret: newSecret,
+        oldSecret: endpoint.secret,
+        secretGracePeriodExpiresAt: gracePeriodEndsAt
+      },
     });
 
     return { secret: newSecret };

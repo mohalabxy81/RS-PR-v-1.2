@@ -94,10 +94,15 @@ export class ApiKeyService {
     if (!apiKeyRecord) {
       apiKeyRecord = await this.prisma.apiKey.findUnique({
         where: { keyHash },
+        include: { tenant: true },
       });
 
       if (!apiKeyRecord) return null;
       if (apiKeyRecord.status !== 'ACTIVE') return null;
+      if (apiKeyRecord.tenant.status === 'SUSPENDED' || apiKeyRecord.tenant.status === 'CANCELLED') {
+        this.logger.warn(`API key ${apiKeyRecord.id} rejected: Tenant is ${apiKeyRecord.tenant.status}`);
+        return null;
+      }
 
       if (apiKeyRecord.expiresAt && new Date(apiKeyRecord.expiresAt) < new Date()) {
         await this.revokeApiKey(apiKeyRecord.tenantId, apiKeyRecord.id);

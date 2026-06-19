@@ -2580,9 +2580,11 @@ model WebhookEndpoint {
   tenantId  String
   projectId String
   project   DeveloperProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  url       String
-  secret    String?
-  events    String[] // e.g., ["lead.created", "property.updated"]
+  url                        String
+  secret                     String?
+  oldSecret                  String?
+  secretGracePeriodExpiresAt DateTime?
+  events                     String[] // e.g., ["lead.created", "property.updated"]
   status    String // ACTIVE, DISABLED
   isActive  Boolean          @default(true)
   createdAt DateTime         @default(now())

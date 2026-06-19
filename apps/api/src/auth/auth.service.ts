@@ -11,7 +11,7 @@ import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../prisma/prisma.service';
 import { SessionBlocklistService } from './session-blocklist.service';
 import { SecurityAuditService, SecurityEvent } from '../audit-logs/security-audit.service';
-import * as bcrypt from 'bcrypt';
+import * as argon2 from 'argon2';
 import * as crypto from 'crypto';
 import {
   RegisterDto,
@@ -26,7 +26,7 @@ import {
 // TODO(security): Add MFA support (Phase 2)
 // TODO(security): Add leaked-password detection via HaveIBeenPwned API (Phase 2)
 
-const BCRYPT_ROUNDS = 12;
+// BCRYPT_ROUNDS removed, using argon2 defaults
 const VERIFICATION_TOKEN_TTL_HOURS = 24;
 const RESET_TOKEN_TTL_HOURS = 1;
 
@@ -73,7 +73,7 @@ export class AuthService {
     this.validatePasswordStrength(dto.password);
 
     // Hash password — MUST NOT log plain password
-    const passwordHash = await bcrypt.hash(dto.password, BCRYPT_ROUNDS);
+    const passwordHash = await argon2.hash(dto.password);
 
     // Create tenant + default roles + owner user in a transaction
     const result = await this.prisma.$transaction(async (tx) => {
@@ -164,7 +164,7 @@ export class AuthService {
 
     // Use constant-time comparison to prevent timing attacks
     const passwordValid =
-      user && (await bcrypt.compare(dto.password, user.passwordHash));
+      user && (await argon2.verify(user.passwordHash, dto.password));
 
     if (!user || !passwordValid) {
       if (user) {
@@ -381,7 +381,7 @@ export class AuthService {
 
     this.validatePasswordStrength(dto.password);
 
-    const passwordHash = await bcrypt.hash(dto.password, BCRYPT_ROUNDS);
+    const passwordHash = await argon2.hash(dto.password);
 
     await this.prisma.$transaction([
       // Mark token as used
@@ -410,12 +410,12 @@ export class AuthService {
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
     if (!user) throw new NotFoundException('User not found');
 
-    const valid = await bcrypt.compare(dto.currentPassword, user.passwordHash);
+    const valid = await argon2.verify(user.passwordHash, dto.currentPassword);
     if (!valid) throw new UnauthorizedException('Current password is incorrect');
 
     this.validatePasswordStrength(dto.newPassword);
 
-    const passwordHash = await bcrypt.hash(dto.newPassword, BCRYPT_ROUNDS);
+    const passwordHash = await argon2.hash(dto.newPassword);
 
     await this.prisma.$transaction([
       this.prisma.user.update({
@@ -503,7 +503,8 @@ export class AuthService {
     const payload = {
       sub: user.id,
       tenantId: user.tenantId,
-      roleId: user.roleId,
+      role: user.role?.name || '',
+      permissions: [],
       sessionId: refreshTokenRecord.id,
     };
 

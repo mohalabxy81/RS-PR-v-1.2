@@ -35,7 +35,15 @@ export class WebhookWorker extends WorkerHost {
 
     const timestamp = Math.floor(Date.now() / 1000).toString();
     const eventId = payload.id || 'evt_' + Date.now();
-    const signature = this.generateSignature(payload, endpoint.secret || '', timestamp, endpointId);
+    
+    const signatures: string[] = [];
+    signatures.push(`v1=${this.generateSignature(payload, endpoint.secret || '', timestamp, endpointId)}`);
+
+    if (endpoint.oldSecret && endpoint.secretGracePeriodExpiresAt && endpoint.secretGracePeriodExpiresAt > new Date()) {
+      signatures.push(`v1=${this.generateSignature(payload, endpoint.oldSecret, timestamp, endpointId)}`);
+    }
+
+    const signatureHeader = signatures.join(',');
 
     try {
       this.logger.log(`Delivering webhook ${eventType} to ${endpoint.url}`);
@@ -44,12 +52,9 @@ export class WebhookWorker extends WorkerHost {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-reis-signature': signature,
-          'x-reis-event': eventType,
-          'X-Webhook-Timestamp': timestamp,
+          'X-Signature': signatureHeader,
+          'X-Timestamp': timestamp,
           'X-Webhook-ID': eventId,
-          'X-Hub-Signature': `sha256=${signature}`,
-          'X-Hub-Signature-256': `sha256=${signature}`,
         },
         body: JSON.stringify(payload),
       });
