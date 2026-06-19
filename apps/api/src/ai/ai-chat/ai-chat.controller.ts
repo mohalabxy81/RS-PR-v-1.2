@@ -1,8 +1,8 @@
 import {
-import { RequirePermissions } from '../../common/decorators/require-permissions.decorator';
   Controller, Post, Get, Delete, Body, Param, Query,
   UseGuards, Request, HttpCode, HttpStatus,
 } from '@nestjs/common';
+import { RequirePermissions } from '../../common/decorators/require-permissions.decorator';
 import { AiChatService, ChatRequestDto } from './ai-chat.service';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
