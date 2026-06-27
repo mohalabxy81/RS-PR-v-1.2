@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useRef, useEffect, useState } from 'react';
 import { useAiStore } from '@/lib/ai-store';
 import { useAiContext } from '@/hooks/use-ai-context';

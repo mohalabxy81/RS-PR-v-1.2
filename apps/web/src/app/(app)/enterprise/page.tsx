@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import { GovernanceCenter } from '@/components/enterprise/GovernanceCenter';
 import { WorkflowBuilder } from '@/components/enterprise/WorkflowBuilder';

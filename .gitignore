@@ -37,3 +37,10 @@ build/
 .env
 .env.*
 !.env.example
+
+# Custom local files
+.turbo/
+scratch/
+update_schema*.js
+refactor.js
+

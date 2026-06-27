@@ -8,13 +8,15 @@ import {
   Building, 
   Briefcase, 
   TrendingUp, 
-  Calendar,
-  CheckCircle2,
   Clock,
   ArrowUpRight
 } from 'lucide-react';
 import { cn, formatCurrency, formatRelativeTime } from '@/lib/utils';
 import Link from 'next/link';
+import { useState } from 'react';
+
+// TODO(security): Tokens are currently stored in localStorage, which exposes them to XSS.
+// A future migration should use HttpOnly cookies served by a BFF or the API itself.
 
 export default function DashboardPage() {
   const { user } = useAuthStore();
@@ -82,7 +84,7 @@ export default function DashboardPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
-        {/* Main Chart Area Placeholder */}
+        {/* Revenue Chart */}
         <div className="lg:col-span-2 card p-5 min-h-[400px] flex flex-col">
           <div className="flex justify-between items-center mb-6">
             <h3 className="text-lg font-semibold">Revenue Forecast</h3>
@@ -91,8 +93,8 @@ export default function DashboardPage() {
               <option>Last 6 Months</option>
             </select>
           </div>
-          <div className="flex-1 border border-dashed border-[hsl(var(--surface-border))] rounded-lg flex items-center justify-center text-[hsl(var(--foreground-subtle))]">
-            [Chart Area: Install Recharts/Chart.js in next phase]
+          <div className="flex-1">
+            <RevenueChart />
           </div>
         </div>
 
@@ -117,7 +119,7 @@ export default function DashboardPage() {
               </div>
             ) : activities.length > 0 ? (
               <div className="space-y-6 relative before:absolute before:inset-0 before:ml-4 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-300 before:to-transparent">
-                {activities.map((activity: any, index: number) => (
+                {activities.map((activity: any) => (
                   <div key={activity.id} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
                     <div className="flex items-center justify-center w-8 h-8 rounded-full border border-[hsl(var(--surface-border))] bg-[hsl(var(--surface))] text-[hsl(var(--brand))] shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow">
                       <Clock size={14} />
@@ -173,6 +175,234 @@ function StatCard({ title, value, icon: Icon, trend, trendUp }: any) {
           <ArrowUpRight size={14} className={cn(!trendUp && "rotate-180")} /> {trend}
         </p>
       )}
+    </div>
+  );
+}
+
+// ── Revenue SVG Bar Chart ─────────────────────────────────────────────────────
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+// Simulated monthly revenue in AED (thousands) — will be replaced by real API data
+const REVENUE_DATA = [420, 680, 590, 810, 740, 920, 1050, 970, 1120, 1030, 890, 1240];
+const FORECAST_DATA: (number | null)[] = [null, null, null, null, null, null, null, null, null, 1100, 1250, 1380];
+
+function RevenueChart() {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  const chartH = 220;
+  const barWidth = 5.5;
+  const gap = 2.8;
+  const maxVal = Math.max(...REVENUE_DATA, ...(FORECAST_DATA.filter(Boolean) as number[]));
+  const padTop = 12;
+  const padBottom = 26;
+  const innerH = chartH - padTop - padBottom;
+
+  const totalWidth = MONTHS.length * (barWidth + gap) - gap;
+  const xScale = 100 / totalWidth;
+
+  const getBarY = (val: number) => padTop + innerH - (val / maxVal) * innerH;
+  const getBarH = (val: number) => (val / maxVal) * innerH;
+
+  const yTicks = [0, 0.25, 0.5, 0.75, 1].map(f => Math.round(f * maxVal));
+
+  const linePoints = REVENUE_DATA.map((val, i) => {
+    const x = (i * (barWidth + gap) + barWidth / 2) * xScale;
+    const y = getBarY(val);
+    return `${x},${y}`;
+  }).join(' ');
+
+  const areaPoints = [
+    `0,${chartH - padBottom}`,
+    ...REVENUE_DATA.map((val, i) => {
+      const x = (i * (barWidth + gap) + barWidth / 2) * xScale;
+      return `${x},${getBarY(val)}`;
+    }),
+    `100,${chartH - padBottom}`,
+  ].join(' ');
+
+  return (
+    <div className="w-full h-full flex flex-col">
+      {/* Legend */}
+      <div className="flex items-center gap-5 mb-4 text-xs text-[hsl(var(--foreground-muted))]">
+        <span className="flex items-center gap-1.5">
+          <span className="inline-block w-3 h-3 rounded-sm" style={{ background: 'hsl(222, 89%, 55%)' }} />
+          Actual Revenue
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="inline-block w-3 h-3 rounded-sm" style={{ background: 'hsl(199, 89%, 50%)', opacity: 0.5 }} />
+          Forecast
+        </span>
+      </div>
+
+      <svg
+        viewBox={`0 0 100 ${chartH}`}
+        preserveAspectRatio="none"
+        className="w-full overflow-visible"
+        style={{ minHeight: 180, flex: 1 }}
+        aria-label="Monthly revenue bar chart"
+        role="img"
+      >
+        <defs>
+          <linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="hsl(222, 89%, 60%)" stopOpacity="1" />
+            <stop offset="100%" stopColor="hsl(222, 89%, 42%)" stopOpacity="0.85" />
+          </linearGradient>
+          <linearGradient id="forecastGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="hsl(199, 89%, 55%)" stopOpacity="0.55" />
+            <stop offset="100%" stopColor="hsl(199, 89%, 40%)" stopOpacity="0.25" />
+          </linearGradient>
+          <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="hsl(222, 89%, 55%)" stopOpacity="0.18" />
+            <stop offset="100%" stopColor="hsl(222, 89%, 55%)" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+
+        {/* Y-axis grid lines + labels */}
+        {yTicks.map((tick) => {
+          const y = getBarY(tick);
+          return (
+            <g key={tick}>
+              <line
+                x1="0" y1={y} x2="100" y2={y}
+                stroke="hsl(220, 10%, 18%)" strokeWidth="0.3" strokeDasharray="1,1.5"
+              />
+              <text
+                x="-0.5" y={y + 1.2}
+                textAnchor="end"
+                fontSize="2.8"
+                fill="hsl(220, 10%, 42%)"
+              >
+                {tick >= 1000 ? `${(tick / 1000).toFixed(0)}k` : tick}
+              </text>
+            </g>
+          );
+        })}
+
+        {/* Area fill under trend line */}
+        <polygon points={areaPoints} fill="url(#areaGrad)" />
+
+        {/* Bars */}
+        {MONTHS.map((month, i) => {
+          const x = (i * (barWidth + gap)) * xScale;
+          const val = REVENUE_DATA[i];
+          const forecast = FORECAST_DATA[i];
+          const bH = getBarH(val);
+          const bY = getBarY(val);
+          const isHovered = hoveredIndex === i;
+
+          return (
+            <g key={month}>
+              {/* Actual bar */}
+              <rect
+                x={x}
+                y={bY}
+                width={barWidth * xScale}
+                height={bH}
+                rx="0.8"
+                fill={isHovered ? 'hsl(222, 89%, 70%)' : 'url(#barGrad)'}
+                style={{ transition: 'fill 0.15s ease', cursor: 'crosshair' }}
+                onMouseEnter={() => setHoveredIndex(i)}
+                onMouseLeave={() => setHoveredIndex(null)}
+              />
+
+              {/* Forecast overlay bar */}
+              {forecast !== null && (
+                <rect
+                  x={x}
+                  y={getBarY(forecast)}
+                  width={barWidth * xScale}
+                  height={getBarH(forecast)}
+                  rx="0.8"
+                  fill="url(#forecastGrad)"
+                  pointerEvents="none"
+                />
+              )}
+
+              {/* Hover tooltip */}
+              {isHovered && (() => {
+                const tooltipX = Math.min(x - 0.5, 79);
+                return (
+                  <g pointerEvents="none">
+                    <rect
+                      x={tooltipX}
+                      y={bY - 10}
+                      width={21}
+                      height={8}
+                      rx="1.2"
+                      fill="hsl(222, 89%, 48%)"
+                    />
+                    <text
+                      x={tooltipX + 10.5}
+                      y={bY - 5}
+                      textAnchor="middle"
+                      fontSize="2.8"
+                      fill="white"
+                      fontWeight="600"
+                    >
+                      {val >= 1000 ? `${(val / 1000).toFixed(2)}M` : `${val}K`} AED
+                    </text>
+                  </g>
+                );
+              })()}
+
+              {/* Month label */}
+              <text
+                x={x + (barWidth * xScale) / 2}
+                y={chartH - padBottom + 7}
+                textAnchor="middle"
+                fontSize="2.9"
+                fill={isHovered ? 'hsl(222, 89%, 65%)' : 'hsl(220, 10%, 44%)'}
+                style={{ transition: 'fill 0.15s' }}
+              >
+                {month}
+              </text>
+            </g>
+          );
+        })}
+
+        {/* Trend line */}
+        <polyline
+          points={linePoints}
+          fill="none"
+          stroke="hsl(222, 89%, 68%)"
+          strokeWidth="0.55"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+
+        {/* Data-point dots on trend line */}
+        {REVENUE_DATA.map((val, i) => {
+          const x = (i * (barWidth + gap) + barWidth / 2) * xScale;
+          const y = getBarY(val);
+          return (
+            <circle
+              key={i}
+              cx={x}
+              cy={y}
+              r={hoveredIndex === i ? 1.4 : 0.8}
+              fill="hsl(222, 89%, 70%)"
+              stroke="hsl(220, 16%, 8%)"
+              strokeWidth="0.3"
+              style={{ transition: 'r 0.15s ease' }}
+              onMouseEnter={() => setHoveredIndex(i)}
+              onMouseLeave={() => setHoveredIndex(null)}
+            />
+          );
+        })}
+      </svg>
+
+      {/* Summary row */}
+      <div className="flex items-center justify-between mt-3 pt-3 border-t border-[hsl(var(--surface-border))] text-xs text-[hsl(var(--foreground-muted))]">
+        <span>
+          Total YTD:{' '}
+          <span className="text-[hsl(var(--foreground))] font-semibold">
+            {formatCurrency(REVENUE_DATA.reduce((a, b) => a + b, 0) * 1000)}
+          </span>
+        </span>
+        <span className="flex items-center gap-1" style={{ color: 'hsl(158, 64%, 40%)' }}>
+          <ArrowUpRight size={12} /> +18.3% vs last year
+        </span>
+      </div>
     </div>
   );
 }

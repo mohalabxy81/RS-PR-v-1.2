@@ -24,6 +24,7 @@ export const clearTokens = () => {
   localStorage.removeItem('access_token');
   localStorage.removeItem('refresh_token');
   localStorage.removeItem('user');
+  localStorage.removeItem('auth-store');
 };
 
 // ─── Request interceptor — inject Bearer token ────────────────────────────────

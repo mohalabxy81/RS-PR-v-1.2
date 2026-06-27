@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-
+/* NOTE: Inter is loaded via next/font/google in layout.tsx — no @import url() needed here */
 @import "tailwindcss";
 
 /* ─────────────────────────────────────────────────────────
@@ -324,5 +323,14 @@
   /* Sidebar transition */
   .sidebar-transition {
     transition: width 0.2s ease, transform 0.2s ease;
+  }
+
+  /* Hide scrollbar but keep scroll functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
   }
 }
