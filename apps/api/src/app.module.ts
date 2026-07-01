@@ -21,6 +21,7 @@ import { RequestIdInterceptor } from './common/interceptors/request-id.intercept
 import { ResponseTransformInterceptor } from './common/interceptors/response-transform.interceptor';
 import { UsageMeteringInterceptor } from './common/interceptors/usage-metering.interceptor';
 import { EnterpriseThrottlerGuard } from './common/guards/enterprise-throttler.guard';
+import { AuditLogsModule } from './audit-logs/audit-logs.module';
 import { PermissionsGuard } from './roles/guards/permissions.guard';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 
@@ -49,6 +50,7 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
     BrandingModule,
     EnterpriseModule,
     PlatformModule,
+    AuditLogsModule,
   ],
   controllers: [AppController],
   providers: [
